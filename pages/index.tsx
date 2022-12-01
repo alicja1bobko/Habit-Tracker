@@ -1,16 +1,10 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { useSelector, useDispatch } from "react-redux";
-import { decrement, increment, selectValue } from "../slices/counterSlice";
-import type { RootState } from "../store";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
 import Layout from "./unLogged/Layout.jsx";
 import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
 
 export default function Home() {
-  const count = useSelector(selectValue);
-  const dispatch = useDispatch();
-
   return (
     <Layout>
       <Head>
@@ -22,8 +16,8 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* Navbar */}
       <Navbar />
+      <Hero />
     </Layout>
   );
 }

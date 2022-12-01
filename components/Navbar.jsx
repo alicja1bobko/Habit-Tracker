@@ -7,7 +7,7 @@ import { IconButton, Hidden, Menu } from "@material-ui/core";
 import { AccountCircle, PersonAdd } from "@material-ui/icons";
 import Link from "next/link";
 
-function Navbar({}) {
+const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -101,12 +101,6 @@ function Navbar({}) {
       </Menu>
     </nav>
   );
-}
-
-// function MobileMenu({}) {
-//   return (
-
-//   );
-// }
+};
 
 export default Navbar;
