@@ -27,7 +27,7 @@ const HomepageLayout = ({ children, meta }: Props) => {
       </Head>
       <HeroBackground>
         <Navbar />
-        <div className="my-auto mx-auto px-8 text-white h-full flex flex-col space-y-10 items-center justify-center text-center z-10 max-w-3xl">
+        <div className=" h-full mx-auto px-8 text-white  flex flex-col space-y-10 items-center justify-center text-center z-10 max-w-3xl">
           {children}
         </div>
       </HeroBackground>

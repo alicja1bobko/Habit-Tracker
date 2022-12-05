@@ -1,20 +1,21 @@
-import React from "react";
 import SignUp from "../components/SignUp";
 import HomepageLayout from "../Layouts/HomepageLayout";
+import React, { ReactElement, ReactNode } from "react";
+import type { NextPageWithLayout } from "../pages/_app";
 
-type Props = {};
+const SignUpPage: NextPageWithLayout = () => {
+  return <SignUp />;
+};
 
-const SignUpPage = (props: Props) => {
+SignUpPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <HomepageLayout
       meta={{
-        title: "Habit tracker app",
-        description: "Habit tracker app homepage",
+        title: "Habit tracker app | Sign up",
+        description: "Habit tracker app Sig nup Page",
       }}
     >
-      <div className="bg-slate-100">
-        <SignUp />
-      </div>
+      {page}
     </HomepageLayout>
   );
 };

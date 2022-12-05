@@ -18,13 +18,6 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    console.log("header mounted");
-    return () => {
-      console.log("header mounted");
-    };
-  }, []);
-
   return (
     <nav className="flex flex-wrap items-center justify-between w-full px-10 text-lg text-zinc-900 bg-white h-[5rem] z-10 shadow-[0_5px_10px_0px_rgba(0,0,0,0.25)]">
       <span className="text-2xl font-semibold">
@@ -42,20 +35,16 @@ const Navbar = () => {
             </a>
           </MenuItem>
 
-          <MenuItem>
-            <Link className="px-2 block hover:text-purple-500" href="#">
-              Sign In
-            </Link>
-          </MenuItem>
+          <Link className="px-2 block hover:text-purple-500" href="#">
+            <MenuItem>Sign In</MenuItem>
+          </Link>
 
-          <MenuItem>
-            <Link
-              class="px-2 block hover:text-purple-400 text-purple-500"
-              href="/sign-up"
-            >
-              Sign Up
-            </Link>
-          </MenuItem>
+          <Link
+            className="px-2 block hover:text-purple-400 text-purple-500"
+            href="/sign-up"
+          >
+            <MenuItem>Sign Up</MenuItem>
+          </Link>
         </MenuList>
       </Hidden>
 
@@ -81,18 +70,22 @@ const Navbar = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>
-          <IconButton>
-            <AccountCircle />
-          </IconButton>
-          <p>Sign In </p>
-        </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
-          <IconButton>
-            <PersonAdd />
-          </IconButton>
-          <p>Sign Up</p>
-        </MenuItem>
+        <Link href="/sign-in">
+          <MenuItem onClick={handleClose}>
+            <IconButton>
+              <AccountCircle />
+            </IconButton>
+            <p>Sign In </p>
+          </MenuItem>
+        </Link>
+        <Link href="/sign-up">
+          <MenuItem onClick={handleClose} disableRipple>
+            <IconButton>
+              <PersonAdd />
+            </IconButton>
+            <p>Sign Up</p>
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleClose} disableRipple>
           <a
             href="https://github.com/alicja1bobko/Habit-Tracker"

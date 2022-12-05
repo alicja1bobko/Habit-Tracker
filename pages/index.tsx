@@ -1,10 +1,11 @@
 import LandingPage from "../components/LandingPage";
 import HomepageLayout from "../Layouts/HomepageLayout";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
+import type { NextPageWithLayout } from "./_app";
 
-export default function Home() {
-  return <LandingPage />;
-}
+ const Home: NextPageWithLayout = () => {
+   return <LandingPage />;
+ };
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return (
@@ -18,3 +19,5 @@ Home.getLayout = function getLayout(page: ReactElement) {
     </HomepageLayout>
   );
 };
+
+export default Home;

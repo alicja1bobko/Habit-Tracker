@@ -3,15 +3,16 @@ import type { AppProps } from "next/app";
 import React, { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 
-type NextPageWithLayout = NextPage & {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
+
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
-  const layout = getLayout(<Component {...pageProps} />);
-  return <React.Fragment>{layout}</React.Fragment>;
+
+  return getLayout(<Component {...pageProps} />);
 }
