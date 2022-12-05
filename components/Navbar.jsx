@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuList from "@mui/material/MenuList";
@@ -17,6 +17,13 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    console.log("header mounted");
+    return () => {
+      console.log("header mounted");
+    };
+  }, []);
 
   return (
     <nav className="flex flex-wrap items-center justify-between w-full px-10 text-lg text-zinc-900 bg-white h-[5rem] z-10 shadow-[0_5px_10px_0px_rgba(0,0,0,0.25)]">
@@ -44,7 +51,7 @@ const Navbar = () => {
           <MenuItem>
             <Link
               class="px-2 block hover:text-purple-400 text-purple-500"
-              href="#"
+              href="/sign-up"
             >
               Sign Up
             </Link>

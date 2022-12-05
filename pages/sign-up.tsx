@@ -1,12 +1,10 @@
-import LandingPage from "../components/LandingPage";
+import React from "react";
+import SignUp from "../components/SignUp";
 import HomepageLayout from "../Layouts/HomepageLayout";
-import { ReactElement, ReactNode } from "react";
 
-export default function Home() {
-  return <LandingPage />;
-}
+type Props = {};
 
-Home.getLayout = function getLayout(page: ReactElement) {
+const SignUpPage = (props: Props) => {
   return (
     <HomepageLayout
       meta={{
@@ -14,7 +12,11 @@ Home.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker app homepage",
       }}
     >
-      {page}
+      <div className="bg-slate-100">
+        <SignUp />
+      </div>
     </HomepageLayout>
   );
 };
+
+export default SignUpPage;

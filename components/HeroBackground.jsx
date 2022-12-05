@@ -1,4 +1,4 @@
-const Layout = ({ children }) => {
+const HeroBackground = ({ children }) => {
   return (
     <>
       <BackgroundImage>
@@ -22,4 +22,4 @@ const BackgroundImage = ({ children }) => {
   );
 };
 
-export default Layout;
+export default HeroBackground;
