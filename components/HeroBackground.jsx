@@ -2,7 +2,7 @@ const HeroBackground = ({ children }) => {
   return (
     <>
       <BackgroundImage>
-        <div className="min-w-full flex flex-col">{children}</div>
+        <div className="flex flex-col">{children}</div>
       </BackgroundImage>
     </>
   );

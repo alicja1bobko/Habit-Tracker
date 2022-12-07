@@ -12,7 +12,7 @@ SignUpPage.getLayout = function getLayout(page: ReactElement) {
     <HomepageLayout
       meta={{
         title: "Habit tracker app | Sign up",
-        description: "Habit tracker app Sig nup Page",
+        description: "Habit tracker app Sign up Page",
       }}
     >
       {page}
