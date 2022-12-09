@@ -35,7 +35,7 @@ const Navbar = () => {
             </a>
           </MenuItem>
 
-          <Link className="px-2 block hover:text-purple-500" href="#">
+          <Link className="px-2 block hover:text-purple-500" href="/sign-in">
             <MenuItem>Sign In</MenuItem>
           </Link>
 

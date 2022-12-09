@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import isEmailValidator from "validator/lib/isEmail";
 
-export const validationSchema = yup.object().shape({
+const user = {
   email: yup
     .string()
     .email("Invalid email format")
@@ -26,4 +26,17 @@ export const validationSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Password confirmation is required"),
+};
+
+const signUpSchema = yup.object().shape({
+  email: user.email,
+  password: user.password,
+  passwordConfirmation: user.passwordConfirmation,
 });
+
+const signInSchema = yup.object().shape({
+  email: user.email,
+  password: user.password,
+});
+
+export { signInSchema, signUpSchema };

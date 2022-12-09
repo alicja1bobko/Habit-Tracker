@@ -2,16 +2,19 @@ import LandingPage from "../components/LandingPage";
 import HomepageLayout from "../Layouts/HomepageLayout";
 import { ReactElement } from "react";
 import type { NextPageWithLayout } from "./_app";
+import useAuth from "../hooks/useAuth";
 
- const Home: NextPageWithLayout = () => {
-   return <LandingPage />;
- };
+const Home: NextPageWithLayout = () => {
+  const { loading } = useAuth();
+  if (loading) return null;
+  return <LandingPage />;
+};
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return (
     <HomepageLayout
       meta={{
-        title: "Habit tracker app",
+        title: "Habit tracker",
         description: "Habit tracker app homepage",
       }}
     >

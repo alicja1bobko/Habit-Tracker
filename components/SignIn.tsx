@@ -1,16 +1,15 @@
 import { TextField } from "@material-ui/core";
 import LoadingButton from "@mui/lab/LoadingButton";
-import Link from "next/link";
+
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { signUpSchema } from "../schemas/logging-validation-schema";
+import { signInSchema } from "../schemas/logging-validation-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAuth from "../hooks/useAuth";
 
 type FormValues = {
   email: string;
   password: string;
-  passwordConfirmation: string;
 };
 
 const SignUp = () => {
@@ -20,13 +19,13 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: yupResolver(signUpSchema) });
+  } = useForm<FormValues>({ resolver: yupResolver(signInSchema) });
 
   const onSubmitHandler: SubmitHandler<FormValues> = async ({
     email,
     password,
   }) => {
-    login && (await signUp(email, password));
+    login && (await signIn(email, password));
   };
 
   return (
@@ -35,13 +34,8 @@ const SignUp = () => {
         onSubmit={handleSubmit(onSubmitHandler)}
         className="w-[22rem] my-10"
       >
-        <h1 className="text-3xl">Sign up</h1>
-        <p className="text-slate-500 my-[1rem]">
-          Already have an account?{" "}
-          <Link href="/sign-in" className="text-blue-600 font-semibold">
-            Sign in
-          </Link>
-        </p>
+        <h1 className="text-3xl mb-7">Sign in</h1>
+
         <div className="space-y-4">
           <div>
             <TextField
@@ -78,24 +72,6 @@ const SignUp = () => {
               <p className="invalidInput hide"></p>
             )}
           </div>
-          <div>
-            <TextField
-              type="password"
-              autoComplete="repeat-password"
-              label={"Confirm password"}
-              placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-              variant="outlined"
-              fullWidth
-              {...register("passwordConfirmation")}
-            />
-            {errors.passwordConfirmation ? (
-              <p className="invalidInput" role="alert">
-                {errors.passwordConfirmation.message}
-              </p>
-            ) : (
-              <p className="invalidInput hide"></p>
-            )}
-          </div>
 
           <LoadingButton
             fullWidth
@@ -104,7 +80,7 @@ const SignUp = () => {
             type="submit"
             onClick={() => setLogin(true)}
           >
-            Sign up
+            Sign in
           </LoadingButton>
         </div>
       </form>
