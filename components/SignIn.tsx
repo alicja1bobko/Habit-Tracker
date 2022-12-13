@@ -1,18 +1,19 @@
 import { TextField } from "@material-ui/core";
 import LoadingButton from "@mui/lab/LoadingButton";
-
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signInSchema } from "../schemas/logging-validation-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAuth from "../hooks/useAuth";
+import AuthList from "./AuthList";
+import Link from "next/link";
 
 type FormValues = {
   email: string;
   password: string;
 };
 
-const SignUp = () => {
+const SignIn = () => {
   const [login, setLogin] = useState(false);
   const { signIn, signUp } = useAuth();
   const {
@@ -35,6 +36,14 @@ const SignUp = () => {
         className="w-[22rem] my-10"
       >
         <h1 className="text-3xl mb-7">Sign in</h1>
+        <p className="text-slate-500 my-[1rem]">
+          Don't have an account?{" "}
+          <Link href="/sign-up" className="text-blue-600 font-semibold">
+            Sign up
+          </Link>
+        </p>
+
+        <AuthList text={"Sign In with"} />
 
         <div className="space-y-4">
           <div>
@@ -87,4 +96,4 @@ const SignUp = () => {
     </div>
   );
 };
-export default SignUp;
+export default SignIn;
