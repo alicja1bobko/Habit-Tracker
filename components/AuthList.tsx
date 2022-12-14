@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core";
 
 type AuthProps = {
   text: string;
+  onAuthorizationProviderClick: Function;
 };
 
 const useStyles = makeStyles(() => ({
@@ -13,7 +14,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AuthList = ({ text }: AuthProps): React.ReactElement => {
+const AuthList = ({
+  text,
+  onAuthorizationProviderClick,
+}: AuthProps): React.ReactElement => {
   const buttons = authData.map(({ id, name, color, icon }) => {
     const classes = useStyles();
     return (
@@ -30,6 +34,7 @@ const AuthList = ({ text }: AuthProps): React.ReactElement => {
         variant="outlined"
         key={id}
         startIcon={icon}
+        onClick={(event) => onAuthorizationProviderClick(event, id)}
         fullWidth
       >
         {text} {name}

@@ -15,7 +15,7 @@ type FormValues = {
 
 const SignIn = () => {
   const [login, setLogin] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, signUpWithFacebookProvider } = useAuth();
   const {
     register,
     handleSubmit,
@@ -27,6 +27,17 @@ const SignIn = () => {
     password,
   }) => {
     login && (await signIn(email, password));
+  };
+
+  const handleOnAuthorizationProviderClick = (
+    event: React.MouseEvent<HTMLElement>,
+    id: string
+  ) => {
+    event.preventDefault();
+    console.log(id);
+    if (id === "facebook") {
+      signUpWithFacebookProvider();
+    }
   };
 
   return (
@@ -43,7 +54,10 @@ const SignIn = () => {
           </Link>
         </p>
 
-        <AuthList text={"Sign In with"} />
+        <AuthList
+          text={"Sign In with"}
+          onAuthorizationProviderClick={handleOnAuthorizationProviderClick}
+        />
 
         <div className="space-y-4">
           <div>

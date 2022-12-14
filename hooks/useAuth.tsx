@@ -4,6 +4,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
   User,
+  FacebookAuthProvider,
+  getAuth,
+  signInWithPopup,
 } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useState, createContext, useEffect, useMemo, useContext } from "react";
@@ -13,6 +16,7 @@ interface IAuth {
   user: User | null;
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signUpWithFacebookProvider: () => void;
   logout: () => Promise<void>;
   error: string | null;
   loading: boolean;
@@ -20,6 +24,7 @@ interface IAuth {
 
 const AuthContext = createContext<IAuth>({
   user: null,
+  signUpWithFacebookProvider: async () => {},
   signUp: async () => {},
   signIn: async () => {},
   logout: async () => {},
@@ -56,6 +61,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const router = useRouter();
 
+  // Sign up with email and password
+
   const signUp = async (email: string, password: string) => {
     setLoading(true);
     await createUserWithEmailAndPassword(auth, email, password)
@@ -67,6 +74,37 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .catch((error) => alert(error.message))
       .finally(() => setLoading(false));
   };
+
+  // Sign in with Provider
+
+  const signUpWithFacebookProvider = () => {
+    setLoading(true);
+    const provider = new FacebookAuthProvider();
+    provider.addScope("email");
+    const auth = getAuth();
+    console.log(auth, provider);
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+        console.log(user);
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        const accessToken = credential?.accessToken;
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = FacebookAuthProvider.credentialFromError(error);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  // Sign in with email and password
 
   const signIn = async (email: string, password: string) => {
     setLoading(true);
@@ -89,7 +127,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .finally(() => setLoading(false));
   };
   const memoizedValue = useMemo(
-    () => ({ user, signUp, signIn, error, loading, logout }),
+    () => ({
+      user,
+      signUp,
+      signIn,
+      error,
+      loading,
+      logout,
+      signUpWithFacebookProvider,
+    }),
     [user, loading, error]
   );
 
