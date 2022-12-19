@@ -3,7 +3,7 @@ import React from "react";
 
 const LandingPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-[calc(100vh-5rem)] space-y-10 max-w-4xl mx-auto text-white text-center px-8">
+    <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] space-y-10 max-w-4xl mx-auto text-white text-center px-8">
       <h1 className="text-4xl md:text-7xl font-medium capitalize leading-[1.2em]">
         Get your life on track,
         <br /> build golden habits

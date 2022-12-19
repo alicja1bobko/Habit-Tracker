@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useAuth from "../hooks/useAuth";
 import AuthList from "./AuthList";
 import Link from "next/link";
+import FormDivider from "./FormDivider";
 
 type FormValues = {
   email: string;
@@ -15,7 +16,14 @@ type FormValues = {
 
 const SignIn = () => {
   const [login, setLogin] = useState(false);
-  const { signIn, signUp, signUpWithFacebookProvider } = useAuth();
+  const {
+    signIn,
+    signUp,
+    signUpWithFacebookProvider,
+    signUpWithGithubProvider,
+    signUpWithGoogleProvider,
+    error,
+  } = useAuth();
   const {
     register,
     handleSubmit,
@@ -34,79 +42,90 @@ const SignIn = () => {
     id: string
   ) => {
     event.preventDefault();
-    console.log(id);
     if (id === "facebook") {
       signUpWithFacebookProvider();
+    } else if (id === "github") {
+      signUpWithGithubProvider();
+    } else if (id === "google") {
+      signUpWithGoogleProvider();
     }
   };
 
   return (
-    <div className="bg-white text-black flex flex-col items-center justify-center text-center  mt-[5rem] max-w-[35rem] mx-auto border rounded-lg shadow-2xl">
-      <form
-        onSubmit={handleSubmit(onSubmitHandler)}
-        className="w-[22rem] my-10"
-      >
-        <h1 className="text-3xl mb-7">Sign in</h1>
-        <p className="text-slate-500 my-[1rem]">
-          Don't have an account?{" "}
-          <Link href="/sign-up" className="text-blue-600 font-semibold">
-            Sign up
-          </Link>
-        </p>
+    <div className="h-[calc(100vh-4rem)] flex items-center text-center">
+      <div className="bg-white text-black mx-auto px-[5rem] 2xl:py-4 border rounded-lg shadow-2xl">
+        <form
+          onSubmit={handleSubmit(onSubmitHandler)}
+          className="w-[23rem] my-8"
+        >
+          <h1 className="text-3xl mb-7">Sign in</h1>
+          <p className="text-slate-500 mt-[1rem] mb-[2rem]">
+            Don't have an account?{" "}
+            <Link href="/sign-up" className="text-blue-600 font-semibold">
+              Sign up
+            </Link>
+          </p>
 
-        <AuthList
-          text={"Sign In with"}
-          onAuthorizationProviderClick={handleOnAuthorizationProviderClick}
-        />
+          <AuthList
+            text={"Sign In with"}
+            onAuthorizationProviderClick={handleOnAuthorizationProviderClick}
+          />
+          <FormDivider />
 
-        <div className="space-y-4">
-          <div>
-            <TextField
-              autoComplete="email"
-              label={"Email"}
-              placeholder="john@doe.com"
-              variant="outlined"
+          <div className="space-y-4">
+            <div>
+              <TextField
+                autoComplete="email"
+                label={"Email"}
+                placeholder="john@doe.com"
+                variant="outlined"
+                fullWidth
+                {...register("email")}
+              />
+              {errors.email ? (
+                <p className="invalidInput" role="alert">
+                  {errors.email.message}
+                </p>
+              ) : (
+                <p className="invalidInput hide"></p>
+              )}
+            </div>
+            <div>
+              <TextField
+                type="password"
+                autoComplete="current-password"
+                label={"Password"}
+                placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                variant="outlined"
+                fullWidth
+                {...register("password")}
+              />
+              {errors.password ? (
+                <p className="invalidInput" role="alert">
+                  {errors.password.message}
+                </p>
+              ) : (
+                <p className="invalidInput hide"></p>
+              )}
+              {error && (
+                <p className="invalidInput" role="alert">
+                  {error}
+                </p>
+              )}
+            </div>
+
+            <LoadingButton
               fullWidth
-              {...register("email")}
-            />
-            {errors.email ? (
-              <p className="invalidInput" role="alert">
-                {errors.email.message}
-              </p>
-            ) : (
-              <p className="invalidInput hide"></p>
-            )}
+              variant="contained"
+              className="bg-[#1976d2]"
+              type="submit"
+              onClick={() => setLogin(true)}
+            >
+              Sign in
+            </LoadingButton>
           </div>
-          <div>
-            <TextField
-              type="password"
-              autoComplete="current-password"
-              label={"Password"}
-              placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-              variant="outlined"
-              fullWidth
-              {...register("password")}
-            />
-            {errors.password ? (
-              <p className="invalidInput" role="alert">
-                {errors.password.message}
-              </p>
-            ) : (
-              <p className="invalidInput hide"></p>
-            )}
-          </div>
-
-          <LoadingButton
-            fullWidth
-            variant="contained"
-            className="bg-[#1976d2]"
-            type="submit"
-            onClick={() => setLogin(true)}
-          >
-            Sign in
-          </LoadingButton>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

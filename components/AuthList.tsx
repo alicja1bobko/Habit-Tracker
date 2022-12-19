@@ -41,7 +41,7 @@ const AuthList = ({
       </Button>
     );
   });
-  return <div className="space-y-3 mb-5 ">{buttons}</div>;
+  return <div className="space-y-3 mb-7 ">{buttons}</div>;
 };
 
 export default AuthList;

@@ -7,6 +7,8 @@ import {
   FacebookAuthProvider,
   getAuth,
   signInWithPopup,
+  GithubAuthProvider,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useState, createContext, useEffect, useMemo, useContext } from "react";
@@ -16,7 +18,9 @@ interface IAuth {
   user: User | null;
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signUpWithGithubProvider: () => void;
   signUpWithFacebookProvider: () => void;
+  signUpWithGoogleProvider: () => void;
   logout: () => Promise<void>;
   error: string | null;
   loading: boolean;
@@ -25,6 +29,8 @@ interface IAuth {
 const AuthContext = createContext<IAuth>({
   user: null,
   signUpWithFacebookProvider: async () => {},
+  signUpWithGithubProvider: async () => {},
+  signUpWithGoogleProvider: async () => {},
   signUp: async () => {},
   signIn: async () => {},
   logout: async () => {},
@@ -82,12 +88,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const provider = new FacebookAuthProvider();
     provider.addScope("email");
     const auth = getAuth();
-    console.log(auth, provider);
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
+
         setUser(user);
-        console.log(user);
+        router.push("/habit-dashboard");
+        setLoading(false);
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = FacebookAuthProvider.credentialFromResult(result);
         const accessToken = credential?.accessToken;
@@ -96,10 +103,69 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorMessage, errorCode);
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
         const credential = FacebookAuthProvider.credentialFromError(error);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const signUpWithGithubProvider = () => {
+    setLoading(true);
+    const provider = new GithubAuthProvider();
+
+    const auth = getAuth();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+
+        setUser(user);
+        router.push("/habit-dashboard");
+        setLoading(false);
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        const credential = GithubAuthProvider.credentialFromResult(result);
+        const accessToken = credential?.accessToken;
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage, errorCode);
+        // The email of the user's account used.
+
+        // The AuthCredential type that was used.
+        const credential = GithubAuthProvider.credentialFromError(error);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const signUpWithGoogleProvider = () => {
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+
+    const auth = getAuth();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+
+        setUser(user);
+        router.push("/habit-dashboard");
+        setLoading(false);
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const accessToken = credential?.accessToken;
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage, errorCode);
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
       })
       .finally(() => setLoading(false));
   };
@@ -114,7 +180,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         router.push("/habit-dashboard");
         setLoading(false);
       })
-      .catch((error) => console.log(error.message))
+      .catch((error) => setError(error.message))
       .finally(() => setLoading(false));
   };
   const logout = async () => {
@@ -135,6 +201,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       loading,
       logout,
       signUpWithFacebookProvider,
+      signUpWithGithubProvider,
+      signUpWithGoogleProvider,
     }),
     [user, loading, error]
   );
