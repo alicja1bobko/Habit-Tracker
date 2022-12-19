@@ -37,7 +37,7 @@ const AuthList = ({
         onClick={(event) => onAuthorizationProviderClick(event, id)}
         fullWidth
       >
-        {text} {name}
+        {id !== "guest" ? `${text} with ${name}` : `${text} as guest`}
       </Button>
     );
   });

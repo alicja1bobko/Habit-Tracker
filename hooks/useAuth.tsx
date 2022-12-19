@@ -9,6 +9,7 @@ import {
   signInWithPopup,
   GithubAuthProvider,
   GoogleAuthProvider,
+  signInAnonymously,
 } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useState, createContext, useEffect, useMemo, useContext } from "react";
@@ -21,6 +22,7 @@ interface IAuth {
   signUpWithGithubProvider: () => void;
   signUpWithFacebookProvider: () => void;
   signUpWithGoogleProvider: () => void;
+  signUpAnonymously: () => void;
   logout: () => Promise<void>;
   error: string | null;
   loading: boolean;
@@ -31,6 +33,7 @@ const AuthContext = createContext<IAuth>({
   signUpWithFacebookProvider: async () => {},
   signUpWithGithubProvider: async () => {},
   signUpWithGoogleProvider: async () => {},
+  signUpAnonymously: async () => {},
   signUp: async () => {},
   signIn: async () => {},
   logout: async () => {},
@@ -170,6 +173,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .finally(() => setLoading(false));
   };
 
+  const signUpAnonymously = () => {
+    setLoading(true);
+
+    const auth = getAuth();
+    signInAnonymously(auth)
+      .then(() => {
+        router.push("/habit-dashboard");
+        setLoading(false);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage, errorCode);
+      })
+      .finally(() => setLoading(false));
+  };
+
   // Sign in with email and password
 
   const signIn = async (email: string, password: string) => {
@@ -203,6 +224,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       signUpWithFacebookProvider,
       signUpWithGithubProvider,
       signUpWithGoogleProvider,
+      signUpAnonymously,
     }),
     [user, loading, error]
   );

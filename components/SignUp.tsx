@@ -23,6 +23,7 @@ const SignUp = () => {
     signUpWithFacebookProvider,
     signUpWithGithubProvider,
     signUpWithGoogleProvider,
+    signUpAnonymously,
   } = useAuth();
   const {
     register,
@@ -49,6 +50,8 @@ const SignUp = () => {
       signUpWithGithubProvider();
     } else if (id === "google") {
       signUpWithGoogleProvider();
+    } else if (id === "guest") {
+      signUpAnonymously();
     }
   };
 
@@ -68,7 +71,7 @@ const SignUp = () => {
           </p>
 
           <AuthList
-            text={"Sign Up with"}
+            text={"Sign Up"}
             onAuthorizationProviderClick={handleOnAuthorizationProviderClick}
           />
           <FormDivider />
