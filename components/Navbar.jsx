@@ -3,9 +3,10 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
-import { IconButton, Hidden, Menu } from "@material-ui/core";
+import { IconButton, Menu } from "@material-ui/core";
 import { AccountCircle, PersonAdd } from "@material-ui/icons";
 import Link from "next/link";
+import Box from "@mui/material/Box";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -25,33 +26,34 @@ const Navbar = () => {
           <Link href="/">Habit Tracker</Link>
         </span>
         {/* {Desktop Menu} */}
-        <Hidden smDown>
-          <MenuList className="flex justify-between">
-            <MenuItem className="pr-4 block hover:text-purple-500">
-              <a
-                href="https://github.com/alicja1bobko/Habit-Tracker"
-                target="_blank"
-              >
-                <GitHubIcon />
-              </a>
-            </MenuItem>
-
-            <Link className="px-2 block hover:text-purple-500" href="/sign-in">
-              <MenuItem>Sign In</MenuItem>
-            </Link>
-
-            <Link
-              className="px-2 block hover:text-purple-400 text-purple-500"
-              href="/sign-up"
+        <MenuList
+          className="flex justify-between"
+          sx={{ display: { md: "flex", xs: "none" } }}
+        >
+          <MenuItem className="pr-4 block hover:text-purple-500">
+            <a
+              href="https://github.com/alicja1bobko/Habit-Tracker"
+              target="_blank"
             >
-              <MenuItem>Sign Up</MenuItem>
-            </Link>
-          </MenuList>
-        </Hidden>
+              <GitHubIcon />
+            </a>
+          </MenuItem>
+
+          <Link className="px-2 block hover:text-purple-500" href="/sign-in">
+            <MenuItem>Sign In</MenuItem>
+          </Link>
+
+          <Link
+            className="px-2 block hover:text-purple-400 text-purple-500"
+            href="/sign-up"
+          >
+            <MenuItem>Sign Up</MenuItem>
+          </Link>
+        </MenuList>
 
         {/* {MobileMenu} */}
 
-        <Hidden mdUp>
+        <Box sx={{ display: { md: "none", xs: "block" } }}>
           <IconButton
             aria-label="show more"
             aria-controls="mobile-menu-list"
@@ -61,7 +63,8 @@ const Navbar = () => {
           >
             <MenuIcon className="scale-125" />
           </IconButton>
-        </Hidden>
+        </Box>
+
         <Menu
           id="customized-menu"
           MenuListProps={{
