@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { DrawerButton, DrawerListItem } from "./drawer";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -14,7 +13,7 @@ import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBullete
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 interface Props {
   children: React.ReactNode;
@@ -25,31 +24,61 @@ export default function Sidebar({ children }: Props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const handleListItemClick = (index: number) => {
+    setSelectedIndex(index);
+  };
 
   const drawer = (
-    <div className="p-4">
-      <p className="text-3xl text-[#2e822e]">Habit Tracker</p>
+    <div className=" p-4 bg-[#fcfbf9] h-full">
+      <h1 className="text-3xl text-[#2e822e] p-6">Habit Tracker</h1>
 
       <List>
         <DrawerListItem
           icon={<CheckCircleOutlineOutlinedIcon />}
           destination={"/habit-dashboard"}
+          selected={selectedIndex === 0}
+          index={0}
+          handleListItemClick={handleListItemClick}
         >
           Dashboard
         </DrawerListItem>
-        <DrawerListItem icon={<AddTaskIcon />} destination={"/add-habit"}>
+        <DrawerListItem
+          icon={<AddTaskIcon />}
+          destination={"/add-habit"}
+          selected={selectedIndex === 1}
+          index={1}
+          handleListItemClick={handleListItemClick}
+        >
           Add habit
         </DrawerListItem>
         <DrawerListItem
           icon={<FormatListBulletedRoundedIcon />}
           destination={"/manage-habits"}
+          selected={selectedIndex === 2}
+          index={2}
+          handleListItemClick={handleListItemClick}
         >
           Manage habits
         </DrawerListItem>
-        <DrawerListItem icon={<SettingsIcon />} destination={"/settings"}>
+        <DrawerListItem
+          icon={<SettingsIcon />}
+          destination={"/settings"}
+          selected={selectedIndex === 3}
+          index={3}
+          handleListItemClick={handleListItemClick}
+        >
           Settings
         </DrawerListItem>
-        <DrawerButton icon={<LogoutRoundedIcon />}>Logout</DrawerButton>
+        <DrawerButton
+          icon={<LogoutRoundedIcon />}
+          selected={selectedIndex === 4}
+          index={4}
+          handleListItemClick={handleListItemClick}
+        >
+          Logout
+        </DrawerButton>
       </List>
     </div>
   );

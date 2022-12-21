@@ -3,7 +3,7 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 
 const habitDashboardPAge: NextPageWithLayout = () => {
-  return <div>Dashboard</div>;
+  return <div className=" w-full bg-white p-8 rounded-3xl ">Dashboard</div>;
 };
 
 habitDashboardPAge.getLayout = function getLayout(page: ReactElement) {
