@@ -9,13 +9,13 @@ import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDoihtwU8jXiUTiSK0ZxdGpEyzcWo4fvr4",
-  authDomain: "habit-tracker-app-pf.firebaseapp.com",
-  projectId: "habit-tracker-app-pf",
-  storageBucket: "habit-tracker-app-pf.appspot.com",
-  messagingSenderId: "88178403321",
-  appId: "1:88178403321:web:9bc73423c9566b5ff17f28",
-  measurementId: "G-PGHEXERBHG",
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
