@@ -6,7 +6,7 @@ let completed = 20;
 
 const ProfilePicture = (props: Props) => {
   return (
-    <div className="p-3">
+    <div className="p-3 w-3/4">
       <div className="w-[140px] h-[140px] bg-white rounded-full absolute -translate-x-[5px] -translate-y-[5px] z-20"></div>
       <div
         className="w-[150px] h-[150px] rounded-full absolute -translate-x-[10px] -translate-y-[10px] z-10"
