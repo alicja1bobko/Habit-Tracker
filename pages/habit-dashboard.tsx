@@ -6,6 +6,7 @@ import ProfilePicture from "../components/loggedIn/ProfilePicture";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 import DailyGoals from "../components/loggedIn/DailyGoals";
+import ProgressCalendar from "../components/loggedIn/Calendar";
 
 const habitDashboardPAge: NextPageWithLayout = () => {
   return (
@@ -14,7 +15,6 @@ const habitDashboardPAge: NextPageWithLayout = () => {
         <Greeting />
         <div className="flex flex-col xl:flex-row justify-between">
           <ProfilePicture />
-
           <Statistics header={"Current goal"} text={"habits"} stat={6} />
           <Statistics header={"Achieved today"} text={"habits"} stat={6} />
           <Statistics
@@ -24,6 +24,7 @@ const habitDashboardPAge: NextPageWithLayout = () => {
             habit={"meditation"}
           />
         </div>
+        {/* <ProgressCalendar /> */}
       </div>
       <div className="col-span-1">
         <DailyGoals />

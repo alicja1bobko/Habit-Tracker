@@ -20,7 +20,6 @@ const ProfilePicture = (props: Props) => {
         width={130}
         height={130}
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBcg5OV7m4Ojt-6P7o0JwzgBcZosZwisJw0A&usqp=CAU"
-        objectFit="cover"
         className="rounded-full relative z-20"
       />
     </div>

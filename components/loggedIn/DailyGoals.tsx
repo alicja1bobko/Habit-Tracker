@@ -4,7 +4,6 @@ type Props = {};
 
 type Goal = {
   habit: string;
-
   id: number;
 };
 
@@ -58,7 +57,7 @@ const Goal = ({ habit, id }: Goal) => {
 
 const DailyGoals = (props: Props) => {
   const habitsList = habits.map((habit, index) => {
-    return <Goal habit={habit} id={index} />;
+    return <Goal habit={habit} id={index} key={index} />;
   });
 
   return (

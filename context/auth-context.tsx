@@ -10,10 +10,12 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
   signInAnonymously,
+  getAdditionalUserInfo,
 } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useState, createContext, useEffect, useMemo, useContext } from "react";
-import { auth } from "../firebase";
+import { auth } from "../pages/api/firebase";
+import setSampleUserDatabase from "./propagate-sample-data";
 
 interface IAuth {
   user: User | null;
@@ -77,6 +79,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user);
+        setSampleUserDatabase(userCredential.user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
       })
@@ -94,22 +97,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-
         setUser(user);
+        const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
+        if (isNewUser) setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential?.accessToken;
       })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage, errorCode);
-        // The email of the user's account used.
         const email = error.customData.email;
-        // The AuthCredential type that was used.
         const credential = FacebookAuthProvider.credentialFromError(error);
       })
       .finally(() => setLoading(false));
@@ -118,13 +117,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signUpWithGithubProvider = () => {
     setLoading(true);
     const provider = new GithubAuthProvider();
-
     const auth = getAuth();
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-
         setUser(user);
+        const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
+        if (isNewUser) setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -136,9 +135,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage, errorCode);
-        // The email of the user's account used.
-
-        // The AuthCredential type that was used.
         const credential = GithubAuthProvider.credentialFromError(error);
       })
       .finally(() => setLoading(false));
@@ -152,8 +148,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-
         setUser(user);
+        const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
+        if (isNewUser) setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -175,7 +172,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signUpAnonymously = () => {
     setLoading(true);
-
     const auth = getAuth();
     signInAnonymously(auth)
       .then(() => {
@@ -183,7 +179,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setLoading(false);
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage, errorCode);
@@ -204,6 +199,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .catch((error) => setError(error.message))
       .finally(() => setLoading(false));
   };
+
   const logout = async () => {
     setLoading(true);
     signOut(auth)
@@ -213,6 +209,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .catch((error) => console.log(error.message))
       .finally(() => setLoading(false));
   };
+
   const memoizedValue = useMemo(
     () => ({
       user,

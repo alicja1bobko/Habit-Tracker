@@ -6,7 +6,7 @@ import FormDivider from "../components/FormDivider";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signUpSchema } from "../schemas/logging-validation-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../context/auth-context";
 import AuthList from "./AuthList";
 
 type FormValues = {
@@ -18,7 +18,6 @@ type FormValues = {
 const SignUp = () => {
   const [login, setLogin] = useState(false);
   const {
-    signIn,
     signUp,
     signUpWithFacebookProvider,
     signUpWithGithubProvider,
@@ -43,7 +42,6 @@ const SignUp = () => {
     id: string
   ) => {
     event.preventDefault();
-    console.log(id);
     if (id === "facebook") {
       signUpWithFacebookProvider();
     } else if (id === "github") {

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signInSchema } from "../schemas/logging-validation-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../context/auth-context";
 import AuthList from "./AuthList";
 import Link from "next/link";
 import FormDivider from "./FormDivider";
@@ -18,7 +18,6 @@ const SignIn = () => {
   const [login, setLogin] = useState(false);
   const {
     signIn,
-    signUp,
     signUpWithFacebookProvider,
     signUpWithGithubProvider,
     signUpWithGoogleProvider,

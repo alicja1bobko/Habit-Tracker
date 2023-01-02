@@ -20,7 +20,9 @@
     "**/*.ts",
     "**/*.tsx",
     "components/Navbar.tsx",
-    "pages/_app.jsx"
+    "pages/_app.jsx",
+    "context/index.js",
+    "context/firestore-context.tsx"
   ],
   "exclude": ["node_modules"]
 }
