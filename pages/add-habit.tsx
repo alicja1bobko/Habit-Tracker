@@ -2,11 +2,11 @@ import React, { ReactElement } from "react";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 
-const addHabitPAge: NextPageWithLayout = () => {
+const addHabitPage: NextPageWithLayout = () => {
   return <div>Add habit</div>;
 };
 
-addHabitPAge.getLayout = function getLayout(page: ReactElement) {
+addHabitPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <DashboardLayout
       meta={{
@@ -19,4 +19,4 @@ addHabitPAge.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export default addHabitPAge;
+export default addHabitPage;

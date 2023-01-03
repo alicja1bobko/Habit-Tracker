@@ -3,10 +3,7 @@ import HomepageLayout from "../Layouts/HomepageLayout";
 import { ReactElement } from "react";
 import type { NextPageWithLayout } from "./_app";
 
-
 const Home: NextPageWithLayout = () => {
-  // const \{ loading } = useAuth();
-  // if (loading) return null;
   return <LandingPage />;
 };
 

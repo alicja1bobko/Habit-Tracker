@@ -8,7 +8,7 @@ import { NextPageWithLayout } from "./_app";
 import DailyGoals from "../components/loggedIn/DailyGoals";
 import ProgressCalendar from "../components/loggedIn/Calendar";
 
-const habitDashboardPAge: NextPageWithLayout = () => {
+const habitDashboardPage: NextPageWithLayout = () => {
   return (
     <>
       <div className="col-span-4">
@@ -33,7 +33,7 @@ const habitDashboardPAge: NextPageWithLayout = () => {
   );
 };
 
-habitDashboardPAge.getLayout = function getLayout(page: ReactElement) {
+habitDashboardPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <DashboardLayout
       meta={{
@@ -48,4 +48,4 @@ habitDashboardPAge.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export default habitDashboardPAge;
+export default habitDashboardPage;

@@ -44,11 +44,14 @@ const SignIn = () => {
     event.preventDefault();
     if (id === "facebook") {
       signUpWithFacebookProvider();
-    } else if (id === "github") {
+    }
+    if (id === "github") {
       signUpWithGithubProvider();
-    } else if (id === "google") {
+    }
+    if (id === "google") {
       signUpWithGoogleProvider();
-    } else if (id === "guest") {
+    }
+    if (id === "guest") {
       signUpAnonymously();
     }
   };
