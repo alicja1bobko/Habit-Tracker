@@ -54,11 +54,11 @@ const SignUp = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-4rem)] flex items-center text-center">
-      <div className="bg-white text-black mx-auto px-[5rem] border rounded-lg shadow-2xl">
+    <div className="sm:h-[calc(100vh-2rem)] xl:h-[calc(100vh-7rem)] flex items-center text-center">
+      <div className="bg-white text-black mx-auto px-2 md:px-8 xl:px-[5rem] border rounded-lg shadow-2xl">
         <form
           onSubmit={handleSubmit(onSubmitHandler)}
-          className="w-[23rem] my-8"
+          className="md:w-[23rem] my-8"
         >
           <h1 className="text-3xl">Sign up</h1>
           <p className="text-slate-500 mt-[1rem] mb-[1rem]">
