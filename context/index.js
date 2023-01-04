@@ -1,10 +1,16 @@
-import { AuthProvider } from "./auth-context";
+import { AuthProvider, ProtectRoute } from "./auth-context";
 import { FirestoreProvider } from "./firestore-context";
+import { UserProvider } from "./user-context";
 
 const AppProviders = ({ children }) => {
   return (
     <FirestoreProvider>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider>
+        <ProtectRoute>
+          {/* <UserProvider>{children}</UserProvider> */}
+          {children}
+        </ProtectRoute>
+      </AuthProvider>
     </FirestoreProvider>
   );
 };

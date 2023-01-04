@@ -1,13 +1,14 @@
-import React, { createContext, useContext } from "react";
-import app, { db } from "../pages/api/firebase";
+import React, { createContext, ReactNode, useContext } from "react";
+import db from "../pages/api/firebase";
 import "firebase/firestore";
 
 // Context
 
 const FirestoreContext = createContext<any | null>(null);
+FirestoreContext.displayName = "FirebaseContext";
 
 // Provider
-const FirestoreProvider = ({ children }: { children: React.ReactNode }) => {
+const FirestoreProvider = ({ children }: { children: ReactNode }) => {
   return (
     <FirestoreContext.Provider value={db}>{children}</FirestoreContext.Provider>
   );

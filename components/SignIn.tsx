@@ -8,6 +8,7 @@ import useAuth from "../context/auth-context";
 import AuthList from "./AuthList";
 import Link from "next/link";
 import FormDivider from "./FormDivider";
+import { useFirestore } from "../context/firestore-context";
 
 type FormValues = {
   email: string;
@@ -24,6 +25,7 @@ const SignIn = () => {
     signUpAnonymously,
     error,
   } = useAuth();
+
   const {
     register,
     handleSubmit,

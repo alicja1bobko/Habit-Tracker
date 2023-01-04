@@ -1,16 +1,56 @@
-import { createContext, ReactNode, useContext } from "react";
-import { User } from "firebase/auth";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import useAuth from "./auth-context";
+import { useFirestore } from "./firestore-context";
+// import { db } from "../pages/api/firebase";
 
-const { user } = useAuth();
+const UserContext = createContext<any | null>(null);
+UserContext.displayName = "UserContext";
 
-const UserContext = createContext({
-  data: null,
-  error: null,
-  loading: false,
-});
+function UserProvider({ children }: { children: ReactNode }) {
+  const [userData, setUserData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-// function UserProvider({ children }: ReactNode) {}
+  const { user } = useAuth();
+  const { db } = useFirestore();
+
+  // useEffect(() => {
+  //   // const userDataRef = doc(db, `users/${user?.uid}`);
+  //   // const userDataSnap = async () => {
+  //   //   return await getDoc(userDataRef);
+  //   // };
+  //   console.log(db);
+  //   const unsub = onSnapshot(doc(db, `users/${user?.uid}`), (doc) => {
+  //     console.log("Current data: ", doc.data());
+  //   });
+  // }, [db, user, setUserData]);
+
+  const isSuccess = user?.uid !== null;
+
+  // User data is loading
+  // if (isLoading) {
+  //   return <div>Loading</div>;
+  // }
+
+  // Error when loading user data
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  if (isSuccess) {
+    setIsLoading(false);
+    return (
+      <UserContext.Provider value={userData}>{children}</UserContext.Provider>
+    );
+  }
+}
 
 function useUser() {
   const context = useContext(UserContext);
@@ -20,4 +60,4 @@ function useUser() {
   return context;
 }
 
-// export { UserProvider, useUser };
+export { UserProvider, useUser };
