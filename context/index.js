@@ -7,8 +7,8 @@ const AppProviders = ({ children }) => {
     <FirestoreProvider>
       <AuthProvider>
         <ProtectRoute>
-          {/* <UserProvider>{children}</UserProvider> */}
-          {children}
+          <UserProvider>{children}</UserProvider>
+          {/* {children} */}
         </ProtectRoute>
       </AuthProvider>
     </FirestoreProvider>

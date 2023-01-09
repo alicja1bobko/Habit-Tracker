@@ -7,8 +7,12 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 import DailyGoals from "../components/loggedIn/DailyGoals";
 import ProgressCalendar from "../components/loggedIn/Calendar";
+import { useUser } from "../context/user-context";
 
 const habitDashboardPage: NextPageWithLayout = () => {
+  const userData = useUser();
+  console.log(userData);
+
   return (
     <>
       <div className="col-span-4">
