@@ -236,3 +236,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 export default function useAuth() {
   return useContext(AuthContext);
 }
+
+export const ProtectRoute = ({ children }: any) => {
+  const router = useRouter();
+  const authContext = useContext(AuthContext);
+
+  const isLoggedIn = authContext.user !== null;
+
+  if (isLoggedIn && window.location.pathname === "/") {
+    router.push("/habit-dashboard");
+  } else if (!isLoggedIn && window.location.pathname !== "/") {
+    router.push("/sign-in");
+  }
+
+  return children;
+};

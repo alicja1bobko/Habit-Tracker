@@ -24,6 +24,7 @@ const SignIn = () => {
     signUpAnonymously,
     error,
   } = useAuth();
+
   const {
     register,
     handleSubmit,
