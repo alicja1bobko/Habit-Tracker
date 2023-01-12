@@ -1,23 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DoneIcon from "@mui/icons-material/Done";
-type Props = {};
+import { db } from "../../pages/api/firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import useAuth from "../../context/auth-context";
 
 type Goal = {
-  habit: string;
-  id: number;
+  habit: any;
+  key: number;
+  habitKey: string;
+  checkmarkKey: string;
+  isCompleted: boolean;
 };
 
-const habits = ["journaling", "meditation", "wake up at 6am", "joga"];
+const weekdaysTable: { [key: string]: string } = {
+  0: "Mon",
+  1: "Tue",
+  2: "Wed",
+  3: "Thu",
+  4: "Fri",
+  5: "Sat",
+  6: "Sun",
+};
 
-const Goal = ({ habit, id }: Goal) => {
-  const [isDone, setIsDone] = useState(false);
+const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
+  const { user } = useAuth();
+  const [isDone, setIsDone] = useState<boolean>(isCompleted);
+
+  let frequency: string[] = [];
+  habit.frequency.map((num: number) => {
+    frequency.push(weekdaysTable[num]);
+  });
 
   const handleClick = () => {
     setIsDone((current) => !current);
+    handleCheckedChange(isDone, habitKey, checkmarkKey, user);
   };
 
   return (
-    <div key={id} className="mb-8">
+    <div className="mb-8">
       <div
         className="flex flex-col rounded-3xl w-full m-3 lg:w-1/2 xl:m-0 xl:w-full transition-all"
         style={{ backgroundColor: isDone ? "#318a31" : "#fcfbf9" }}
@@ -27,13 +47,13 @@ const Goal = ({ habit, id }: Goal) => {
             className="font-bold capitalize"
             style={{ color: isDone ? "white" : "black" }}
           >
-            {habit}
+            {habit.name}
           </h3>
           <p
-            className="text-sm whitespace-nowrap"
+            className="text-sm whitespace-nowrap mt-1"
             style={{ color: isDone ? "white" : "#b9b8b8" }}
           >
-            Every day
+            {frequency.length == 6 ? "Everyday" : frequency.join(", ")}
           </p>
         </div>
         <button
@@ -55,11 +75,42 @@ const Goal = ({ habit, id }: Goal) => {
   );
 };
 
-const DailyGoals = (props: Props) => {
-  const habitsList = habits.map((habit, index) => {
-    return <Goal habit={habit} id={index} key={index} />;
-  });
+interface IDailyGoals {
+  habits: {
+    [key: string]: {
+      name: string;
+      description: string;
+      frequency: Array<number>;
+    };
+  };
+  checkmarks: {
+    [key: string]: {
+      habitId: string;
+      date: string;
+      completed: boolean;
+    };
+  };
+}
 
+const DailyGoals = ({ habits, checkmarks }: IDailyGoals) => {
+  const habitsKeys = Object.keys(habits);
+  const checkmarkKeys = Object.keys(checkmarks);
+  const habitsList = habitsKeys.map((habitKey, index) => {
+    let checkmarkKey = checkmarkKeys.find((key) => {
+      return checkmarks[key].habitId == habitKey;
+    }) as string;
+
+    let isCompleted = checkmarks[checkmarkKey].completed;
+    return (
+      <Goal
+        habit={habits[habitKey]}
+        key={index}
+        habitKey={habitKey}
+        checkmarkKey={checkmarkKey}
+        isCompleted={isCompleted}
+      />
+    );
+  });
   return (
     <>
       <h3 className="font-bold text-lg mb-2 mt-2">Habits</h3>
@@ -69,3 +120,21 @@ const DailyGoals = (props: Props) => {
 };
 
 export default DailyGoals;
+
+/* function to update document in firestore */
+const handleCheckedChange = async (
+  isDone: boolean,
+  habitKey: string,
+  checkmarkKey: string,
+  user: any
+) => {
+  console.log(isDone, habitKey, checkmarkKey);
+  const checkmarkDoc = doc(db, `users/${user?.uid}/checkmarks/${checkmarkKey}`);
+  try {
+    await updateDoc(checkmarkDoc, { completed: isDone });
+  } catch (err) {
+    alert(err);
+  }
+};
+
+export { handleCheckedChange };

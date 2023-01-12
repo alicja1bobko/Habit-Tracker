@@ -1,14 +1,23 @@
-import Image from "next/image";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import Statistics from "../components/loggedIn/Statistics";
 import Greeting from "../components/loggedIn/Greeting";
 import ProfilePicture from "../components/loggedIn/ProfilePicture";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 import DailyGoals from "../components/loggedIn/DailyGoals";
-import ProgressCalendar from "../components/loggedIn/Calendar";
+import { useUser } from "../context/user-context";
+import { IUserData } from "../context/user-context";
 
 const habitDashboardPage: NextPageWithLayout = () => {
+  const userData: IUserData | null = useUser();
+  const [habits, setHabits] = useState({});
+  const [checkmarks, setCheckmarks] = useState({});
+
+  useEffect(() => {
+    userData && setHabits(userData.habits);
+    userData && setCheckmarks(userData.checkmarks);
+  }, [userData]);
+
   return (
     <>
       <div className="col-span-4">
@@ -27,7 +36,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
         {/* <ProgressCalendar /> */}
       </div>
       <div className="col-span-1">
-        <DailyGoals />
+        <DailyGoals habits={habits} checkmarks={checkmarks} />
       </div>
     </>
   );
