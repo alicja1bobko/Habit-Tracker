@@ -30,5 +30,5 @@ const DashboardLayout = ({ children, meta }: Props) => {
     </>
   );
 };
-
+DashboardLayout.requireAuth = true;
 export default DashboardLayout;

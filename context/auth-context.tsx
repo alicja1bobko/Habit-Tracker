@@ -13,7 +13,14 @@ import {
   getAdditionalUserInfo,
 } from "firebase/auth";
 import { useRouter } from "next/router";
-import { useState, createContext, useEffect, useMemo, useContext } from "react";
+import {
+  useState,
+  createContext,
+  useEffect,
+  useMemo,
+  useContext,
+  ReactNode,
+} from "react";
 import { auth } from "../pages/api/firebase";
 import setSampleUserDatabase from "./propagate-sample-data";
 
@@ -28,6 +35,7 @@ interface IAuth {
   logout: () => Promise<void>;
   error: string | null;
   loading: boolean;
+  initialLoading: boolean;
 }
 
 const AuthContext = createContext<IAuth>({
@@ -41,6 +49,7 @@ const AuthContext = createContext<IAuth>({
   logout: async () => {},
   error: null,
   loading: false,
+  initialLoading: true,
 });
 
 interface AuthProviderProps {
@@ -222,6 +231,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       signUpWithGithubProvider,
       signUpWithGoogleProvider,
       signUpAnonymously,
+      initialLoading,
     }),
     [user, loading, error]
   );
@@ -237,17 +247,30 @@ export default function useAuth() {
   return useContext(AuthContext);
 }
 
-export const ProtectRoute = ({ children }: any) => {
+export function AuthGuard({ children }: { children: JSX.Element }) {
+  const { user, initialLoading } = useAuth();
   const router = useRouter();
-  const authContext = useContext(AuthContext);
 
-  const isLoggedIn = authContext.user !== null;
+  useEffect(() => {
+    if (!initialLoading) {
+      //auth is initialized and there is no user
+      if (!user) {
+        // redirect
+        router.push("/sign-in");
+      }
+    }
+  }, [initialLoading, router, user]);
 
-  if (isLoggedIn && window.location.pathname === "/") {
-    router.push("/habit-dashboard");
-  } else if (!isLoggedIn && window.location.pathname !== "/") {
-    router.push("/sign-in");
+  /* show loading indicator while the auth provider is still initializing */
+  if (initialLoading) {
+    return <div>Loading..</div>;
   }
 
-  return children;
-};
+  // if auth initialized with a valid user show protected page
+  if (!initialLoading && user) {
+    return <>{children}</>;
+  }
+
+  /* otherwise don't return anything, will do a redirect from useEffect */
+  return null;
+}

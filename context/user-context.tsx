@@ -9,10 +9,10 @@ import {
 import useAuth from "./auth-context";
 import { db } from "../pages/api/firebase";
 
-const UserContext = createContext<Object | null>(null);
+const UserContext = createContext<IUserData | null>(null);
 UserContext.displayName = "UserContext";
 
-interface IUserData {
+export interface IUserData {
   habits: {
     [key: string]: {
       name: string;
@@ -24,7 +24,7 @@ interface IUserData {
     [key: string]: {
       habitId: string;
       date: string;
-      value: string;
+      completed: boolean;
     };
   };
   settings: {
@@ -36,7 +36,7 @@ function UserProvider({ children }: { children: ReactNode }) {
   const [userData, setUserData] = useState<IUserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
-  // const [error, setError] = useState(false);
+  const [error, setError] = useState(false);
 
   const { user } = useAuth();
 
@@ -48,40 +48,70 @@ function UserProvider({ children }: { children: ReactNode }) {
   }, [userData]);
 
   useEffect(() => {
+    let isMounted = true;
     const habitsRef = collection(db, `users/${user?.uid}/habits`);
     const checkmarksRef = collection(db, `users/${user?.uid}/checkmarks`);
     const settingsRef = collection(db, `users/${user?.uid}/settings`);
 
     //real time update
     //habits
-    onSnapshot(habitsRef, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        setUserData((prev: any) => ({
-          ...prev,
-          habits: {
-            [doc.id]: doc.data(),
-          },
-        }));
-      });
-    });
+    onSnapshot(
+      habitsRef,
+      (snapshot) => {
+        if (isMounted) {
+          snapshot.docs.forEach((doc) => {
+            setUserData((prev: any) => ({
+              ...prev,
+              habits: {
+                [doc.id]: doc.data(),
+              },
+            }));
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
     //checkmarks
-    onSnapshot(checkmarksRef, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        setUserData((prev: any) => ({
-          ...prev,
-          checkmarks: {
-            [doc.id]: doc.data(),
-          },
-        }));
-      });
-    });
+    onSnapshot(
+      checkmarksRef,
+      (snapshot) => {
+        if (isMounted) {
+          snapshot.docs.forEach((doc) => {
+            setUserData((prev: any) => ({
+              ...prev,
+              checkmarks: {
+                [doc.id]: doc.data(),
+              },
+            }));
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
     //settings
-    onSnapshot(settingsRef, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        setUserData((prev: any) => ({ ...prev, settings: doc.data() }));
-      });
-    });
-
+    onSnapshot(
+      settingsRef,
+      (snapshot) => {
+        if (isMounted) {
+          snapshot.docs.forEach((doc) => {
+            setUserData((prev: any) => ({ ...prev, settings: doc.data() }));
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
+    return () => {
+      isMounted = false;
+    };
     // return () => unsubscribe();
   }, [user, db, setUserData]);
 
@@ -90,17 +120,13 @@ function UserProvider({ children }: { children: ReactNode }) {
     return <div>Loading</div>;
   }
 
-  // Error when loading user data
-  // if (error) {
-  //   return <div>Error</div>;
-  // }
-
   if (isSuccess) {
-    console.log(userData);
     return (
       <UserContext.Provider value={userData}>{children}</UserContext.Provider>
     );
   }
+
+  return <>{children}</>;
 }
 
 function useUser() {

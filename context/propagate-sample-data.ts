@@ -1,11 +1,5 @@
-import {
-  collection,
-  addDoc,
-  serverTimestamp,
-  FieldValue,
-} from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
-import { useFirestore } from "./firestore-context";
 import { db } from "../pages/api/firebase";
 
 export default async function setSampleUserDatabase(uid: string) {
@@ -28,6 +22,6 @@ export default async function setSampleUserDatabase(uid: string) {
   await addDoc(checkmarksCol, {
     habitId: "habit-one",
     date: Date.now(),
-    value: "completed",
+    completed: false,
   });
 }

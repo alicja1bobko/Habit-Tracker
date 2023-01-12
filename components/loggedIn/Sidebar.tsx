@@ -12,6 +12,7 @@ import AddTaskIcon from "@mui/icons-material/AddTask";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import useAuth from "../../context/auth-context";
 
 const drawerWidth = 280;
 
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export default function Sidebar({ children }: Props) {
+  const { logout } = useAuth();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -77,7 +79,7 @@ export default function Sidebar({ children }: Props) {
           index={4}
           handleListItemClick={handleListItemClick}
         >
-          Logout
+          <button onClick={() => logout()}>Logout</button>
         </DrawerButton>
       </List>
     </div>
