@@ -3,6 +3,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import { db } from "../../pages/api/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import useAuth from "../../context/auth-context";
+import { weekdaysTable } from "../../utils/weekdays";
 
 type Goal = {
   habit: any;
@@ -10,16 +11,6 @@ type Goal = {
   habitKey: string;
   checkmarkKey: string;
   isCompleted: boolean;
-};
-
-const weekdaysTable: { [key: string]: string } = {
-  0: "Mon",
-  1: "Tue",
-  2: "Wed",
-  3: "Thu",
-  4: "Fri",
-  5: "Sat",
-  6: "Sun",
 };
 
 const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
@@ -33,8 +24,11 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
 
   const handleClick = () => {
     setIsDone((current) => !current);
-    handleCheckedChange(isDone, habitKey, checkmarkKey, user);
   };
+
+  useEffect(() => {
+    handleCheckedChange(isDone, habitKey, checkmarkKey, user);
+  }, [isDone]);
 
   return (
     <div className="mb-8">
@@ -86,7 +80,7 @@ interface IDailyGoals {
   checkmarks: {
     [key: string]: {
       habitId: string;
-      date: string;
+      date: number;
       completed: boolean;
     };
   };
@@ -101,6 +95,8 @@ const DailyGoals = ({ habits, checkmarks }: IDailyGoals) => {
     }) as string;
 
     let isCompleted = checkmarks[checkmarkKey].completed;
+    let date = new Date(checkmarks[checkmarkKey].date);
+    console.log(date);
     return (
       <Goal
         habit={habits[habitKey]}
@@ -128,7 +124,6 @@ const handleCheckedChange = async (
   checkmarkKey: string,
   user: any
 ) => {
-  console.log(isDone, habitKey, checkmarkKey);
   const checkmarkDoc = doc(db, `users/${user?.uid}/checkmarks/${checkmarkKey}`);
   try {
     await updateDoc(checkmarkDoc, { completed: isDone });

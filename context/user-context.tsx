@@ -23,7 +23,7 @@ export interface IUserData {
   checkmarks: {
     [key: string]: {
       habitId: string;
-      date: string;
+      date: number;
       completed: boolean;
     };
   };
@@ -116,9 +116,9 @@ function UserProvider({ children }: { children: ReactNode }) {
   }, [user, db, setUserData]);
 
   // User data is loading
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading</div>;
+  // }
 
   if (isSuccess) {
     return (
