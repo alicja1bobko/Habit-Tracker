@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -9,13 +9,14 @@ import {
   FormGroup,
   TextField,
 } from "@mui/material";
-import { weekdaysTable } from "../utils/weekdays";
+import { normaliZeWeekdayFromDate, weekdaysTable } from "../utils/weekdays";
 import { createHabitSchema } from "../schemas/create-habit";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../pages/api/firebase";
 import useAuth from "../context/auth-context";
+import { getToday } from "../utils/getToday";
 
 type FormValues = {
   habitName: string;
@@ -30,6 +31,7 @@ const initializeHabit = {
 };
 
 const addHabitPage: NextPageWithLayout = () => {
+  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const {
     control,
@@ -48,13 +50,24 @@ const addHabitPage: NextPageWithLayout = () => {
     description,
     frequency,
   }) => {
+    setLoading(true);
     const habitsCol = collection(db, `users/${user?.uid}/habits`);
-    await addDoc(habitsCol, {
+    const docRef = await addDoc(habitsCol, {
       name: habitName,
       description: description,
       frequency: frequency,
     });
-
+    //if applicable to current day add checkmark for this habit
+    const weekday = normaliZeWeekdayFromDate();
+    if (frequency.filter((day) => day == weekday).length > 0) {
+    }
+    const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
+    await addDoc(checkmarksDoc, {
+      completed: false,
+      habitId: docRef.id,
+      date: getToday(),
+    });
+    setLoading(false);
     reset();
   };
 
@@ -171,6 +184,7 @@ const addHabitPage: NextPageWithLayout = () => {
           </FormGroup>
         </FormControl>
         <LoadingButton
+          loading={loading}
           fullWidth
           variant="contained"
           sx={{
@@ -255,4 +269,3 @@ const formControlStyle = {
     color: "white",
   },
 };
-

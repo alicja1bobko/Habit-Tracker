@@ -47,7 +47,7 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
             className="text-sm whitespace-nowrap mt-1"
             style={{ color: isDone ? "white" : "#b9b8b8" }}
           >
-            {frequency.length == 6 ? "Everyday" : frequency.join(", ")}
+            {frequency.length === 7 ? "Everyday" : frequency.join(", ")}
           </p>
         </div>
         <button
@@ -80,7 +80,7 @@ interface IDailyGoals {
   checkmarks: {
     [key: string]: {
       habitId: string;
-      date: number;
+      date: string;
       completed: boolean;
     };
   };
@@ -94,25 +94,17 @@ const DailyGoals = ({ habits, checkmarks }: IDailyGoals) => {
       return checkmarks[key].habitId == habitKey;
     }) as string;
 
-    let isCompleted = checkmarks[checkmarkKey].completed;
-    let date = new Date(checkmarks[checkmarkKey].date);
-    console.log(date);
     return (
       <Goal
         habit={habits[habitKey]}
         key={index}
         habitKey={habitKey}
         checkmarkKey={checkmarkKey}
-        isCompleted={isCompleted}
+        isCompleted={checkmarks[checkmarkKey].completed}
       />
     );
   });
-  return (
-    <>
-      <h3 className="font-bold text-lg mb-2 mt-2">Habits</h3>
-      {habitsList}
-    </>
-  );
+  return <>{habitsList}</>;
 };
 
 export default DailyGoals;

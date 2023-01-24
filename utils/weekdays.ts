@@ -7,3 +7,10 @@ export const weekdaysTable: { [key: string]: string } = {
   5: "Sa",
   6: "Su",
 };
+
+export const normaliZeWeekdayFromDate = () => {
+  // new Date().getDay() returns 0 for Sunday 1 for Monday and so on..
+  let weekday = new Date().getDay();
+  if (weekday === 0) return 6;
+  else return weekday - 1;
+};

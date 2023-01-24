@@ -7,16 +7,67 @@ import { NextPageWithLayout } from "./_app";
 import DailyGoals from "../components/loggedIn/DailyGoals";
 import { useUser } from "../context/user-context";
 import { IUserData } from "../context/user-context";
+import { getToday } from "../utils/getToday";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "./api/firebase";
+import useAuth from "../context/auth-context";
+import { normaliZeWeekdayFromDate } from "../utils/weekdays";
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
-  const [habits, setHabits] = useState({});
+  const { user } = useAuth();
+  const [habits, setHabits] = useState<IUserData["habits"]>({});
   const [checkmarks, setCheckmarks] = useState({});
 
+  const today: any = getToday();
+  const weekday = normaliZeWeekdayFromDate();
+
   useEffect(() => {
-    userData && setHabits(userData.habits);
-    userData && setCheckmarks(userData.checkmarks);
+    setHabits(userData.habits);
+    initializeNewDay(userData.checkmarks, userData.habits);
   }, [userData]);
+
+  //check if today's checkmarks exist in database if not initialize
+  const initializeNewDay = (
+    allCheckmarks: { [key: string]: any },
+    allHabits: { [key: string]: any }
+  ) => {
+    const checkmarkKeys = Object.keys(allCheckmarks);
+    const habitsKeys = Object.keys(allHabits);
+
+    let todaysCheckmarkKeys = checkmarkKeys.filter(
+      (checkmarkKey) => allCheckmarks[checkmarkKey].date == today
+    );
+
+    if (todaysCheckmarkKeys.length == 0) {
+      const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
+      let todaysHabits = habitsKeys.map((habitKey) => {
+        if (allHabits[habitKey].frequency.some((day: any) => day == weekday))
+          return habitKey;
+      });
+      //add new checkmarks docs for all today's habits
+      const addCheckmarksToDb = () => {
+        todaysHabits.forEach(async (habitKey) => {
+          const docRef = await addDoc(checkmarksDoc, {
+            completed: false,
+            habitId: habitKey,
+            date: today,
+          });
+          setCheckmarks({ [docRef.id]: userData.checkmarks[docRef.id] });
+        });
+      };
+      addCheckmarksToDb();
+    } else {
+      let todaysCheckmarks = todaysCheckmarkKeys.map((checkmarkKey) => {
+        return { [checkmarkKey]: allCheckmarks[checkmarkKey] };
+      });
+      // transform array of objects to key value object
+      const res = todaysCheckmarks.reduce((acc, curr) => {
+        return { ...acc, ...curr };
+      }, {});
+      setCheckmarks(res);
+    }
+  };
 
   return (
     <>
@@ -36,6 +87,9 @@ const habitDashboardPage: NextPageWithLayout = () => {
         {/* <ProgressCalendar /> */}
       </div>
       <div className="col-span-1">
+        <div className="flex justify-between">
+          <h3 className="font-bold text-lg mb-2 mt-2">Habits</h3>
+        </div>
         <DailyGoals habits={habits} checkmarks={checkmarks} />
       </div>
     </>
