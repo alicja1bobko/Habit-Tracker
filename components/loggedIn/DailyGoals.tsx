@@ -87,20 +87,26 @@ interface IDailyGoals {
 }
 
 const DailyGoals = ({ habits, checkmarks }: IDailyGoals) => {
+  
   const habitsKeys = Object.keys(habits);
+  if (habitsKeys.length === 0) {
+    return <p className="italic mt-2">No habits for today</p>;
+  }
+
   const checkmarkKeys = Object.keys(checkmarks);
   const habitsList = habitsKeys.map((habitKey, index) => {
     let checkmarkKey = checkmarkKeys.find((key) => {
       return checkmarks[key].habitId == habitKey;
     }) as string;
 
+    let completed = checkmarks[checkmarkKey]?.completed;
     return (
       <Goal
         habit={habits[habitKey]}
         key={index}
         habitKey={habitKey}
         checkmarkKey={checkmarkKey}
-        isCompleted={checkmarks[checkmarkKey].completed}
+        isCompleted={completed}
       />
     );
   });

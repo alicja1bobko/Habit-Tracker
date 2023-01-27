@@ -17,13 +17,12 @@ const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
   const { user } = useAuth();
   const [habits, setHabits] = useState<IUserData["habits"]>({});
-  const [checkmarks, setCheckmarks] = useState({});
+  const [checkmarks, setCheckmarks] = useState<IUserData["checkmarks"]>({});
 
   const today: any = getToday();
   const weekday = normaliZeWeekdayFromDate();
 
   useEffect(() => {
-    setHabits(userData.habits);
     initializeNewDay(userData.checkmarks, userData.habits);
   }, [userData]);
 
@@ -39,15 +38,32 @@ const habitDashboardPage: NextPageWithLayout = () => {
       (checkmarkKey) => allCheckmarks[checkmarkKey].date == today
     );
 
-    if (todaysCheckmarkKeys.length == 0) {
-      const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
-      let todaysHabits = habitsKeys.map((habitKey) => {
-        if (allHabits[habitKey].frequency.some((day: any) => day == weekday))
-          return habitKey;
+    let todaysHabitKeys = habitsKeys.filter((habitKey) => {
+      if (allHabits[habitKey].frequency.some((day: any) => day == weekday)) {
+        return habitKey;
+      }
+    });
+
+    // if habits for today exist setHabits
+    if (todaysHabitKeys.length !== 0) {
+      let todaysHabits = todaysHabitKeys.map((habitKey) => {
+        return { [habitKey!]: allHabits[habitKey!] };
       });
+
+      // transform array of objects to key value object
+      const res = todaysHabits.reduce((acc, curr) => {
+        return { ...acc, ...curr };
+      }, {});
+      setHabits(res);
+    }
+
+    //if habits for today exist set checkmarks for each habit in db
+    if (todaysCheckmarkKeys.length == 0 && todaysHabitKeys.length !== 0) {
+      const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
+
       //add new checkmarks docs for all today's habits
       const addCheckmarksToDb = () => {
-        todaysHabits.forEach(async (habitKey) => {
+        todaysHabitKeys.forEach(async (habitKey) => {
           const docRef = await addDoc(checkmarksDoc, {
             completed: false,
             habitId: habitKey,
