@@ -1,40 +1,41 @@
 import { TextField } from "@material-ui/core";
 import LoadingButton from "@mui/lab/LoadingButton";
-import Link from "next/link";
 import React, { useState } from "react";
-import FormDivider from "../components/FormDivider";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { signUpSchema } from "../schemas/logging-validation-schema";
+import { signInSchema } from "../../schemas/logging-validation-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useAuth from "../context/auth-context";
+import useAuth from "../../context/auth-context";
 import AuthList from "./AuthList";
+import Link from "next/link";
+import FormDivider from "./FormDivider";
 
 type FormValues = {
   email: string;
   password: string;
-  passwordConfirmation: string;
 };
 
-const SignUp = () => {
+const SignIn = () => {
   const [login, setLogin] = useState(false);
   const {
-    signUp,
+    signIn,
     signUpWithFacebookProvider,
     signUpWithGithubProvider,
     signUpWithGoogleProvider,
     signUpAnonymously,
+    error,
   } = useAuth();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: yupResolver(signUpSchema) });
+  } = useForm<FormValues>({ resolver: yupResolver(signInSchema) });
 
   const onSubmitHandler: SubmitHandler<FormValues> = async ({
     email,
     password,
   }) => {
-    login && (await signUp(email, password));
+    login && (await signIn(email, password));
   };
 
   const handleOnAuthorizationProviderClick = (
@@ -57,22 +58,22 @@ const SignUp = () => {
   };
 
   return (
-    <div className="sm:h-[calc(100vh-2rem)] xl:h-[calc(100vh-7rem)] flex items-center text-center">
+    <div className="h-[calc(100vh-4rem)] flex items-center text-center">
       <div className="bg-white text-black mx-auto px-2 md:px-8 xl:px-[5rem] border rounded-lg shadow-2xl">
         <form
           onSubmit={handleSubmit(onSubmitHandler)}
           className="md:w-[23rem] my-8"
         >
-          <h1 className="text-3xl">Sign up</h1>
-          <p className="text-slate-500 mt-[1rem] mb-[1rem]">
-            Already have an account?{" "}
-            <Link href="/sign-in" className="text-blue-600 font-semibold">
-              Sign in
+          <h1 className="text-3xl mb-7">Sign in</h1>
+          <p className="text-slate-500 mt-[1rem] mb-[2rem]">
+            Don't have an account?{" "}
+            <Link href="/sign-up" className="text-blue-600 font-semibold">
+              Sign up
             </Link>
           </p>
 
           <AuthList
-            text={"Sign Up"}
+            text={"Sign In "}
             onAuthorizationProviderClick={handleOnAuthorizationProviderClick}
           />
           <FormDivider />
@@ -112,23 +113,10 @@ const SignUp = () => {
               ) : (
                 <p className="invalidInput hide"></p>
               )}
-            </div>
-            <div>
-              <TextField
-                type="password"
-                autoComplete="repeat-password"
-                label={"Confirm password"}
-                placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                variant="outlined"
-                fullWidth
-                {...register("passwordConfirmation")}
-              />
-              {errors.passwordConfirmation ? (
+              {error && (
                 <p className="invalidInput" role="alert">
-                  {errors.passwordConfirmation.message}
+                  {error}
                 </p>
-              ) : (
-                <p className="invalidInput hide"></p>
               )}
             </div>
 
@@ -139,7 +127,7 @@ const SignUp = () => {
               type="submit"
               onClick={() => setLogin(true)}
             >
-              Sign up
+              Sign in
             </LoadingButton>
           </div>
         </form>
@@ -147,4 +135,4 @@ const SignUp = () => {
     </div>
   );
 };
-export default SignUp;
+export default SignIn;

@@ -1,7 +1,7 @@
 import HomepageLayout from "../Layouts/HomepageLayout";
 import React, { ReactElement, ReactNode } from "react";
 import type { NextPageWithLayout } from "../pages/_app";
-import SignIn from "../components/SignIn";
+import SignIn from "../components/notLogged/SignIn";
 
 const SignInPage: NextPageWithLayout = () => {
   return <SignIn />;

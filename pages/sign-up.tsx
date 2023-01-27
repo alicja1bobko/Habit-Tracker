@@ -1,4 +1,4 @@
-import SignUp from "../components/SignUp";
+import SignUp from "../components/notLogged/SignUp";
 import HomepageLayout from "../Layouts/HomepageLayout";
 import React, { ReactElement, ReactNode } from "react";
 import type { NextPageWithLayout } from "../pages/_app";
