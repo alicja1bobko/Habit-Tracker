@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React, { ReactNode } from "react";
-import HeroBackground from "../components/HeroBackground";
-import Navbar from "../components/Navbar";
+import HeroBackground from "../components/notLogged/HeroBackground";
+import Navbar from "../components/notLogged/Navbar";
 
 interface Props {
   meta: {
@@ -26,7 +26,7 @@ const HomepageLayout = ({ children, meta }: Props) => {
         <link rel="icon" href={icon || "/favicon.ico"} />
       </Head>
       <HeroBackground>
-        <div className="z-10 ">
+        <div className="z-10">
           <Navbar />
           {children}
         </div>

@@ -13,11 +13,9 @@ const LandingPage = () => {
         beautiful charts and insightful statistics helps you efficiently and
         successfully maintain great habits.
       </p>
-      <Link href="/sign-up">
-        <button className="rounded-lg px-7 py-3 bg-blue-700 text-white text-base md:text-xl cursor-pointer shadow-lg hover:bg-blue-800 transition-all ease-in tracking-wider">
-          Get Started
-        </button>
-      </Link>
+      <button className="btn rounded-lg px-7 py-3 bg-blue-700 text-white text-base md:text-xl cursor-pointer shadow-lg hover:bg-blue-800 transition-all ease-in tracking-wider">
+        <Link href="/sign-up">Get Started</Link>
+      </button>
     </div>
   );
 };

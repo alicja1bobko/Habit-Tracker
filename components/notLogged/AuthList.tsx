@@ -1,5 +1,5 @@
 import React from "react";
-import authData from "../utils/auth-data";
+import authData from "../../utils/auth-data";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@material-ui/core";
 

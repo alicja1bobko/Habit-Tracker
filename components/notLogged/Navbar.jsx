@@ -7,8 +7,10 @@ import { IconButton, Menu } from "@material-ui/core";
 import { AccountCircle, PersonAdd } from "@material-ui/icons";
 import Link from "next/link";
 import Box from "@mui/material/Box";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -22,7 +24,7 @@ const Navbar = () => {
   return (
     <div>
       <nav className="flex flex-wrap items-center justify-between w-full px-10 text-lg text-zinc-900 bg-white h-[4rem] z-10 shadow-[0_5px_10px_0px_rgba(0,0,0,0.25)]">
-        <span className="text-2xl font-semibold">
+        <span className="text-2xl font-semibold" data-test="appName">
           <Link href="/">Habit Tracker</Link>
         </span>
         {/* {Desktop Menu} */}
@@ -39,12 +41,19 @@ const Navbar = () => {
             </a>
           </MenuItem>
 
-          <Link className="px-2 block hover:text-purple-500" href="/sign-in">
+          <Link
+            className={`px-2 block hover:text-purple-400 ${
+              router.pathname == "/sign-in" ? "text-purple-400" : "text-black"
+            }`}
+            href="/sign-in"
+          >
             <MenuItem>Sign In</MenuItem>
           </Link>
 
           <Link
-            className="px-2 block hover:text-purple-400 text-purple-500"
+            className={`px-2 block hover:text-purple-400 ${
+              router.pathname == "/sign-up" ? "text-purple-400" : "text-black"
+            }`}
             href="/sign-up"
           >
             <MenuItem>Sign Up</MenuItem>

@@ -1,4 +1,4 @@
-import LandingPage from "../components/LandingPage";
+import LandingPage from "../components/notLogged/LandingPage";
 import HomepageLayout from "../Layouts/HomepageLayout";
 import { ReactElement } from "react";
 import type { NextPageWithLayout } from "./_app";

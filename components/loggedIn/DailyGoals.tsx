@@ -3,6 +3,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import { db } from "../../pages/api/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import useAuth from "../../context/auth-context";
+import { weekdaysTable } from "../../utils/weekdays";
 
 type Goal = {
   habit: any;
@@ -10,16 +11,6 @@ type Goal = {
   habitKey: string;
   checkmarkKey: string;
   isCompleted: boolean;
-};
-
-const weekdaysTable: { [key: string]: string } = {
-  0: "Mon",
-  1: "Tue",
-  2: "Wed",
-  3: "Thu",
-  4: "Fri",
-  5: "Sat",
-  6: "Sun",
 };
 
 const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
@@ -33,8 +24,11 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
 
   const handleClick = () => {
     setIsDone((current) => !current);
-    handleCheckedChange(isDone, habitKey, checkmarkKey, user);
   };
+
+  useEffect(() => {
+    handleCheckedChange(isDone, habitKey, checkmarkKey, user);
+  }, [isDone]);
 
   return (
     <div className="mb-8">
@@ -53,7 +47,7 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
             className="text-sm whitespace-nowrap mt-1"
             style={{ color: isDone ? "white" : "#b9b8b8" }}
           >
-            {frequency.length == 6 ? "Everyday" : frequency.join(", ")}
+            {frequency.length === 7 ? "Everyday" : frequency.join(", ")}
           </p>
         </div>
         <button
@@ -93,30 +87,30 @@ interface IDailyGoals {
 }
 
 const DailyGoals = ({ habits, checkmarks }: IDailyGoals) => {
+  
   const habitsKeys = Object.keys(habits);
+  if (habitsKeys.length === 0) {
+    return <p className="italic mt-2">No habits for today</p>;
+  }
+
   const checkmarkKeys = Object.keys(checkmarks);
   const habitsList = habitsKeys.map((habitKey, index) => {
     let checkmarkKey = checkmarkKeys.find((key) => {
       return checkmarks[key].habitId == habitKey;
     }) as string;
 
-    let isCompleted = checkmarks[checkmarkKey].completed;
+    let completed = checkmarks[checkmarkKey]?.completed;
     return (
       <Goal
         habit={habits[habitKey]}
         key={index}
         habitKey={habitKey}
         checkmarkKey={checkmarkKey}
-        isCompleted={isCompleted}
+        isCompleted={completed}
       />
     );
   });
-  return (
-    <>
-      <h3 className="font-bold text-lg mb-2 mt-2">Habits</h3>
-      {habitsList}
-    </>
-  );
+  return <>{habitsList}</>;
 };
 
 export default DailyGoals;
@@ -128,7 +122,6 @@ const handleCheckedChange = async (
   checkmarkKey: string,
   user: any
 ) => {
-  console.log(isDone, habitKey, checkmarkKey);
   const checkmarkDoc = doc(db, `users/${user?.uid}/checkmarks/${checkmarkKey}`);
   try {
     await updateDoc(checkmarkDoc, { completed: isDone });

@@ -1,14 +1,16 @@
 import { collection, addDoc } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../pages/api/firebase";
+import { getToday } from "../utils/getToday";
 
 export default async function setSampleUserDatabase(uid: string) {
+  const today = getToday();
   const userRef = setDoc(doc(db, "users", uid), {});
-  const habitsDoc = doc(db, `users/${uid}/habits`, "habit-one");
+  const habitsDoc = collection(db, `users/${uid}/habits`);
   const checkmarksCol = collection(db, `users/${uid}/checkmarks`);
   const settingsCol = collection(db, `users/${uid}/settings`);
 
-  await setDoc(habitsDoc, {
+  await addDoc(habitsDoc, {
     name: "Wake up at 6am",
     description:
       "Wake up 1 hour before normal wake up time for mindful activities",
@@ -21,7 +23,7 @@ export default async function setSampleUserDatabase(uid: string) {
 
   await addDoc(checkmarksCol, {
     habitId: "habit-one",
-    date: Date.now(),
+    date: today,
     completed: false,
   });
 }

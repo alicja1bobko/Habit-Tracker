@@ -9,8 +9,13 @@ import {
 import useAuth from "./auth-context";
 import { db } from "../pages/api/firebase";
 
-const UserContext = createContext<IUserData | null>(null);
-UserContext.displayName = "UserContext";
+const initializeUserData = {
+  habits: {},
+  checkmarks: {},
+  settings: {
+    name: "Anonymous",
+  },
+};
 
 export interface IUserData {
   habits: {
@@ -32,8 +37,12 @@ export interface IUserData {
   };
 }
 
+//empty value as default
+const UserContext = createContext<IUserData>(initializeUserData);
+UserContext.displayName = "UserContext";
+
 function UserProvider({ children }: { children: ReactNode }) {
-  const [userData, setUserData] = useState<IUserData | null>(null);
+  const [userData, setUserData] = useState<IUserData>(initializeUserData);
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -41,17 +50,42 @@ function UserProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (userData !== null) {
+    if (user !== null) {
       setIsLoading(false);
       setIsSuccess(true);
     }
-  }, [userData]);
+    if (user == null) {
+      setUserData(initializeUserData);
+    }
+  }, [user]);
 
   useEffect(() => {
     let isMounted = true;
     const habitsRef = collection(db, `users/${user?.uid}/habits`);
     const checkmarksRef = collection(db, `users/${user?.uid}/checkmarks`);
     const settingsRef = collection(db, `users/${user?.uid}/settings`);
+
+    //checkmarks
+    onSnapshot(
+      checkmarksRef,
+      (snapshot) => {
+        if (isMounted) {
+          snapshot.docs.forEach((doc) => {
+            setUserData((prev: any) => ({
+              ...prev,
+              checkmarks: {
+                ...prev.checkmarks,
+                [doc.id]: doc.data(),
+              },
+            }));
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+        setIsLoading(false);
+      }
+    );
 
     //real time update
     //habits
@@ -63,6 +97,7 @@ function UserProvider({ children }: { children: ReactNode }) {
             setUserData((prev: any) => ({
               ...prev,
               habits: {
+                ...prev.habits,
                 [doc.id]: doc.data(),
               },
             }));
@@ -74,26 +109,7 @@ function UserProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     );
-    //checkmarks
-    onSnapshot(
-      checkmarksRef,
-      (snapshot) => {
-        if (isMounted) {
-          snapshot.docs.forEach((doc) => {
-            setUserData((prev: any) => ({
-              ...prev,
-              checkmarks: {
-                [doc.id]: doc.data(),
-              },
-            }));
-          });
-        }
-      },
-      (error) => {
-        console.log(error);
-        setIsLoading(false);
-      }
-    );
+
     //settings
     onSnapshot(
       settingsRef,
@@ -109,10 +125,10 @@ function UserProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     );
+
     return () => {
       isMounted = false;
     };
-    // return () => unsubscribe();
   }, [user, db, setUserData]);
 
   // User data is loading
