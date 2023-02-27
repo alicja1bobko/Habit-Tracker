@@ -14,9 +14,9 @@ const Greeting = (props: Props) => {
   } else greeting = "Good evening";
 
   return (
-    <div className="text-3xl font-bold tracking-wide mb-10">
+    <h2 className="text-3xl font-bold tracking-wide mb-10 xl:mb-0 col-span-1 xl:col-span-4 ">
       {greeting}, {name}!
-    </div>
+    </h2>
   );
 };
 

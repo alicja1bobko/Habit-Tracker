@@ -47,7 +47,7 @@ function UserProvider({ children }: { children: ReactNode }) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(false);
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     if (user !== null) {
@@ -82,7 +82,8 @@ function UserProvider({ children }: { children: ReactNode }) {
         }
       },
       (error) => {
-        console.log(error);
+        console.log(error.message);
+        if (user === null) logout();
         setIsLoading(false);
       }
     );
@@ -105,7 +106,8 @@ function UserProvider({ children }: { children: ReactNode }) {
         }
       },
       (error) => {
-        console.log(error);
+        console.log(error.message);
+        if (user === null) logout();
         setIsLoading(false);
       }
     );
@@ -121,7 +123,8 @@ function UserProvider({ children }: { children: ReactNode }) {
         }
       },
       (error) => {
-        console.log(error);
+        console.log(error.message);
+        if (user === null) logout();
         setIsLoading(false);
       }
     );

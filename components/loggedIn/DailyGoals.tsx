@@ -33,7 +33,7 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
   return (
     <div className="mb-8">
       <div
-        className="flex flex-col rounded-3xl w-full m-3 lg:w-1/2 xl:m-0 xl:w-full transition-all"
+        className="flex flex-col rounded-3xl w-full lg:m-3 lg:w-1/2 xl:m-0 xl:w-full transition-all"
         style={{ backgroundColor: isDone ? "#318a31" : "#fcfbf9" }}
       >
         <div className="p-5">
@@ -84,33 +84,36 @@ interface IDailyGoals {
       completed: boolean;
     };
   };
+  loading: boolean;
 }
 
-const DailyGoals = ({ habits, checkmarks }: IDailyGoals) => {
-  
+const DailyGoals = ({ habits, checkmarks, loading }: IDailyGoals) => {
   const habitsKeys = Object.keys(habits);
   if (habitsKeys.length === 0) {
     return <p className="italic mt-2">No habits for today</p>;
   }
+  if (!loading) {
+    const checkmarkKeys = Object.keys(checkmarks);
+    const habitsList = habitsKeys.map((habitKey, index) => {
+      let checkmarkKey = checkmarkKeys.find((key) => {
+        return checkmarks[key].habitId == habitKey;
+      }) as string;
 
-  const checkmarkKeys = Object.keys(checkmarks);
-  const habitsList = habitsKeys.map((habitKey, index) => {
-    let checkmarkKey = checkmarkKeys.find((key) => {
-      return checkmarks[key].habitId == habitKey;
-    }) as string;
-
-    let completed = checkmarks[checkmarkKey]?.completed;
-    return (
-      <Goal
-        habit={habits[habitKey]}
-        key={index}
-        habitKey={habitKey}
-        checkmarkKey={checkmarkKey}
-        isCompleted={completed}
-      />
-    );
-  });
-  return <>{habitsList}</>;
+      let completed = checkmarks[checkmarkKey]?.completed;
+      return (
+        <Goal
+          habit={habits[habitKey]}
+          key={index}
+          habitKey={habitKey}
+          checkmarkKey={checkmarkKey}
+          isCompleted={completed}
+        />
+      );
+    });
+    return <>{habitsList}</>;
+  } else {
+    return <p>Loading...</p>;
+  }
 };
 
 export default DailyGoals;
@@ -126,7 +129,7 @@ const handleCheckedChange = async (
   try {
     await updateDoc(checkmarkDoc, { completed: isDone });
   } catch (err) {
-    alert(err);
+    console.log(err);
   }
 };
 

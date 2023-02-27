@@ -1,28 +1,46 @@
 import React, { ReactElement, useEffect, useState } from "react";
+import { NextPageWithLayout } from "./_app";
 import Statistics from "../components/loggedIn/Statistics";
 import Greeting from "../components/loggedIn/Greeting";
 import ProfilePicture from "../components/loggedIn/ProfilePicture";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import { NextPageWithLayout } from "./_app";
 import DailyGoals from "../components/loggedIn/DailyGoals";
 import { useUser } from "../context/user-context";
 import { IUserData } from "../context/user-context";
-import { getToday } from "../utils/getToday";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "./api/firebase";
 import useAuth from "../context/auth-context";
 import { normaliZeWeekdayFromDate } from "../utils/weekdays";
+import ProgressCalendar from "../components/loggedIn/ProgressCalendar";
+import { SelectChangeEvent } from "@mui/material";
+import {
+  endOfWeek,
+  lightFormat,
+  Locale,
+  startOfWeek,
+  subWeeks,
+} from "date-fns";
+import { CalendarDateRange } from "../components/loggedIn/CalendarDateRange";
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
   const { user } = useAuth();
   const [habits, setHabits] = useState<IUserData["habits"]>({});
   const [checkmarks, setCheckmarks] = useState<IUserData["checkmarks"]>({});
+  const [loading, setLoading] = useState(false);
+  const [weekStart, setWeekStart] = useState(
+    startOfWeek(new Date(), { locale: { code: "en-gb" }, weekStartsOn: 1 })
+  );
+  const [weekEnd, setWeekEnd] = useState(
+    endOfWeek(new Date(), { locale: { code: "en-gb" }, weekStartsOn: 1 })
+  );
+  const [selectedWeek, setSelectedWeek] = useState("0");
 
-  const today: any = getToday();
-  const weekday = normaliZeWeekdayFromDate();
+  const locale: Locale = { code: "en-gb" };
+  const NUMBER_OF_PAST_WEEKS = 4;
 
   useEffect(() => {
+    setLoading(true);
     initializeNewDay(userData.checkmarks, userData.habits);
   }, [userData]);
 
@@ -31,6 +49,8 @@ const habitDashboardPage: NextPageWithLayout = () => {
     allCheckmarks: { [key: string]: any },
     allHabits: { [key: string]: any }
   ) => {
+    const today: any = lightFormat(new Date(), "d-M-yyy");
+    const weekday = normaliZeWeekdayFromDate();
     const checkmarkKeys = Object.keys(allCheckmarks);
     const habitsKeys = Object.keys(allHabits);
 
@@ -60,7 +80,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
     //if habits for today exist set checkmarks for each habit in db
     if (todaysCheckmarkKeys.length == 0 && todaysHabitKeys.length !== 0) {
       const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
-
+      setLoading(true);
       //add new checkmarks docs for all today's habits
       const addCheckmarksToDb = () => {
         todaysHabitKeys.forEach(async (habitKey) => {
@@ -73,6 +93,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
         });
       };
       addCheckmarksToDb();
+      setLoading(false);
     } else {
       let todaysCheckmarks = todaysCheckmarkKeys.map((checkmarkKey) => {
         return { [checkmarkKey]: allCheckmarks[checkmarkKey] };
@@ -82,14 +103,52 @@ const habitDashboardPage: NextPageWithLayout = () => {
         return { ...acc, ...curr };
       }, {});
       setCheckmarks(res);
+      setLoading(false);
     }
+  };
+
+  //Object to store selected week range and pass it to Progress Calendar
+  const weeksList = (num: Number) => {
+    let weekStarts = startOfWeek(new Date(), {
+      locale: { code: "en-gb" },
+      weekStartsOn: 1,
+    });
+    let weekEnds = endOfWeek(new Date(), {
+      locale: { code: "en-gb" },
+      weekStartsOn: 1,
+    });
+    let selectWeeks: {
+      [key: string]: {
+        start: Date;
+        end: Date;
+      };
+    } = {
+      ["0"]: { start: weekStarts, end: weekEnds },
+    };
+    for (let i = 1; i <= num; i++) {
+      let start = subWeeks(weekStarts, i);
+      let end = endOfWeek(start, { locale, weekStartsOn: 1 });
+      selectWeeks = {
+        ...selectWeeks,
+        [i.toString()]: { start: start, end: end },
+      };
+    }
+    return selectWeeks;
+  };
+  const selectWeekRange = weeksList(NUMBER_OF_PAST_WEEKS);
+
+  const handleSelect = (event: SelectChangeEvent<string>) => {
+    let index = event.target.value;
+    setSelectedWeek(index);
+    setWeekStart(selectWeekRange[index]["start"]);
+    setWeekEnd(selectWeekRange[index]["end"]);
   };
 
   return (
     <>
-      <div className="col-span-4">
-        <Greeting />
-        <div className="flex flex-col xl:flex-row justify-between">
+      <div className="col-span-4 xl:col-span-1 p-5">
+        <div className="statistics-layout">
+          <Greeting />
           <ProfilePicture />
           <Statistics header={"Current goal"} text={"habits"} stat={6} />
           <Statistics header={"Achieved today"} text={"habits"} stat={6} />
@@ -100,13 +159,26 @@ const habitDashboardPage: NextPageWithLayout = () => {
             habit={"meditation"}
           />
         </div>
-        {/* <ProgressCalendar /> */}
-      </div>
-      <div className="col-span-1">
-        <div className="flex justify-between">
-          <h3 className="font-bold text-lg mb-2 mt-2">Habits</h3>
+        <div className="mt-10 md:mt-14 mb-5">
+          <CalendarDateRange
+            selectedWeek={selectedWeek}
+            handleSelect={handleSelect}
+            selectWeekRange={selectWeekRange}
+          />
+          <ProgressCalendar
+            checkmarks={userData.checkmarks}
+            habits={userData.habits}
+            weekStart={weekStart}
+            weekEnd={weekEnd}
+          />
         </div>
-        <DailyGoals habits={habits} checkmarks={checkmarks} />
+        <hr></hr>
+      </div>
+      <div className="col-span-4 md:col-span-1 mt-5 md:m-0">
+        <div className="flex justify-between">
+          <h3 className="font-bold text-2xl mb-3 mt-2">Habits</h3>
+        </div>
+        <DailyGoals habits={habits} checkmarks={checkmarks} loading={loading} />
       </div>
     </>
   );
@@ -120,7 +192,7 @@ habitDashboardPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker DashboardPage",
       }}
     >
-      <div className="w-full bg-white p-10 rounded-3xl md:-translate-y-12 grid grid-cols-1 xl:grid-cols-5 xl:gap-5 ">
+      <div className="w-full bg-white p-10 rounded-3xl md:-translate-y-12 md:grid md:grid-cols-1 xl:grid-cols-[auto_275px] xl:gap-12 ">
         {page}
       </div>
     </DashboardLayout>
