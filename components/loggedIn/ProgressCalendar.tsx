@@ -1,6 +1,6 @@
 import { lightFormat, eachDayOfInterval } from "date-fns";
 import { IUserData } from "../../context/user-context";
-
+import { weekdaysTable } from "../../utils/weekdays";
 const ProgressCalendar = ({
   habits,
   checkmarks,
@@ -43,32 +43,59 @@ const ProgressCalendar = ({
     });
   });
 
+  const checkIfHabitCompleted = (day: string, habitName: string) => {
+    let isCompleted = false;
+    if (weeklyHabits[day] !== undefined) {
+      isCompleted =
+        typeof Object.keys(weeklyHabits[day]).find(
+          (key) => key == habitName
+        ) !== undefined
+          ? weeklyHabits[day][habitName]
+          : false;
+    }
+    return isCompleted;
+  };
+
   return (
     <>
       <div className="flex-col ">
+        <div className="grid grid-cols-[25%_auto] xl:grid-cols-[25%_auto] gap-5 pt-4 ">
+          <div></div>
+          <div className="flex  justify-between ">
+            {Object.values(weekdaysTable).map((weekday) => {
+              return (
+                <p className="w-[40px] h-[40px] justify-center items-center flex uppercase font-semibold text-sm text-[#949494]">
+                  {weekday}
+                </p>
+              );
+            })}
+          </div>
+        </div>
         {habitNames.map((habitName, index) => {
           return (
             <div className="grid grid-cols-[25%_auto] xl:grid-cols-[25%_auto] gap-5 pt-4 ">
-              <div key={index}>{habitName}</div>
-              <div className="flex gap-1 justify-between">
-                {selectedDates.map((day) => {
-                  let isCompleted = false;
-                  if (weeklyHabits[day] !== undefined) {
-                    isCompleted =
-                      typeof Object.keys(weeklyHabits[day]).find(
-                        (key) => key == habitName
-                      ) !== undefined
-                        ? weeklyHabits[day][habitName]
-                        : false;
-                  }
-                  return (
-                    <Day
-                      key={`${day} ${habitName}`}
-                      dayOfMonth={day}
-                      isCompleted={isCompleted}
-                    />
-                  );
-                })}
+              <div key={index} className="font-semibold">
+                {habitName}
+              </div>
+              <div className="">
+                <div className="flex justify-between items-center ">
+                  {selectedDates.map((day, i, arr) => {
+                    let streak = false;
+                    if (i > 0) {
+                      let previousDay = arr[i - 1];
+                      streak = checkIfHabitCompleted(previousDay, habitName);
+                    }
+                    let isCompleted = checkIfHabitCompleted(day, habitName);
+                    return (
+                      <Day
+                        key={`${day} ${habitName}`}
+                        dayOfMonth={day}
+                        isCompleted={isCompleted}
+                        streak={streak}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
           );
@@ -81,20 +108,30 @@ const ProgressCalendar = ({
 const Day = ({
   dayOfMonth,
   isCompleted,
+  streak,
 }: {
   dayOfMonth: string;
   isCompleted: boolean;
+  streak: boolean;
 }) => {
   return (
-    <div
-      className="rounded-full w-[40px] h-[40px] justify-center items-center flex"
-      style={{
-        backgroundColor: isCompleted ? "#318a31" : "#fcfbf9",
-        color: isCompleted ? "#ffffff" : "#d3c9b7",
-      }}
-    >
-      {dayOfMonth.split("-")[0]}
-    </div>
+    <>
+      <div
+        className="flex-grow border-b border-2 first-of-type:hidden"
+        style={{
+          borderColor: streak && isCompleted ? "#318a31" : "transparent",
+        }}
+      ></div>
+      <div
+        className="rounded-full w-[40px] h-[40px] justify-center items-center flex"
+        style={{
+          backgroundColor: isCompleted ? "#318a31" : "#fcfbf9",
+          color: isCompleted ? "#ffffff" : "#d3c9b7",
+        }}
+      >
+        {dayOfMonth.split("-")[0]}
+      </div>
+    </>
   );
 };
 

@@ -159,7 +159,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
             habit={"meditation"}
           />
         </div>
-        <div className="mt-10 md:mt-14 mb-5">
+        <div className="mt-10 xl:mt-12 mb-5">
           <CalendarDateRange
             selectedWeek={selectedWeek}
             handleSelect={handleSelect}

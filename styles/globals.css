@@ -13,10 +13,10 @@
     }
 
     .progress-layout{
-        @apply grid grid-cols-[25%_auto] xl:grid-cols-[25%_10%_10%_auto] grid-rows-2 xl:grid-rows-1 grid-areas-[top-left_top-right,bottom-left_bottom-right] xl:grid-areas-[progress_week_month_select] gap-4 mb-3
+        @apply grid grid-cols-[25%_auto] xl:grid-cols-[25%_15%_15%_auto] grid-rows-2 xl:grid-rows-1 grid-areas-[top-left_top-right,bottom-left_bottom-right] xl:grid-areas-[progress_week_month_select] gap-4 mb-3
     }
     .statistics-layout{
-       @apply grid grid-cols-2 grid-rows-4 lg:grid-rows-3 gap-2 xl:gap-10 xl:grid-rows-[auto_1fr] xl:grid-cols-[auto_1fr_1fr_1fr]
+       @apply grid grid-cols-2 grid-rows-4 lg:grid-rows-3 gap-2 xl:gap-x-2 xl:gap-y-7 3xl:gap-x-14 3xl:gap-y-10 xl:grid-rows-[auto_1fr] xl:grid-cols-[auto_1fr_1fr_1fr]
     }
 }
 

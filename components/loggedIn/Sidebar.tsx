@@ -14,7 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import useAuth from "../../context/auth-context";
 
-const drawerWidth = 300;
+const drawerWidth = 270;
 
 interface Props {
   children: React.ReactNode;

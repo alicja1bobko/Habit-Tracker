@@ -36,8 +36,8 @@ export const CalendarDateRange = ({
         </div>
         <FormControl
           size="small"
-          className="grid-in-[top-right] justify-self-end xl:grid-in-[select]"
-          sx={{ minWidth: 150 }}
+          className="grid-in-[top-right] self-end justify-self-end xl:grid-in-[select]"
+          sx={{ minWidth: 135 }}
         >
           <Select
             labelId="select-dates-range-label"
@@ -45,6 +45,30 @@ export const CalendarDateRange = ({
             value={selectedWeek}
             label="range"
             onChange={handleSelect}
+            variant="standard"
+            disableUnderline
+            sx={{
+              fontWeight: "light",
+              boxShadow: "none",
+              ".MuiOutlinedInput-notchedOutline": { border: 0 },
+              ".MuiSelect-select": {
+                "&:focus": { backgroundColor: "transparent" },
+                fontWeight: 600,
+                color: "#949494",
+              },
+              ".css-jd1zyo-MuiSelect-select-MuiInputBase-input-MuiInput-input":
+                {
+                  padding: 0,
+                },
+            }}
+            MenuProps={{
+              sx: {
+                "&& .Mui-selected": {
+                  backgroundColor: "rgba(49, 138, 49,0.4)",
+                  "&:hover": { backgroundColor: "rgba(49, 138, 49,0.3)" },
+                },
+              },
+            }}
           >
             {Object.entries(selectWeekRange).map((entry) => {
               let key = entry[0];

@@ -9,6 +9,9 @@ module.exports = {
       backgroundImage: {
         my_bg_image: "url('../public/assets/bcg2.jpg')",
       },
+      screens: {
+        "3xl": "1700px",
+      },
     },
   },
   plugins: [require("@savvywombat/tailwindcss-grid-areas")],
