@@ -1,107 +1,157 @@
-import { lightFormat, eachDayOfInterval } from "date-fns";
+import {
+  lightFormat,
+  eachDayOfInterval,
+  getWeeksInMonth,
+  startOfWeek,
+  endOfWeek,
+} from "date-fns";
 import { IUserData } from "../../context/user-context";
-import { weekdaysTable } from "../../utils/weekdays";
+import { chunks } from "../../utils/chunks";
+
+interface ISelectedRangeHabits {
+  [key: string]: {
+    [key: string]: boolean;
+  };
+}
+
 const ProgressCalendar = ({
   habits,
   checkmarks,
-  weekStart,
-  weekEnd,
+  selectedHabitKey,
+  selectDatesRange,
+  weekView,
 }: {
   habits: IUserData["habits"];
   checkmarks: IUserData["checkmarks"];
-  weekStart: Date;
-  weekEnd: Date;
+  weekView: boolean;
+  selectedHabitKey: string;
+  selectDatesRange: {
+    start: Date;
+    end: Date;
+  };
 }) => {
-  // Get dates that are currently selected
-  const selectedDates = eachDayOfInterval({
-    start: weekStart,
-    end: weekEnd,
-  }).map((date) => lightFormat(date, "d-M-yyy"));
-
-  const habitsKeys = Object.keys(habits);
-  const habitNames = habitsKeys.map((key) => habits[key].name);
+  let habitsKeys = Object.keys(habits);
   const checkmarkKeys = Object.keys(checkmarks);
+  let selectedDates: string[] = [];
+  let weeksSpanForMonthView: number = getWeeksInMonth(selectDatesRange.start, {
+    weekStartsOn: 1,
+  });
+  let selectedRangeHabits: ISelectedRangeHabits;
+  let selectedDatesChunks: string[][];
+
+  const createSelectedRangeHabitsObject = () => {
+    let selectedRangeHabits: ISelectedRangeHabits = {};
+    selectedDates.map((day) => {
+      checkmarkKeys.map((key) => {
+        if (checkmarks[key].date == day) {
+          let habitId = checkmarks[key].habitId;
+          selectedRangeHabits[day] = {
+            ...selectedRangeHabits[day],
+            [`${habitId}`]: checkmarks[key].completed,
+          };
+        }
+      });
+    });
+    return selectedRangeHabits;
+  };
+
+  // Get dates that are currently selected
+
+  if (weekView) {
+    selectedDates = eachDayOfInterval({
+      start: selectDatesRange.start,
+      end: selectDatesRange.end,
+    }).map((date) => lightFormat(date, "d-M-yyy"));
+    selectedRangeHabits = createSelectedRangeHabitsObject();
+    selectedDatesChunks = chunks(selectedDates, 7);
+  } else {
+    let firstWeekStart = startOfWeek(selectDatesRange.start, {
+      locale: { code: "en-gb" },
+      weekStartsOn: 1,
+    });
+    let lastWeekEnd = endOfWeek(selectDatesRange.end, {
+      locale: { code: "en-gb" },
+      weekStartsOn: 1,
+    });
+    selectedDates = eachDayOfInterval({
+      start: firstWeekStart,
+      end: lastWeekEnd,
+    }).map((date) => lightFormat(date, "d-M-yyy"));
+    selectedRangeHabits = createSelectedRangeHabitsObject();
+    selectedDatesChunks = chunks(selectedDates, 7);
+    habitsKeys = [selectedHabitKey];
+  }
 
   // Transform db into object with dates as keys and habits as values
-  interface IWeeklyHabits {
-    [key: string]: {
-      [key: string]: boolean;
-    };
-  }
-  let weeklyHabits: IWeeklyHabits = {};
-
-  selectedDates.map((day) => {
-    checkmarkKeys.map((key) => {
-      if (checkmarks[key].date == day) {
-        let habitId = checkmarks[key].habitId;
-        let habitName = habits[habitId].name;
-        weeklyHabits[day] = {
-          ...weeklyHabits[day],
-          [`${habitName}`]: checkmarks[key].completed,
-        };
-      }
-    });
-  });
-
-  const checkIfHabitCompleted = (day: string, habitName: string) => {
+  const checkIfHabitCompleted = (day: string, habitsKey: string) => {
     let isCompleted = false;
-    if (weeklyHabits[day] !== undefined) {
+    if (selectedRangeHabits[day] !== undefined) {
       isCompleted =
-        typeof Object.keys(weeklyHabits[day]).find(
-          (key) => key == habitName
+        typeof Object.keys(selectedRangeHabits[day]).find(
+          (key) => key == habitsKey
         ) !== undefined
-          ? weeklyHabits[day][habitName]
+          ? selectedRangeHabits[day][habitsKey]
           : false;
     }
     return isCompleted;
   };
 
   return (
-    <>
-      <div className="flex-col ">
-        <div className="grid grid-cols-[25%_auto] xl:grid-cols-[25%_auto] gap-5 pt-4 ">
-          <div></div>
-          <div className="flex  justify-between ">
-            {Object.values(weekdaysTable).map((weekday) => {
+    <div
+      className={`grid grid-rows-${
+        weekView ? habitsKeys.length : weeksSpanForMonthView
+      } grid-cols-1 gap-y-4 3xl:gap-y-6`}
+    >
+      {habitsKeys.map((habitsKey) => {
+        return (
+          <>
+            {selectedDatesChunks.map((week, i) => {
               return (
-                <p className="w-[40px] h-[40px] justify-center items-center flex uppercase font-semibold text-sm text-[#949494]">
-                  {weekday}
-                </p>
+                <Week
+                  index={i}
+                  week={week}
+                  habitsKey={habitsKey}
+                  checkIfHabitCompleted={checkIfHabitCompleted}
+                />
               );
             })}
-          </div>
-        </div>
-        {habitNames.map((habitName, index) => {
-          return (
-            <div className="grid grid-cols-[25%_auto] xl:grid-cols-[25%_auto] gap-5 pt-4 ">
-              <div key={index} className="font-semibold">
-                {habitName}
-              </div>
-              <div className="">
-                <div className="flex justify-between items-center ">
-                  {selectedDates.map((day, i, arr) => {
-                    let streak = false;
-                    if (i > 0) {
-                      let previousDay = arr[i - 1];
-                      streak = checkIfHabitCompleted(previousDay, habitName);
-                    }
-                    let isCompleted = checkIfHabitCompleted(day, habitName);
-                    return (
-                      <Day
-                        key={`${day} ${habitName}`}
-                        dayOfMonth={day}
-                        isCompleted={isCompleted}
-                        streak={streak}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </>
+          </>
+        );
+      })}
+    </div>
+  );
+};
+
+const Week = ({
+  index,
+  week,
+  habitsKey,
+  checkIfHabitCompleted,
+}: {
+  index: number;
+  week: string[];
+  habitsKey: string;
+  checkIfHabitCompleted: (day: string, habitsKey: string) => boolean;
+}) => {
+  return (
+    <div key={index} className="flex justify-between items-center ">
+      {week.map((day, i, arr) => {
+        let streak = false;
+        if (i > 0) {
+          let previousDay = arr[i - 1];
+          streak = checkIfHabitCompleted(previousDay, habitsKey);
+        }
+        let isCompleted = checkIfHabitCompleted(day, habitsKey);
+        return (
+          <Day
+            key={`${day} ${habitsKey}`}
+            dayOfMonth={day}
+            isCompleted={isCompleted}
+            streak={streak}
+          />
+        );
+      })}
+    </div>
   );
 };
 
@@ -123,7 +173,7 @@ const Day = ({
         }}
       ></div>
       <div
-        className="rounded-full w-[40px] h-[40px] justify-center items-center flex"
+        className="rounded-full w-[30px] h-[30px] md:w-[40px] md:h-[40px] justify-center items-center flex text-xs md:text-base"
         style={{
           backgroundColor: isCompleted ? "#318a31" : "#fcfbf9",
           color: isCompleted ? "#ffffff" : "#d3c9b7",

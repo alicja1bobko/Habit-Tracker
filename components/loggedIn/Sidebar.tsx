@@ -87,8 +87,6 @@ export default function Sidebar({ children }: Props) {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* <CssBaseline /> */}
-
       <AppBar
         position="fixed"
         className="!bg-[#f87e3a] "

@@ -13,6 +13,24 @@ type Goal = {
   isCompleted: boolean;
 };
 
+interface IDailyGoals {
+  habits: {
+    [key: string]: {
+      name: string;
+      description: string;
+      frequency: Array<number>;
+    };
+  };
+  checkmarks: {
+    [key: string]: {
+      habitId: string;
+      date: string;
+      completed: boolean;
+    };
+  };
+  loading: boolean;
+}
+
 const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
   const { user } = useAuth();
   const [isDone, setIsDone] = useState<boolean>(isCompleted);
@@ -69,27 +87,14 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
   );
 };
 
-interface IDailyGoals {
-  habits: {
-    [key: string]: {
-      name: string;
-      description: string;
-      frequency: Array<number>;
-    };
-  };
-  checkmarks: {
-    [key: string]: {
-      habitId: string;
-      date: string;
-      completed: boolean;
-    };
-  };
-  loading: boolean;
-}
-
 const DailyGoals = ({ habits, checkmarks, loading }: IDailyGoals) => {
   const habitsKeys = Object.keys(habits);
-  if (habitsKeys.length === 0) {
+  const checkmarksKeys = Object.keys(checkmarks);
+  if (
+    habitsKeys.length === 0 ||
+    loading === true ||
+    checkmarksKeys.length === 0
+  ) {
     return <p className="italic mt-2">No habits for today</p>;
   }
   if (!loading) {
@@ -116,8 +121,6 @@ const DailyGoals = ({ habits, checkmarks, loading }: IDailyGoals) => {
   }
 };
 
-export default DailyGoals;
-
 /* function to update document in firestore */
 const handleCheckedChange = async (
   isDone: boolean,
@@ -133,4 +136,4 @@ const handleCheckedChange = async (
   }
 };
 
-export { handleCheckedChange };
+export { handleCheckedChange, DailyGoals };
