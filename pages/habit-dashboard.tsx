@@ -7,7 +7,7 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import { DailyGoals } from "../components/loggedIn/DailyGoals";
 import { useUser } from "../context/user-context";
 import { IUserData } from "../context/user-context";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDoc } from "firebase/firestore";
 import { db } from "./api/firebase";
 import useAuth from "../context/auth-context";
 import { normaliZeWeekdayFromDate } from "../utils/weekdays";
@@ -43,7 +43,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
   }, [userData]);
 
   //check if today's checkmarks exist in database if not initialize
-  const initializeNewDay = (
+  const initializeNewDay = async (
     allCheckmarks: { [key: string]: any },
     allHabits: { [key: string]: any }
   ) => {
@@ -80,18 +80,27 @@ const habitDashboardPage: NextPageWithLayout = () => {
       const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
       setLoading(true);
       //add new checkmarks docs for all today's habits
-      const addCheckmarksToDb = () => {
-        todaysHabitKeys.forEach(async (habitKey) => {
+      const addCheckmarksToDb = async () => {
+        const promises = todaysHabitKeys.map(async (habitKey) => {
           const docRef = await addDoc(checkmarksDoc, {
             completed: false,
             habitId: habitKey,
             date: today,
           });
-          setCheckmarks({ [docRef.id]: userData.checkmarks[docRef.id] });
-          setLoading(false);
+          const docSnap = await getDoc(docRef);
+          return { [docRef.id]: docSnap.data() };
         });
+
+        return await Promise.all(promises);
       };
-      addCheckmarksToDb();
+      const results = await addCheckmarksToDb().then((habitsArray) => {
+        let checkmarksObj: any = habitsArray.reduce(
+          (acc, cur) => ({ ...acc, ...cur }),
+          {}
+        );
+        setCheckmarks(checkmarksObj);
+        setLoading(false);
+      });
     } else {
       setLoading(true);
       let todaysCheckmarks = todaysCheckmarkKeys.map((checkmarkKey) => {
