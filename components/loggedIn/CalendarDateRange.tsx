@@ -5,7 +5,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { MouseEvent } from "react";
-import { formatDateForSelectWeek } from "../../utils/formatDateForSelectWeek";
+import { formatDateForSelectWeek } from "../../utils/formatDateForSelect";
 import { selectRange } from "../../utils/weeksRangeList";
 
 type TCalendarDateRange = {

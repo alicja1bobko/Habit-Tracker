@@ -18,21 +18,30 @@ import { SelectChangeEvent } from "@mui/material";
 import { lightFormat } from "date-fns";
 import { CalendarDateRange } from "../components/loggedIn/CalendarDateRange";
 import { weeksList } from "../utils/weeksRangeList";
-import { MonthsList } from "../utils/monthRangeList";
+import { monthsList } from "../utils/monthRangeList";
+import { daysList } from "../utils/daysRangeList";
+import DailyGoalsSelectDateHeader from "../components/loggedIn/DailyGoalsSelectDateHeader";
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
   const { user } = useAuth();
 
+  const NUMBER_OF_PAST_WEEKS = 4;
+  const NUMBER_OF_PAST_MONTHS = 6;
+  const NUMBER_OF_PAST_DAYS = 7;
+  //Object to store selected week range, month, days and pass it to Components
+  const selectDayRange = daysList(NUMBER_OF_PAST_DAYS);
+  const selectWeekRange = weeksList(NUMBER_OF_PAST_WEEKS);
+  const selectMonthsRange = monthsList(NUMBER_OF_PAST_MONTHS);
+
   const [habits, setHabits] = useState<IUserData["habits"]>({});
   const [checkmarks, setCheckmarks] = useState<IUserData["checkmarks"]>({});
   const [loading, setLoading] = useState(false);
   const [selectedRangeIndex, setSelectedRangeIndex] = useState("0");
+  const [selectedDayIndex, setSelectedDayIndex] = useState("0");
   const [weekView, setWeekView] = useState(true);
   const [selectedHabit, setSelectedHabit] = useState(0);
   const [selectedHabitKey, setSelectedHabitKey] = useState("");
-  const NUMBER_OF_PAST_WEEKS = 4;
-  const NUMBER_OF_PAST_MONTHS = 6;
 
   const habitsKeys = Object.keys(userData.habits);
   const habitNames = habitsKeys.map((key) => userData.habits[key].name);
@@ -40,31 +49,34 @@ const habitDashboardPage: NextPageWithLayout = () => {
   useEffect(() => {
     setLoading(true);
     initializeNewDay(userData.checkmarks, userData.habits);
-  }, [userData]);
+  }, [userData, selectedDayIndex]);
 
-  //check if today's checkmarks exist in database if not initialize
+  //check if selected day's checkmarks exist in database if not initialize
   const initializeNewDay = async (
     allCheckmarks: { [key: string]: any },
     allHabits: { [key: string]: any }
   ) => {
     setLoading(true);
-    const today: any = lightFormat(new Date(), "d-M-yyy");
-    const weekday = normaliZeWeekdayFromDate();
+    const selectedDay: any = lightFormat(
+      selectDayRange[selectedDayIndex],
+      "d-M-yyy"
+    );
+    const weekday = normaliZeWeekdayFromDate(selectDayRange[selectedDayIndex]);
     const checkmarkKeys = Object.keys(allCheckmarks);
 
-    let todaysCheckmarkKeys = checkmarkKeys.filter(
-      (checkmarkKey) => allCheckmarks[checkmarkKey].date == today
+    let selectedDaysCheckmarkKeys = checkmarkKeys.filter(
+      (checkmarkKey) => allCheckmarks[checkmarkKey].date == selectedDay
     );
 
-    let todaysHabitKeys = habitsKeys.filter((habitKey) => {
+    let selectedDaysHabitKeys = habitsKeys.filter((habitKey) => {
       if (allHabits[habitKey].frequency.some((day: any) => day == weekday)) {
         return habitKey;
       }
     });
 
     // if habits for today exist setHabits
-    if (todaysHabitKeys.length !== 0) {
-      let todaysHabits = todaysHabitKeys.map((habitKey) => {
+    if (selectedDaysHabitKeys.length !== 0) {
+      let todaysHabits = selectedDaysHabitKeys.map((habitKey) => {
         return { [habitKey!]: allHabits[habitKey!] };
       });
 
@@ -75,17 +87,23 @@ const habitDashboardPage: NextPageWithLayout = () => {
       setHabits(res);
     }
 
-    //if habits for today exist set checkmarks for each habit in db
-    if (todaysCheckmarkKeys.length == 0 && todaysHabitKeys.length !== 0) {
+    // check if habits for today exist in db, set checkmarks for each habit in db
+
+    if (
+      selectedDaysCheckmarkKeys.length == 0 &&
+      selectedDaysHabitKeys.length !== 0
+    ) {
       const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
       setLoading(true);
-      //add new checkmarks docs for all today's habits
+
+      // add new checkmarks docs for all today's habits
+
       const addCheckmarksToDb = async () => {
-        const promises = todaysHabitKeys.map(async (habitKey) => {
+        const promises = selectedDaysHabitKeys.map(async (habitKey) => {
           const docRef = await addDoc(checkmarksDoc, {
             completed: false,
             habitId: habitKey,
-            date: today,
+            date: selectedDay,
           });
           const docSnap = await getDoc(docRef);
           return { [docRef.id]: docSnap.data() };
@@ -93,7 +111,8 @@ const habitDashboardPage: NextPageWithLayout = () => {
 
         return await Promise.all(promises);
       };
-      const results = await addCheckmarksToDb().then((habitsArray) => {
+
+      await addCheckmarksToDb().then((habitsArray) => {
         let checkmarksObj: any = habitsArray.reduce(
           (acc, cur) => ({ ...acc, ...cur }),
           {}
@@ -103,7 +122,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
       });
     } else {
       setLoading(true);
-      let todaysCheckmarks = todaysCheckmarkKeys.map((checkmarkKey) => {
+      let todaysCheckmarks = selectedDaysCheckmarkKeys.map((checkmarkKey) => {
         return { [checkmarkKey]: allCheckmarks[checkmarkKey] };
       });
       // transform array of objects to key value object
@@ -114,10 +133,6 @@ const habitDashboardPage: NextPageWithLayout = () => {
       setLoading(false);
     }
   };
-
-  //Object to store selected week range and pass it to Progress Calendar
-  const selectWeekRange = () => weeksList(NUMBER_OF_PAST_WEEKS);
-  const selectMonthsRange = () => MonthsList(NUMBER_OF_PAST_MONTHS);
 
   const handleSelectDateRange = (event: SelectChangeEvent<string>) => {
     let index = event.target.value;
@@ -148,6 +163,11 @@ const habitDashboardPage: NextPageWithLayout = () => {
     ) as string;
     setSelectedHabitKey(habitKey);
   };
+
+  const handleSelectDay = (event: SelectChangeEvent<string>): void => {
+    setSelectedDayIndex(event.target.value);
+  };
+
   return (
     <>
       <div className="col-span-4 xl:col-span-1 p-3 md:p-5">
@@ -167,9 +187,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
           <CalendarDateRange
             selectedRange={selectedRangeIndex}
             handleSelect={handleSelectDateRange}
-            selectDatesRange={
-              weekView ? selectWeekRange() : selectMonthsRange()
-            }
+            selectDatesRange={weekView ? selectWeekRange : selectMonthsRange}
             handleSelectedCalendarView={handleSelectedCalendarView}
             weekView={weekView}
           />
@@ -190,8 +208,8 @@ const habitDashboardPage: NextPageWithLayout = () => {
               selectedHabitKey={selectedHabitKey}
               selectDatesRange={
                 weekView
-                  ? selectWeekRange()[selectedRangeIndex]
-                  : selectMonthsRange()[selectedRangeIndex]
+                  ? selectWeekRange[selectedRangeIndex]
+                  : selectMonthsRange[selectedRangeIndex]
               }
             />
           </div>
@@ -199,9 +217,11 @@ const habitDashboardPage: NextPageWithLayout = () => {
         <hr></hr>
       </div>
       <div className="col-span-4 md:col-span-1 mt-5 md:m-0 p-2 md:p-0">
-        <div className="flex justify-between">
-          <h3 className="font-bold text-2xl mb-3 mt-2">Habits</h3>
-        </div>
+        <DailyGoalsSelectDateHeader
+          selectedDayIndex={selectedDayIndex}
+          handleSelectDay={handleSelectDay}
+          selectDayRange={selectDayRange}
+        />
         <DailyGoals habits={habits} checkmarks={checkmarks} loading={loading} />
       </div>
     </>

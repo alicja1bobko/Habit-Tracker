@@ -45,6 +45,10 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
   };
 
   useEffect(() => {
+    setIsDone(isCompleted);
+  }, [isCompleted]);
+
+  useEffect(() => {
     handleCheckedChange(isDone, habitKey, checkmarkKey, user);
   }, [isDone]);
 
@@ -90,6 +94,7 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
 const DailyGoals = ({ habits, checkmarks, loading }: IDailyGoals) => {
   const habitsKeys = Object.keys(habits);
   const checkmarksKeys = Object.keys(checkmarks);
+
   if (
     habitsKeys.length === 0 ||
     loading === true ||

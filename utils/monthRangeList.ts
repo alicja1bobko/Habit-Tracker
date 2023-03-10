@@ -1,7 +1,7 @@
 import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 import { selectRange } from "./weeksRangeList";
 
-export const MonthsList = (num: Number) => {
+export const monthsList = (num: Number) => {
   const locale: Locale = { code: "en-gb" };
   let monthStarts = startOfMonth(new Date());
   let monthEnds = endOfMonth(new Date());
