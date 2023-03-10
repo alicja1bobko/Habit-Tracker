@@ -14,7 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import useAuth from "../../context/auth-context";
 
-const drawerWidth = 280;
+const drawerWidth = 270;
 
 interface Props {
   children: React.ReactNode;
@@ -87,8 +87,6 @@ export default function Sidebar({ children }: Props) {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* <CssBaseline /> */}
-
       <AppBar
         position="fixed"
         className="!bg-[#f87e3a] "
