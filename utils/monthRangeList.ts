@@ -8,6 +8,7 @@ export const monthsList = (num: Number) => {
   let selectMonths: selectRange = {
     ["0"]: { start: monthStarts, end: monthEnds },
   };
+
   for (let i = 1; i <= num; i++) {
     let start = subMonths(monthStarts, i);
     let end = endOfMonth(start);

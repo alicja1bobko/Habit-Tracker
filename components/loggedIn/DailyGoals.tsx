@@ -94,12 +94,10 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
 const DailyGoals = ({ habits, checkmarks, loading }: IDailyGoals) => {
   const habitsKeys = Object.keys(habits);
   const checkmarksKeys = Object.keys(checkmarks);
+  let noHabitsForSelectedDay =
+    habitsKeys.length === 0 || checkmarksKeys.length === 0;
 
-  if (
-    habitsKeys.length === 0 ||
-    loading === true ||
-    checkmarksKeys.length === 0
-  ) {
+  if (noHabitsForSelectedDay) {
     return <p className="italic mt-2">No habits for today</p>;
   }
   if (!loading) {

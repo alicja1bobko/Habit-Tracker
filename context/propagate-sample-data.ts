@@ -33,19 +33,4 @@ export default async function setSampleUserDatabase(uid: string) {
   await addDoc(settingsCol, {
     name: "Gorgeous Friend",
   });
-
-  // const checkmarksCol = collection(db, `users/${uid}/checkmarks`);
-
-  // await addDoc(habitsDoc, {
-  //   name: "Wake up at 6am",
-  //   description:
-  //     "Wake up 1 hour before normal wake up time for mindful activities",
-  //   frequency: [0, 1, 2, 3, 4],
-  // });
-
-  // await addDoc(checkmarksCol, {
-  //   habitId: habitsDoc.id,
-  //   date: today,
-  //   completed: false,
-  // });
 }
