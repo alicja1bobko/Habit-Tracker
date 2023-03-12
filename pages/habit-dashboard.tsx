@@ -1,6 +1,6 @@
 import React, { MouseEvent, ReactElement, useEffect, useState } from "react";
 import { NextPageWithLayout } from "./_app";
-import Statistics from "../components/loggedIn/Statistics";
+import Statistics from "../components/loggedIn/Statistics/Statistics";
 import Greeting from "../components/loggedIn/Greeting";
 import ProfilePicture from "../components/loggedIn/ProfilePicture";
 import DashboardLayout from "../Layouts/DashboardLayout";
@@ -21,6 +21,9 @@ import { weeksList } from "../utils/weeksRangeList";
 import { monthsList } from "../utils/monthRangeList";
 import { daysList } from "../utils/daysRangeList";
 import DailyGoalsSelectDateHeader from "../components/loggedIn/DailyGoalsSelectDateHeader";
+import { countCurrentGoals } from "../components/loggedIn/Statistics/countCurrentGoals";
+import { countAchievedToday } from "../components/loggedIn/Statistics/countAchievedToday";
+import { countBestStreak } from "../components/loggedIn/Statistics/countBestStreak";
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
@@ -174,13 +177,25 @@ const habitDashboardPage: NextPageWithLayout = () => {
         <div className="statistics-layout">
           <Greeting />
           <ProfilePicture />
-          <Statistics header={"Current goal"} text={"habits"} stat={6} />
-          <Statistics header={"Achieved today"} text={"habits"} stat={6} />
+          <Statistics
+            header={"Current goal"}
+            text={"habit"}
+            stat={countCurrentGoals(userData["habits"])}
+          />
+          <Statistics
+            header={"Achieved today"}
+            text={"habit"}
+            stat={countAchievedToday(userData["checkmarks"])}
+          />
           <Statistics
             header={"Best streak"}
-            text={"days of"}
-            stat={7}
-            habit={"meditation"}
+            text={"day"}
+            stat={
+              countBestStreak(userData["checkmarks"], userData["habits"])[1]
+            }
+            habit={
+              countBestStreak(userData["checkmarks"], userData["habits"])[0]
+            }
           />
         </div>
         <div className="mt-10 xl:mt-12 mb-5">
