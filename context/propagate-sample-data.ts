@@ -22,12 +22,7 @@ export default async function setSampleUserDatabase(uid: string) {
     description: "Go to the gym",
     frequency: [0, 2, 4],
   });
-  const habitsDoc4 = await addDoc(collection(db, `users/${uid}/habits`), {
-    name: "Spanish ",
-    description: "Learn 5 new words",
-    frequency: [0, 1, 2, 3, 4],
-  });
-
+  
   const settingsCol = collection(db, `users/${uid}/settings`);
 
   await addDoc(settingsCol, {

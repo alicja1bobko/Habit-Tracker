@@ -54,6 +54,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
     initializeNewDay(userData.checkmarks, userData.habits);
   }, [userData, selectedDayIndex]);
 
+
   //check if selected day's checkmarks exist in database if not initialize
   const initializeNewDay = async (
     allCheckmarks: { [key: string]: any },
@@ -176,7 +177,10 @@ const habitDashboardPage: NextPageWithLayout = () => {
       <div className="col-span-4 xl:col-span-1 p-3 md:p-5">
         <div className="statistics-layout">
           <Greeting />
-          <ProfilePicture />
+          <ProfilePicture
+            achievedToday={countAchievedToday(userData["checkmarks"])}
+            todaysHabits={habits}
+          />
           <Statistics
             header={"Current goal"}
             text={"habit"}
