@@ -1,10 +1,9 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { IUserData } from "../../context/user-context";
 
 type Props = {
   achievedToday: number;
-  todaysHabits: IUserData["habits"];
+  todaysHabits: string[];
 };
 
 const ProfilePicture = ({ achievedToday, todaysHabits }: Props) => {
@@ -12,7 +11,7 @@ const ProfilePicture = ({ achievedToday, todaysHabits }: Props) => {
   useEffect(() => {
     todaysHabits &&
       setCompleted((achievedToday / Object.keys(todaysHabits).length) * 100);
-  }, [todaysHabits, achievedToday]);
+  }, [todaysHabits, achievedToday, completed]);
 
   return (
     <div className="p-3  cols-span-1 justify-self-end md:justify-self-start xl:justify-self-center">

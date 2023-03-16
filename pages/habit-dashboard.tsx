@@ -10,7 +10,6 @@ import { IUserData } from "../context/user-context";
 import { addDoc, collection, getDoc } from "firebase/firestore";
 import { db } from "./api/firebase";
 import useAuth from "../context/auth-context";
-import { normaliZeWeekdayFromDate } from "../utils/weekdays";
 import ProgressCalendar from "../components/loggedIn/ProgressCalendar";
 import { HabitsList } from "../components/loggedIn/HabitsList";
 import WeekdaysHeader from "../components/loggedIn/WeekdaysHeader";
@@ -22,8 +21,10 @@ import { monthsList } from "../utils/monthRangeList";
 import { daysList } from "../utils/daysRangeList";
 import DailyGoalsSelectDateHeader from "../components/loggedIn/DailyGoalsSelectDateHeader";
 import { countCurrentGoals } from "../components/loggedIn/Statistics/countCurrentGoals";
-import { countAchievedToday } from "../components/loggedIn/Statistics/countAchievedToday";
+import { countAchieved } from "../components/loggedIn/Statistics/countAchievedToday";
 import { countBestStreak } from "../components/loggedIn/Statistics/countBestStreak";
+import WeekOverview from "../components/loggedIn/WeekOverview";
+import { todaysHabits } from "../components/loggedIn/Statistics/todaysHabits";
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
@@ -41,6 +42,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
   const [checkmarks, setCheckmarks] = useState<IUserData["checkmarks"]>({});
   const [loading, setLoading] = useState(false);
   const [selectedRangeIndex, setSelectedRangeIndex] = useState("0");
+  const [weekOverviewRangeIndex, setWeekOverviewRangeIndex] = useState("0");
   const [selectedDayIndex, setSelectedDayIndex] = useState("0");
   const [weekView, setWeekView] = useState(true);
   const [selectedHabit, setSelectedHabit] = useState(0);
@@ -54,7 +56,6 @@ const habitDashboardPage: NextPageWithLayout = () => {
     initializeNewDay(userData.checkmarks, userData.habits);
   }, [userData, selectedDayIndex]);
 
-
   //check if selected day's checkmarks exist in database if not initialize
   const initializeNewDay = async (
     allCheckmarks: { [key: string]: any },
@@ -65,18 +66,16 @@ const habitDashboardPage: NextPageWithLayout = () => {
       selectDayRange[selectedDayIndex],
       "d-M-yyy"
     );
-    const weekday = normaliZeWeekdayFromDate(selectDayRange[selectedDayIndex]);
     const checkmarkKeys = Object.keys(allCheckmarks);
 
     let selectedDaysCheckmarkKeys = checkmarkKeys.filter(
       (checkmarkKey) => allCheckmarks[checkmarkKey].date == selectedDay
     );
 
-    let selectedDaysHabitKeys = habitsKeys.filter((habitKey) => {
-      if (allHabits[habitKey].frequency.some((day: any) => day == weekday)) {
-        return habitKey;
-      }
-    });
+    let selectedDaysHabitKeys = todaysHabits(
+      selectDayRange[selectedDayIndex],
+      userData.habits
+    );
 
     // if habits for today exist setHabits
     if (selectedDaysHabitKeys.length !== 0) {
@@ -147,6 +146,10 @@ const habitDashboardPage: NextPageWithLayout = () => {
     }
   };
 
+  const handleSelectWeekOverviewDateRange = (e: SelectChangeEvent<string>) => {
+    setWeekOverviewRangeIndex(e.target.value);
+  };
+
   const handleSelectedCalendarView = (
     event: MouseEvent<HTMLButtonElement>,
     value: boolean
@@ -174,12 +177,12 @@ const habitDashboardPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="col-span-4 xl:col-span-1 p-3 md:p-5">
+      <div className="col-span-4 xl:col-span-1 p-3 md:p-5 mb-0 xl:mb-8">
         <div className="statistics-layout">
           <Greeting />
           <ProfilePicture
-            achievedToday={countAchievedToday(userData["checkmarks"])}
-            todaysHabits={habits}
+            achievedToday={countAchieved(userData.checkmarks, new Date())}
+            todaysHabits={todaysHabits(new Date(), userData.habits)}
           />
           <Statistics
             header={"Current goal"}
@@ -189,7 +192,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
           <Statistics
             header={"Achieved today"}
             text={"habit"}
-            stat={countAchievedToday(userData["checkmarks"])}
+            stat={countAchieved(userData.checkmarks, new Date())}
           />
           <Statistics
             header={"Best streak"}
@@ -234,6 +237,11 @@ const habitDashboardPage: NextPageWithLayout = () => {
           </div>
         </div>
         <hr></hr>
+        <WeekOverview
+          selectedRange={weekOverviewRangeIndex}
+          handleSelect={handleSelectWeekOverviewDateRange}
+          selectDatesRange={selectWeekRange}
+        />
       </div>
       <div className="col-span-4 md:col-span-1 mt-5 md:m-0 p-2 md:p-0">
         <DailyGoalsSelectDateHeader
@@ -255,7 +263,7 @@ habitDashboardPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker DashboardPage",
       }}
     >
-      <div className="w-full bg-white p-2 md:p-10 rounded-3xl md:-translate-y-12 md:grid md:grid-cols-1 xl:grid-cols-[auto_275px] xl:gap-12 ">
+      <div className="w-full bg-white p-2 md:p-10 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 ">
         {page}
       </div>
     </DashboardLayout>

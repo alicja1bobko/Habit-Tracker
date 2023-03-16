@@ -22,5 +22,24 @@
     .progress-calendar-grid{
         @apply grid  grid-cols-[25%_auto] xl:grid-cols-[25%_auto] gap-1 xl:gap-5 pt-4
     }
+
+    .react-multi-carousel-list .react-multiple-carousel__arrow {
+        @apply !overflow-visible
+    }
+
+    .react-multiple-carousel__arrow--left{
+        @apply !left-[calc(-1%)]
+    }
+
+    .react-multiple-carousel__arrow--right{
+         @apply !right-[calc(-1%)]
+    }
+    .react-multiple-carousel__arrow {
+        @apply !bg-transparent 
+    }
+
+    .react-multiple-carousel__arrow::before{
+        @apply !text-black !font-bold !overflow-visible
+    }
 }
 

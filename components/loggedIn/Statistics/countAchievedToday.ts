@@ -1,8 +1,12 @@
 import { lightFormat } from "date-fns";
+import { useEffect } from "react";
 import { IUserData } from "../../../context/user-context";
 
-export const countAchievedToday = (checkmarks: IUserData["checkmarks"]) => {
-  const today = lightFormat(new Date(), "d-M-yyy");
+export const countAchieved = (
+  checkmarks: IUserData["checkmarks"],
+  day: Date
+) => {
+  const today = lightFormat(day, "d-M-yyy");
 
   return Object.entries(checkmarks).reduce((sum, curr) => {
     const [key, data] = curr;
