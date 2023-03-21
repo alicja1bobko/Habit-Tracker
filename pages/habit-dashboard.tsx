@@ -24,7 +24,7 @@ import { countCurrentGoals } from "../components/loggedIn/Statistics/countCurren
 import { countAchieved } from "../components/loggedIn/Statistics/countAchievedToday";
 import { countBestStreak } from "../components/loggedIn/Statistics/countBestStreak";
 import WeekOverview from "../components/loggedIn/WeekOverview";
-import { todaysHabits } from "../components/loggedIn/Statistics/todaysHabits";
+import { habitsForDay } from "../components/loggedIn/Statistics/todaysHabits";
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
@@ -72,7 +72,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
       (checkmarkKey) => allCheckmarks[checkmarkKey].date == selectedDay
     );
 
-    let selectedDaysHabitKeys = todaysHabits(
+    let selectedDaysHabitKeys = habitsForDay(
       selectDayRange[selectedDayIndex],
       userData.habits
     );
@@ -182,7 +182,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
           <Greeting />
           <ProfilePicture
             achievedToday={countAchieved(userData.checkmarks, new Date())}
-            todaysHabits={todaysHabits(new Date(), userData.habits)}
+            todaysHabits={habitsForDay(new Date(), userData.habits)}
           />
           <Statistics
             header={"Current goal"}
@@ -241,9 +241,11 @@ const habitDashboardPage: NextPageWithLayout = () => {
           selectedRange={weekOverviewRangeIndex}
           handleSelect={handleSelectWeekOverviewDateRange}
           selectDatesRange={selectWeekRange}
+          checkmarks={userData.checkmarks}
+          habits={userData.habits}
         />
       </div>
-      <div className="col-span-4 md:col-span-1 mt-5 md:m-0 p-2 md:p-0">
+      <div className="col-span-4 md:col-span-1 xl:mt-5 md:m-0 p-2 md:p-0">
         <DailyGoalsSelectDateHeader
           selectedDayIndex={selectedDayIndex}
           handleSelectDay={handleSelectDay}
@@ -263,7 +265,7 @@ habitDashboardPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker DashboardPage",
       }}
     >
-      <div className="w-full bg-white p-2 md:p-10 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 ">
+      <div className="w-full bg-white p-2 md:p-10 md:pb-0 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 ">
         {page}
       </div>
     </DashboardLayout>

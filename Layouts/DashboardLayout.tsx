@@ -24,7 +24,7 @@ const DashboardLayout = ({ children, meta }: Props) => {
         />
         <link rel="icon" href={icon || "/favicon.ico"} />
       </Head>
-      <div className="bg-[#fcfbf9] h-screen">
+      <div className="bg-[#fcfbf9]">
         <Sidebar children={children} />
       </div>
     </>
