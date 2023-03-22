@@ -19,7 +19,7 @@ import useAuth from "../context/auth-context";
 import { daysList } from "../utils/daysRangeList";
 import { lightFormat, subDays } from "date-fns";
 
-type FormValues = {
+export type FormValues = {
   habitName: string;
   description: string;
   frequency: number[];
@@ -230,7 +230,7 @@ addHabitPage.getLayout = function getLayout(page: ReactElement) {
 
 export default addHabitPage;
 
-const textfieldStyles = {
+export const textfieldStyles = {
   backgroundColor: "#fcfbf9",
   borderRadius: "30px",
   "& .MuiOutlinedInput-root": {
@@ -248,7 +248,7 @@ const textfieldStyles = {
   },
 };
 
-const checkboxStyle = {
+export const checkboxStyle = {
   "& .MuiButtonBase-root": {
     backgroundColor: "orange",
   },
@@ -260,7 +260,7 @@ const checkboxStyle = {
   },
 };
 
-const formControlStyle = {
+export const formControlStyle = {
   "& .MuiButtonBase-root": {
     backgroundColor: "#fcfbf9",
     padding: "12px",
