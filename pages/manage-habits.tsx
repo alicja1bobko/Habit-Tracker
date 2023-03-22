@@ -22,7 +22,6 @@ const manageHabitsPage: NextPageWithLayout = () => {
               habit={userData.habits[habitKey]}
             />
           );
-          return <Habit key={habitKey} habit={userData.habits[habitKey]} />;
         })}
       </div>
     </div>
