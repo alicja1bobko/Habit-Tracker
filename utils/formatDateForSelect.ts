@@ -8,3 +8,7 @@ export const formatDateForSelectWeek = (weekStart: Date, weekEnd: Date) => {
     { locale: enGB }
   )}`;
 };
+
+export const formatDateForSelectDay = (day: Date) => {
+  return `${format(day, "LLL do", { locale: enGB })}`;
+};

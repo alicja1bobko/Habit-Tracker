@@ -1,10 +1,18 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-type Props = {};
-let completed = 20;
+type Props = {
+  achievedToday: number;
+  todaysHabits: string[];
+};
 
-const ProfilePicture = (props: Props) => {
+const ProfilePicture = ({ achievedToday, todaysHabits }: Props) => {
+  const [completed, setCompleted] = useState<number>(0);
+  useEffect(() => {
+    todaysHabits &&
+      setCompleted((achievedToday / Object.keys(todaysHabits).length) * 100);
+  }, [todaysHabits, achievedToday, completed]);
+
   return (
     <div className="p-3  cols-span-1 justify-self-end md:justify-self-start xl:justify-self-center">
       <div className="w-[140px] h-[140px] bg-white rounded-full absolute -translate-x-[5px] -translate-y-[5px] z-20"></div>

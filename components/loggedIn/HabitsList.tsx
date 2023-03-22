@@ -14,9 +14,11 @@ export const HabitsList = ({
   handleSelectedHabit,
 }: Props) => {
   const habitNamesLength = habitNames.length;
+
   if (habitNamesLength === 0) {
     return <p>Create some habits to see progress</p>;
   }
+
   return (
     <>
       <div

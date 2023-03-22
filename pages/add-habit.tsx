@@ -16,7 +16,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../pages/api/firebase";
 import useAuth from "../context/auth-context";
-import { getToday } from "../utils/getToday";
+import { daysList } from "../utils/daysRangeList";
+import { lightFormat, subDays } from "date-fns";
 
 type FormValues = {
   habitName: string;
@@ -55,18 +56,26 @@ const addHabitPage: NextPageWithLayout = () => {
     const docRef = await addDoc(habitsCol, {
       name: habitName,
       description: description,
-      frequency: frequency,
+      frequency: frequency.sort(),
     });
-    //if applicable to current day add checkmark for this habit
-    const weekday = normaliZeWeekdayFromDate();
-    if (frequency.filter((day) => day == weekday).length > 0) {
-    }
-    const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
-    await addDoc(checkmarksDoc, {
-      completed: false,
-      habitId: docRef.id,
-      date: getToday(),
-    });
+    // add checkmark for this habit for past week
+    const pastWeek = daysList(7);
+    const addCheckmarksToDb = () => {
+      Object.entries(pastWeek).map(async (entry) => {
+        let i = entry[0];
+        let date = entry[1];
+        const weekday = normaliZeWeekdayFromDate(date);
+        if (frequency.filter((day) => day == weekday).length > 0) {
+          const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
+          await addDoc(checkmarksDoc, {
+            completed: false,
+            habitId: docRef.id,
+            date: lightFormat(date, "d-M-yyy"),
+          });
+        }
+      });
+    };
+    addCheckmarksToDb();
     setLoading(false);
     reset();
   };
