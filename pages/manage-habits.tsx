@@ -3,6 +3,7 @@ import { Habit } from "../components/loggedIn/Habit";
 import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
+import { weekdaysTable } from "../utils/weekdays";
 import { NextPageWithLayout } from "./_app";
 
 const manageHabitsPage: NextPageWithLayout = () => {
@@ -21,11 +22,12 @@ const manageHabitsPage: NextPageWithLayout = () => {
               habit={userData.habits[habitKey]}
             />
           );
+          return <Habit key={habitKey} habit={userData.habits[habitKey]} />;
         })}
       </div>
     </div>
   );
-};
+  };
 
 manageHabitsPage.getLayout = function getLayout(page: ReactElement) {
   return (

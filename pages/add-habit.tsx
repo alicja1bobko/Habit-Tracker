@@ -16,7 +16,6 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../pages/api/firebase";
 import useAuth from "../context/auth-context";
-import { getToday } from "../utils/getToday";
 import { daysList } from "../utils/daysRangeList";
 import { lightFormat, subDays } from "date-fns";
 
