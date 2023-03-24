@@ -108,6 +108,7 @@ const ProgressCalendar = ({
             {selectedDatesChunks.map((week, i) => {
               return (
                 <Week
+                  key={i}
                   index={i}
                   week={week}
                   habitsKey={habitsKey}
