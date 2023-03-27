@@ -1,3 +1,4 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Checkbox,
@@ -6,11 +7,14 @@ import {
   FormGroup,
   TextField,
 } from "@mui/material";
+import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import useAuth from "../../context/auth-context";
 import { IUserData, useUser } from "../../context/user-context";
 import DashboardLayout from "../../Layouts/DashboardLayout";
+import { createHabitSchema } from "../../schemas/create-habit";
 import { weekdaysTable } from "../../utils/weekdays";
 import {
   checkboxStyle,
@@ -18,6 +22,7 @@ import {
   FormValues,
   textfieldStyles,
 } from "../add-habit";
+import { db } from "../api/firebase";
 import { NextPageWithLayout } from "../_app";
 
 const editHabitPage: NextPageWithLayout = () => {
@@ -26,21 +31,28 @@ const editHabitPage: NextPageWithLayout = () => {
     description: "",
     frequency: [],
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const userData: IUserData | null = useUser();
   const router = useRouter();
-  const { habitKey } = router.query;
+
+  // habitKey memoized on refresh page
+  const { habitKey } = useMemo(() => {
+    return router.query;
+  }, [router.query]);
 
   useEffect(() => {
-    if (habitKey !== undefined) {
+    // wait for userData to load
+    if (Object.keys(userData.habits).length !== 0) {
       const habit = userData.habits[habitKey as string];
       setInitializeHabit({
         habitName: habit.name,
         description: habit.description,
         frequency: habit.frequency,
       });
+      setLoading(false);
     }
-  }, [habitKey]);
+  }, [userData]);
 
   const {
     control,
@@ -50,8 +62,15 @@ const editHabitPage: NextPageWithLayout = () => {
     getValues,
     reset,
   } = useForm<FormValues>({
-    defaultValues: initializeHabit,
+    defaultValues: useMemo(() => {
+      return initializeHabit;
+    }, [initializeHabit]),
+    resolver: yupResolver(createHabitSchema),
   });
+
+  useEffect(() => {
+    reset(initializeHabit);
+  }, [initializeHabit]);
 
   const handleCheckbox = (dayIndex: number) => {
     const checkedDays = getValues().frequency;
@@ -67,14 +86,28 @@ const editHabitPage: NextPageWithLayout = () => {
     habitName,
     description,
     frequency,
-  }) => {};
+  }) => {
+    setLoading(true);
+    const habitsRef = doc(db, `users/${user?.uid}/habits/${habitKey}`);
+    await updateDoc(habitsRef, {
+      description: description,
+      frequency: frequency,
+      name: habitName,
+    });
+    setLoading(false);
+    router.push("/manage-habits");
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmitHandler)}
       className="flex items-center m-auto flex-col "
     >
-      <h1 className="text-4xl font-bolder">Edit</h1>
+      <h1 className="text-4xl font-bolder">Edit habit</h1>
       <div className="mt-7 mb-5">
         <div className="mb-4 mt-5 ">
           <p className="font-bold text-sm ">NAME</p>
@@ -90,7 +123,7 @@ const editHabitPage: NextPageWithLayout = () => {
           id="habit-name"
           type="text"
           sx={textfieldStyles}
-          placeholder={"enter the habit name e.g. reading"}
+          placeholder={initializeHabit.habitName}
           variant="outlined"
           fullWidth
           {...register("habitName")}
@@ -109,7 +142,7 @@ const editHabitPage: NextPageWithLayout = () => {
           id="habit-description"
           type="text"
           sx={textfieldStyles}
-          placeholder={"e.g. at least 10 pages"}
+          placeholder={initializeHabit.description}
           variant="outlined"
           fullWidth
           {...register("description")}
@@ -185,7 +218,7 @@ const editHabitPage: NextPageWithLayout = () => {
           }}
           type="submit"
         >
-          Create
+          Save
         </LoadingButton>
       </div>
     </form>
