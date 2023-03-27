@@ -1,18 +1,42 @@
-import { ReactElement } from "react";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import { ReactElement, useEffect, useState } from "react";
 import { Habit } from "../components/loggedIn/Habit";
 import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import { weekdaysTable } from "../utils/weekdays";
+import { db } from "./api/firebase";
 import { NextPageWithLayout } from "./_app";
 
 const manageHabitsPage: NextPageWithLayout = () => {
-  const userData: IUserData | null = useUser();
-  const habitKeys = Object.keys(userData.habits);
+  const { user } = useAuth();
+  const userData: IUserData = useUser();
+  const [habitKeys, setHabitKeys] = useState<string[]>([]);
+
+  useEffect(() => {
+    const habitsRef = collection(db, `users/${user?.uid}/habits`);
+    onSnapshot(habitsRef, (querySnapshot) => {
+      setHabitKeys(querySnapshot.docs.map((doc) => doc.id));
+    });
+  }, [userData]);
+
+  const deleteHabit = async (habitKey: string) => {
+    await deleteDoc(doc(db, `users/${user?.uid}/habits/${habitKey}`));
+
+    const checkmarkKeys = Object.keys(userData.checkmarks);
+    checkmarkKeys.forEach(async (checkmarkKey) => {
+      if (userData.checkmarks[checkmarkKey].habitId === habitKey) {
+        await deleteDoc(
+          doc(db, `users/${user?.uid}/checkmarks/${checkmarkKey}`)
+        );
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col p-10">
-      <h1 className="text-4xl font-bolder mb-3">Manage habits</h1>
+      {habitKeys.length !== 0 && (
+        <h1 className="text-4xl font-bolder mb-3">Manage habits</h1>
+      )}
       <div className="mt-5">
         {habitKeys.map((habitKey, index) => {
           return (
@@ -20,13 +44,14 @@ const manageHabitsPage: NextPageWithLayout = () => {
               key={index}
               habitKey={habitKey}
               habit={userData.habits[habitKey]}
+              deleteHabit={deleteHabit}
             />
           );
         })}
       </div>
     </div>
   );
-  };
+};
 
 manageHabitsPage.getLayout = function getLayout(page: ReactElement) {
   return (
