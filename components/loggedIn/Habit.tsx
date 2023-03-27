@@ -5,17 +5,17 @@ import { useState } from "react";
 import { weekdaysTable } from "../../utils/weekdays";
 import { Modal } from "./Modal";
 
-export const Habit = ({
-  habitKey,
-  habit,
-}: {
+type Props = {
   habitKey: string;
   habit: {
     name: string;
     description: string;
     frequency: Array<number>;
   };
-}) => {
+  deleteHabit: (habitKey: string) => Promise<void>;
+};
+
+export const Habit = ({ habitKey, habit, deleteHabit }: Props) => {
   const { name, frequency, description } = habit;
 
   const [open, setOpen] = useState(false);
@@ -83,7 +83,9 @@ export const Habit = ({
           title: `Delete "${name}"?`,
           description: `Delete habit can't be undone. All data associated with this habit (e.g. progress history) will be deleted.`,
           confirmText: "Delete",
-          onConfirm: () => {},
+          onConfirm: () => {
+            deleteHabit(habitKey);
+          },
         }}
       />
     </>
