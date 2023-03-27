@@ -1,6 +1,7 @@
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { ReactElement, useEffect, useState } from "react";
 import { Habit } from "../components/loggedIn/Habit";
+import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { db } from "./api/firebase";
