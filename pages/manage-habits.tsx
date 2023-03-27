@@ -1,9 +1,7 @@
 import { ReactElement } from "react";
 import { Habit } from "../components/loggedIn/Habit";
-import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import { weekdaysTable } from "../utils/weekdays";
 import { NextPageWithLayout } from "./_app";
 
 const manageHabitsPage: NextPageWithLayout = () => {
@@ -11,8 +9,10 @@ const manageHabitsPage: NextPageWithLayout = () => {
   const habitKeys = Object.keys(userData.habits);
 
   return (
-    <div className="flex flex-col p-10">
-      <h1 className="text-4xl font-bolder mb-3">Manage habits</h1>
+    <div className="flex flex-col p-5 md:p-10">
+      {habitKeys.length !== 0 && (
+        <h1 className="text-4xl font-bolder mb-3">Manage habits</h1>
+      )}
       <div className="mt-5">
         {habitKeys.map((habitKey, index) => {
           return (
