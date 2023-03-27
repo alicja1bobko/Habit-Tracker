@@ -25,31 +25,35 @@ export const Habit = ({ habitKey, habit, deleteHabit }: Props) => {
 
   return (
     <>
-      <div className="p-3 pl-0">
-        <div className="grid lg:grid-cols-2 lg:gap-5">
-          <div>
+      <div className="pb-6 pr-0">
+        <div className="manage-habits-grid">
+          <div className="grid-in-[top-left] lg:grid-in-[habit]">
             <h2 className="text-lg">{name}</h2>
             <p className="text-[#949494] max-w-sm">{description}</p>
           </div>
-          <div className="flex gap-1 mt-3 lg:mt-0 self-center align-middle">
-            {Object.keys(weekdaysTable).map((key: string, index: number) => {
-              let selected = frequency.includes(index);
+          <div className="grid-in-[row] lg:grid-in-[frequency] grid">
+            <div className="flex gap-1 mt-3 lg:mt-0 self-center  align-middle w-max">
+              {Object.keys(weekdaysTable).map((key: string, index: number) => {
+                let selected = frequency.includes(index);
 
-              return (
-                <span
-                  key={index}
-                  className="rounded-full w-[40px] h-[40px] justify-center items-center flex"
-                  style={{
-                    backgroundColor: selected ? "#f87E3A" : "#fcfbf9",
-                    color: selected ? "white" : "black",
-                  }}
-                >
-                  {weekdaysTable[key]}
-                </span>
-              );
-            })}
+                return (
+                  <span
+                    key={index}
+                    className="rounded-full min-w-[40px] h-[40px] justify-center items-center flex"
+                    style={{
+                      backgroundColor: selected ? "#f87E3A" : "#fcfbf9",
+                      color: selected ? "white" : "black",
+                    }}
+                  >
+                    {weekdaysTable[key]}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
 
-            <div className="ml-3">
+          <div className="grid-in-[top-right] lg:grid-in-[edit] grid lg:ml-3">
+            <div className="flex place-content-end self-end lg:self-center">
               {/* Edit link */}
               <Tooltip title={"edit habit"}>
                 <Link href={`/edit-habit/${habitKey}`} passHref>
