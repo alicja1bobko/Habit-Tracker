@@ -20,6 +20,7 @@ import {
   useMemo,
   useContext,
   ReactNode,
+  useCallback,
 } from "react";
 import { auth } from "../pages/api/firebase";
 import setSampleUserDatabase from "./propagate-sample-data";
@@ -33,6 +34,7 @@ interface IAuth {
   signUpWithGoogleProvider: () => void;
   signUpAnonymously: () => void;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<void> | undefined;
   error: string | null;
   loading: boolean;
   initialLoading: boolean;
@@ -47,6 +49,7 @@ const AuthContext = createContext<IAuth>({
   signUp: async () => {},
   signIn: async () => {},
   logout: async () => {},
+  deleteAccount: async () => {},
   error: null,
   loading: false,
   initialLoading: true,
@@ -220,6 +223,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .finally(() => setLoading(false));
   };
 
+  const deleteAccount = useCallback(() => {
+    return auth.currentUser?.delete();
+  }, [auth]);
+
   const memoizedValue = useMemo(
     () => ({
       user,
@@ -233,8 +240,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       signUpWithGoogleProvider,
       signUpAnonymously,
       initialLoading,
+      deleteAccount,
     }),
-    [user, loading, error]
+    [user, loading, error, deleteAccount]
   );
 
   return (
