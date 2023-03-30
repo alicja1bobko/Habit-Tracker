@@ -12,9 +12,7 @@ import { db } from "../pages/api/firebase";
 const initializeUserData = {
   habits: {},
   checkmarks: {},
-  settings: {
-    name: "Anonymous",
-  },
+  settings: {},
 };
 
 export interface IUserData {
@@ -33,7 +31,13 @@ export interface IUserData {
     };
   };
   settings: {
-    name: string;
+    [key: string]: {
+      firstName: string;
+      lastName: string;
+      password: string;
+      email: string;
+      image: string;
+    };
   };
 }
 
@@ -118,7 +122,10 @@ function UserProvider({ children }: { children: ReactNode }) {
       (snapshot) => {
         if (isMounted) {
           snapshot.docs.forEach((doc) => {
-            setUserData((prev: any) => ({ ...prev, settings: doc.data() }));
+            setUserData((prev: any) => ({
+              ...prev,
+              settings: { [doc.id]: doc.data() },
+            }));
           });
         }
       },
