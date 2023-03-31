@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -14,6 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import useAuth from "../../context/auth-context";
 import Image from "next/image";
+import { reactLocalStorage } from "reactjs-localstorage";
 
 const drawerWidth = 270;
 
@@ -23,14 +24,20 @@ interface Props {
 
 export default function Sidebar({ children }: Props) {
   const { logout } = useAuth();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  // keep the selected tab state on page refresh
+  useEffect(() => {
+    setSelectedIndex(reactLocalStorage.get("index"));
+  }, [selectedIndex]);
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index);
+    reactLocalStorage.set("index", index);
   };
 
   const drawer = (
@@ -50,7 +57,7 @@ export default function Sidebar({ children }: Props) {
         <DrawerListItem
           icon={<CheckCircleOutlineOutlinedIcon />}
           destination={"/habit-dashboard"}
-          selected={selectedIndex === 0}
+          selected={selectedIndex == 0}
           index={0}
           handleListItemClick={handleListItemClick}
         >
@@ -59,7 +66,7 @@ export default function Sidebar({ children }: Props) {
         <DrawerListItem
           icon={<AddTaskIcon />}
           destination={"/add-habit"}
-          selected={selectedIndex === 1}
+          selected={selectedIndex == 1}
           index={1}
           handleListItemClick={handleListItemClick}
         >
@@ -68,7 +75,7 @@ export default function Sidebar({ children }: Props) {
         <DrawerListItem
           icon={<FormatListBulletedRoundedIcon />}
           destination={"/manage-habits"}
-          selected={selectedIndex === 2}
+          selected={selectedIndex == 2}
           index={2}
           handleListItemClick={handleListItemClick}
         >
@@ -77,7 +84,7 @@ export default function Sidebar({ children }: Props) {
         <DrawerListItem
           icon={<SettingsIcon />}
           destination={"/settings"}
-          selected={selectedIndex === 3}
+          selected={selectedIndex == 3}
           index={3}
           handleListItemClick={handleListItemClick}
         >
@@ -85,7 +92,7 @@ export default function Sidebar({ children }: Props) {
         </DrawerListItem>
         <DrawerButton
           icon={<LogoutRoundedIcon />}
-          selected={selectedIndex === 4}
+          selected={selectedIndex == 4}
           index={4}
           handleListItemClick={handleListItemClick}
         >
