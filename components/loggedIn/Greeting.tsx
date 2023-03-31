@@ -25,7 +25,7 @@ const Greeting = ({ settings }: Props) => {
   }, [settings]);
 
   return (
-    <h2 className="text-3xl font-bold tracking-wide mb-10 xl:mb-0 col-span-1 xl:col-span-4 ">
+    <h2 className="text-3xl font-bold tracking-wide ml-2 mt-2 mb-auto xl:mb-0 xl:ml-0 col-span-1 xl:col-span-4">
       {greeting}
       {userName}!
     </h2>

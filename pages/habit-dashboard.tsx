@@ -177,7 +177,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="col-span-4 xl:col-span-1 p-3 md:p-5 mb-0 xl:mb-8">
+      <div className="col-span-4 xl:col-span-1 p-3 md:p-5 mb-0">
         <div className="statistics-layout">
           <Greeting settings={userData.settings} />
           <ProfilePicture
@@ -252,7 +252,13 @@ const habitDashboardPage: NextPageWithLayout = () => {
           handleSelectDay={handleSelectDay}
           selectDayRange={selectDayRange}
         />
-        <DailyGoals habits={habits} checkmarks={checkmarks} loading={loading} />
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:grid-cols-1 lg:gap-0">
+          <DailyGoals
+            habits={habits}
+            checkmarks={checkmarks}
+            loading={loading}
+          />
+        </div>
       </div>
     </>
   );
@@ -266,7 +272,7 @@ habitDashboardPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker DashboardPage",
       }}
     >
-      <div className="w-full bg-white p-2 md:p-10 md:pb-0 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 ">
+      <div className="w-full bg-white p-2 md:p-10 md:pb-0 2xl:pl-12 2xl:pt-8 2xl:pb-0 2xl:pr-6 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 2xl:gap-14 3xl:gap-16">
         {page}
       </div>
     </DashboardLayout>
