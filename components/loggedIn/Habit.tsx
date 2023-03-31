@@ -29,7 +29,7 @@ export const Habit = ({ habitKey, habit, deleteHabit }: Props) => {
         <div className="manage-habits-grid">
           <div className="grid-in-[top-left] lg:grid-in-[habit]">
             <h2 className="text-lg">{name}</h2>
-            <p className="text-[#949494] max-w-sm">{description}</p>
+            <p className="text-dark-graphite max-w-sm">{description}</p>
           </div>
           <div className="grid-in-[row] lg:grid-in-[frequency] grid">
             <div className="flex gap-1 mt-3 lg:mt-0 self-center  align-middle w-max">

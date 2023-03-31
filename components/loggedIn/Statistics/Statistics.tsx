@@ -9,10 +9,10 @@ type Props = {
 
 const Statistics = ({ header, text, stat, habit }: Props) => {
   return (
-    <div className="p-6 md:m-3  bg-[#fcfbf9] rounded-3xl w-full lg:col-span-1 xl:w-full col-span-2">
+    <div className="p-6 md:m-3  bg-background-gray rounded-3xl w-full lg:col-span-1 xl:w-full col-span-2">
       <h3 className="font-bold ">{header}</h3>
-      <p className="mt-4 font-bold text-[#b9b8b8]">
-        <span className="text-[#f05100] text-lg">{stat}</span> {text}
+      <p className="mt-4 font-bold text-dark-gray">
+        <span className="text-dark-orange text-lg">{stat}</span> {text}
         {stat == 1 ? "" : "s"}
         {habit && (
           <>

@@ -135,7 +135,7 @@ const SignUp = () => {
             <LoadingButton
               fullWidth
               variant="contained"
-              className="bg-[#1976d2]"
+              className="bg-light-blue"
               type="submit"
               onClick={() => setLogin(true)}
             >

@@ -35,7 +35,7 @@ const ProfilePicture = ({ achievedToday, todaysHabits, settings }: Props) => {
           backgroundImage: `conic-gradient(#f05100 ${completed}%,transparent 0%)`,
         }}
       ></div>
-      <div className="w-[152px] h-[152px] bg-[#fcfbf9] rounded-full absolute -translate-x-[11px] -translate-y-[11px] z-5"></div>
+      <div className="w-[152px] h-[152px] bg-background-gray rounded-full absolute -translate-x-[11px] -translate-y-[11px] z-5"></div>
       <Image
         alt="Profile photo"
         width={130}

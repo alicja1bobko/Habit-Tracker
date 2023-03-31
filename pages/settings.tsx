@@ -220,7 +220,7 @@ const settingsPage: NextPageWithLayout = () => {
           <div className="flex justify-between">
             <div className="mb-3">
               <p className="text-lg mt-3">Delete account</p>
-              <p className="text-[#949494]">Accounts can't be recovered</p>
+              <p className="text-dark-graphite">Accounts can't be recovered</p>
             </div>
             <Button
               onClick={handleDeleteModal}

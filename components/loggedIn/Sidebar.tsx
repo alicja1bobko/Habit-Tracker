@@ -41,7 +41,7 @@ export default function Sidebar({ children }: Props) {
   };
 
   const drawer = (
-    <div className="p-4 bg-[#fcfbf9] h-full">
+    <div className="p-4 bg-background-gray h-full">
       <div className="flex justify-center mt-4">
         <Image
           alt="Profile photo"
@@ -50,7 +50,7 @@ export default function Sidebar({ children }: Props) {
           src={"/../public/assets/sprout.png"}
           className="flex-shrink-0 object-contain"
         />
-        <h1 className="text-3xl text-[#2e822e] p-6 font-semibold">sprout</h1>
+        <h1 className="text-3xl text-light-green p-6 font-semibold">sprout</h1>
       </div>
 
       <List>
@@ -106,7 +106,7 @@ export default function Sidebar({ children }: Props) {
     <Box sx={{ display: "flex" }}>
       <AppBar
         position="fixed"
-        className="!bg-[#f87e3a] "
+        className="!bg-light-orange"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },

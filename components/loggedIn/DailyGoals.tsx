@@ -74,7 +74,7 @@ const Goal = ({ habit, habitKey, checkmarkKey, isCompleted }: Goal) => {
         </div>
         <button
           className="text-white text-center text-sm p-2 w-full rounded-b-3xl transition-all h-[40px]"
-          style={{ backgroundColor: isDone ? "#1f681f" : "#F87E3A" }}
+          style={{ backgroundColor: isDone ? "#1f681f" : "#f87e3a" }}
           onClick={() => handleClick()}
         >
           {isDone ? (

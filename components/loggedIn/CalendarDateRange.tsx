@@ -3,7 +3,7 @@ import { MouseEvent } from "react";
 import { selectRange } from "../../utils/weeksRangeList";
 import DateRangePicker from "./DateRangePicker";
 
-type TCalendarDateRange = {
+type Props = {
   selectedRange: string;
   handleSelect: (event: SelectChangeEvent<string>) => void;
   handleSelectedCalendarView: (
@@ -20,7 +20,7 @@ export const CalendarDateRange = ({
   selectDatesRange,
   weekView,
   handleSelectedCalendarView,
-}: TCalendarDateRange) => {
+}: Props) => {
   return (
     <>
       <div className="progress-layout">
