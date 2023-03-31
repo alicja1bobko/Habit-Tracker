@@ -75,7 +75,7 @@ const WeekOverview = ({
           draggable={true}
           showDots={false}
           responsive={responsive}
-          ssr={true} // means to render carousel on server-side.
+          ssr={true}
           infinite={false}
           autoPlay={false}
           autoPlaySpeed={1000}
@@ -83,14 +83,18 @@ const WeekOverview = ({
           transitionDuration={500}
           containerClass={`flex justify-items-center`}
           removeArrowOnDeviceType={["mobile"]}
-          dotListClass=""
-          itemClass={``}
         >
-          {weekOverview.map((date) => {
+          {weekOverview.map((date, index) => {
             let numOfHabits = habitsForDay(date, habits);
             let achieved = countAchieved(checkmarks, date);
             let completed = (achieved / Object.keys(numOfHabits).length) * 100;
-            return <PieChart day={date.getDate()} completed={completed} />;
+            return (
+              <PieChart
+                key={index}
+                day={date.getDate()}
+                completed={completed}
+              />
+            );
           })}
         </Carousel>
       </div>
