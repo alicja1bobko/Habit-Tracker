@@ -13,6 +13,7 @@ import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBullete
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import useAuth from "../../context/auth-context";
+import Image from "next/image";
 
 const drawerWidth = 270;
 
@@ -33,8 +34,17 @@ export default function Sidebar({ children }: Props) {
   };
 
   const drawer = (
-    <div className=" p-4 bg-[#fcfbf9] h-full">
-      <h1 className="text-3xl text-[#2e822e] p-6">Habit Tracker</h1>
+    <div className="p-4 bg-[#fcfbf9] h-full">
+      <div className="flex justify-center mt-4">
+        <Image
+          alt="Profile photo"
+          width={35}
+          height={40}
+          src={"/../public/assets/sprout.png"}
+          className="flex-shrink-0 object-contain"
+        />
+        <h1 className="text-3xl text-[#2e822e] p-6 font-semibold">sprout</h1>
+      </div>
 
       <List>
         <DrawerListItem
@@ -114,13 +124,12 @@ export default function Sidebar({ children }: Props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
@@ -156,7 +165,6 @@ export default function Sidebar({ children }: Props) {
         }}
       >
         <Toolbar />
-
         {children}
       </Box>
     </Box>
