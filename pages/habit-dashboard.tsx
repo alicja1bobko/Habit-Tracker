@@ -179,7 +179,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
     <>
       <div className="col-span-4 xl:col-span-1 p-3 md:p-5 mb-0 xl:mb-8">
         <div className="statistics-layout">
-          <Greeting />
+          <Greeting settings={userData.settings} />
           <ProfilePicture
             settings={userData.settings}
             achievedToday={countAchieved(userData.checkmarks, new Date())}
