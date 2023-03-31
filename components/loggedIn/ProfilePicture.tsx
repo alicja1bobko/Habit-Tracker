@@ -1,13 +1,26 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { IUserData } from "../../context/user-context";
 
 type Props = {
   achievedToday: number;
   todaysHabits: string[];
+  settings: IUserData["settings"];
 };
 
-const ProfilePicture = ({ achievedToday, todaysHabits }: Props) => {
+const ProfilePicture = ({ achievedToday, todaysHabits, settings }: Props) => {
+  const [img, setImg] = useState(
+    "https://lionsyouthbrass.band/wp-content/uploads/2022/05/Profile.jpg"
+  );
   const [completed, setCompleted] = useState<number>(0);
+
+  // load image from firestore
+  useEffect(() => {
+    const settingsKey = Object.keys(settings)[0];
+    if (settingsKey) setImg(settings[settingsKey].image);
+  }, [settings]);
+
+  //fill the progress border around image on completed habits change
   useEffect(() => {
     todaysHabits &&
       setCompleted((achievedToday / Object.keys(todaysHabits).length) * 100);
@@ -27,7 +40,10 @@ const ProfilePicture = ({ achievedToday, todaysHabits }: Props) => {
         alt="Profile photo"
         width={130}
         height={130}
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBcg5OV7m4Ojt-6P7o0JwzgBcZosZwisJw0A&usqp=CAU"
+        src={img}
+        placeholder="blur"
+        blurDataURL={"/../../public/assets/anonymous.jpg"}
+        onErrorCapture={() => setImg("/../public/assets/anonymous.jpg")}
         className="rounded-full relative z-20 max-w-none"
       />
     </div>

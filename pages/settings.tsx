@@ -57,7 +57,6 @@ const settingsPage: NextPageWithLayout = () => {
     email,
     image,
   }) => {
-    console.log(firstName, lastName, password, email, image);
     let settingsKey = Object.keys(userData.settings)[0];
 
     const settingsRef = doc(db, `users/${user?.uid}/settings/${settingsKey}`);
