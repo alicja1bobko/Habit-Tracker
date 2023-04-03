@@ -106,7 +106,7 @@ const settingsPage: NextPageWithLayout = () => {
         <form onSubmit={handleSubmit(onSubmitHandler)} className="">
           <div className="grid mt-5 gap-5 md:grid-cols-2  md:gap-5 md:mt-5 lg:mt-10">
             <div>
-              <p className="font-semibold text-sm mb-2">FIRST NAME</p>
+              <p className="label mb-2">FIRST NAME</p>
               <TextField
                 id="first-name"
                 type="text"
@@ -125,7 +125,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">LAST NAME</p>
+              <p className="label mb-2">LAST NAME</p>
               <TextField
                 id="last-name"
                 type="text"
@@ -144,7 +144,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">PASSWORD</p>
+              <p className="label mb-2">PASSWORD</p>
 
               <TextField
                 id="password"
@@ -164,7 +164,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">EMAIL</p>
+              <p className="label mb-2">EMAIL</p>
               <TextField
                 id="email"
                 type="email"
@@ -183,7 +183,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">IMAGE</p>
+              <p className="label mb-2">IMAGE</p>
               <TextField
                 id="image"
                 type="text"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -12,7 +12,7 @@ import AddTaskIcon from "@mui/icons-material/AddTask";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import useAuth from "../../context/auth-context";
+import useAuth from "../../../context/auth-context";
 import Image from "next/image";
 import { reactLocalStorage } from "reactjs-localstorage";
 

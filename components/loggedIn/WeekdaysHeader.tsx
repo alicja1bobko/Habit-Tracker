@@ -1,8 +1,6 @@
-import React from "react";
 import { weekdaysTable } from "../../utils/weekdays";
-type Props = {};
 
-const WeekdaysHeader = (props: Props) => {
+const WeekdaysHeader = () => {
   return (
     <div className="progress-calendar-grid">
       <div></div>

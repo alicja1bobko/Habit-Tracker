@@ -1,7 +1,7 @@
 import { SelectChangeEvent } from "@mui/material";
 import { MouseEvent } from "react";
 import { selectRange } from "../../utils/weeksRangeList";
-import DateRangePicker from "./DateRangePicker";
+import DateRangePicker from "./DatePickers/DateRangePicker";
 
 type Props = {
   selectedRange: string;

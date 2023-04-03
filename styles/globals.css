@@ -27,5 +27,9 @@
         @apply grid grid-areas-[top-left_top-right,row_row] grid-cols-[auto_20%] auto-rows-min lg:grid-areas-[habit_frequency_edit] lg:grid-cols-[1fr_auto_auto] lg:grid-rows-1 lg:gap-5
     }
 
+    .label {
+        @apply font-bold text-sm
+    }
+
 }
 

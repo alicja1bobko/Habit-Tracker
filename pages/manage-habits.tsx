@@ -1,11 +1,10 @@
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { ReactElement, useEffect, useState } from "react";
-import { Habit } from "../components/loggedIn/Habit";
+import { ManageHabit } from "../components/loggedIn/ManageHabit";
 import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { db } from "./api/firebase";
-
 import { NextPageWithLayout } from "./_app";
 
 const manageHabitsPage: NextPageWithLayout = () => {
@@ -34,16 +33,14 @@ const manageHabitsPage: NextPageWithLayout = () => {
   };
 
   return (
-
     <div className="flex flex-col p-5 md:p-10">
-
       {habitKeys.length !== 0 && (
         <h1 className="text-4xl font-bolder mb-3">Manage habits</h1>
       )}
       <div className="mt-5">
         {habitKeys.map((habitKey, index) => {
           return (
-            <Habit
+            <ManageHabit
               key={index}
               habitKey={habitKey}
               habit={userData.habits[habitKey]}

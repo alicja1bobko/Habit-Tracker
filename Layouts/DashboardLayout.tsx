@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { ReactNode } from "react";
-import Sidebar from "../components/loggedIn/Sidebar";
+import Sidebar from "../components/loggedIn/Sidebar/Sidebar";
 
 interface Props {
   meta: {

@@ -1,14 +1,16 @@
 import { SelectChangeEvent } from "@mui/material";
-import { selectRange } from "../../utils/weeksRangeList";
-import DateRangePicker from "./DateRangePicker";
+import { selectRange } from "../../../utils/weeksRangeList";
+import DateRangePicker from "../DatePickers/DateRangePicker";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { eachDayOfInterval } from "date-fns";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { IUserData } from "../../context/user-context";
-import { habitsForDay } from "./Statistics/todaysHabits";
-import { countAchieved } from "./Statistics/countAchievedToday";
+import { IUserData } from "../../../context/user-context";
+import { habitsForDay } from "../Statistics/todaysHabits";
+import { countAchieved } from "../Statistics/countAchievedToday";
+import { breakpoints } from "./breakpoints";
+import { PieChart } from "./PieChart";
 
 type Props = {
   selectedRange: string;
@@ -16,28 +18,6 @@ type Props = {
   selectDatesRange: selectRange;
   checkmarks: IUserData["checkmarks"];
   habits: IUserData["habits"];
-};
-const responsive = {
-  large: {
-    breakpoint: { max: 3000, min: 1801 },
-    items: 7,
-    slidesToSlide: 1,
-  },
-  desktop: {
-    breakpoint: { max: 1800, min: 1300 },
-    items: 5,
-    slidesToSlide: 1,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 4,
-    slidesToSlide: 1,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 3,
-    slidesToSlide: 1,
-  },
 };
 
 const WeekOverview = ({
@@ -74,7 +54,7 @@ const WeekOverview = ({
           swipeable={true}
           draggable={true}
           showDots={false}
-          responsive={responsive}
+          responsive={breakpoints}
           ssr={true}
           infinite={false}
           autoPlay={false}
@@ -103,23 +83,3 @@ const WeekOverview = ({
 };
 
 export default WeekOverview;
-
-const PieChart = ({ day, completed }: { day: number; completed: number }) => {
-  return (
-    <div className="flex p-5 justify-center ">
-      <div className="rounded-full w-[80px] h-[80px]  justify-center items-center flex text-xs md:text-base border-solid border-[5px] border-light-gray">
-        <div
-          className="w-[88px] h-[88px]   rounded-full absolute z-5"
-          style={{
-            backgroundImage: `conic-gradient(#ffa745 ${completed}%,transparent 0%)`,
-          }}
-        ></div>
-
-        <div className="absolute  font-bold text-lg text-dark-graphite  z-20">
-          {day}
-        </div>
-        <div className="w-[70px] h-[70px] bg-white rounded-full absolute z-10"></div>
-      </div>
-    </div>
-  );
-};

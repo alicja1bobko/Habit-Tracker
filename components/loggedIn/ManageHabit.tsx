@@ -15,7 +15,7 @@ type Props = {
   deleteHabit: (habitKey: string) => Promise<void>;
 };
 
-export const Habit = ({ habitKey, habit, deleteHabit }: Props) => {
+export const ManageHabit = ({ habitKey, habit, deleteHabit }: Props) => {
   const { name, frequency, description } = habit;
 
   const [open, setOpen] = useState(false);

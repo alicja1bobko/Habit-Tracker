@@ -98,7 +98,7 @@ const addHabitPage: NextPageWithLayout = () => {
       <h1 className="text-4xl font-bolder">Create a habit</h1>
       <div className="mt-7 mb-5">
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm ">NAME</p>
+          <p className="label">NAME</p>
           {errors.habitName ? (
             <p className="invalidInput mt-1" role="alert">
               {errors.habitName.message}
@@ -117,7 +117,7 @@ const addHabitPage: NextPageWithLayout = () => {
           {...register("habitName")}
         />
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm">DESCRIPTION</p>
+          <p className="label">DESCRIPTION</p>
           {errors.description ? (
             <p className="invalidInput" role="alert">
               {errors.description.message}
@@ -136,7 +136,7 @@ const addHabitPage: NextPageWithLayout = () => {
           {...register("description")}
         />
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm">FREQUENCY</p>
+          <p className="label">FREQUENCY</p>
           {errors.frequency ? (
             <p className="invalidInput" role="alert">
               {errors.frequency.message}

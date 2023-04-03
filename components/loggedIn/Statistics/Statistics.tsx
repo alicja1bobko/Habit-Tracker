@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
   header: string;
   text: string;

@@ -5,10 +5,11 @@ import {
   startOfWeek,
   endOfWeek,
 } from "date-fns";
-import { IUserData } from "../../context/user-context";
-import { chunks } from "../../utils/chunks";
+import { IUserData } from "../../../context/user-context";
+import { chunks } from "../../../utils/chunks";
+import { Week } from "./Week";
 
-interface ISelectedRangeHabits {
+export interface ISelectedRangeHabits {
   [key: string]: {
     [key: string]: boolean;
   };
@@ -82,20 +83,6 @@ const ProgressCalendar = ({
     habitsKeys = [selectedHabitKey];
   }
 
-  // Transform db into object with dates as keys and habits as values
-  const checkIfHabitCompleted = (day: string, habitsKey: string) => {
-    let isCompleted = false;
-    if (selectedRangeHabits[day] !== undefined) {
-      isCompleted =
-        typeof Object.keys(selectedRangeHabits[day]).find(
-          (key) => key == habitsKey
-        ) !== undefined
-          ? selectedRangeHabits[day][habitsKey]
-          : false;
-    }
-    return isCompleted;
-  };
-
   return (
     <div
       className={`grid grid-rows-${
@@ -112,7 +99,7 @@ const ProgressCalendar = ({
                   index={i}
                   week={week}
                   habitsKey={habitsKey}
-                  checkIfHabitCompleted={checkIfHabitCompleted}
+                  selectedRangeHabits={selectedRangeHabits}
                 />
               );
             })}
@@ -120,69 +107,6 @@ const ProgressCalendar = ({
         );
       })}
     </div>
-  );
-};
-
-const Week = ({
-  index,
-  week,
-  habitsKey,
-  checkIfHabitCompleted,
-}: {
-  index: number;
-  week: string[];
-  habitsKey: string;
-  checkIfHabitCompleted: (day: string, habitsKey: string) => boolean;
-}) => {
-  return (
-    <div key={index} className="flex justify-between items-center ">
-      {week.map((day, i, arr) => {
-        let streak = false;
-        if (i > 0) {
-          let previousDay = arr[i - 1];
-          streak = checkIfHabitCompleted(previousDay, habitsKey);
-        }
-        let isCompleted = checkIfHabitCompleted(day, habitsKey);
-        return (
-          <Day
-            key={`${day} ${habitsKey}`}
-            dayOfMonth={day}
-            isCompleted={isCompleted}
-            streak={streak}
-          />
-        );
-      })}
-    </div>
-  );
-};
-
-const Day = ({
-  dayOfMonth,
-  isCompleted,
-  streak,
-}: {
-  dayOfMonth: string;
-  isCompleted: boolean;
-  streak: boolean;
-}) => {
-  return (
-    <>
-      <div
-        className="flex-grow border-b border-2 first-of-type:hidden"
-        style={{
-          borderColor: streak && isCompleted ? "#318a31" : "transparent",
-        }}
-      ></div>
-      <div
-        className="rounded-full w-[30px] h-[30px] md:w-[40px] md:h-[40px] justify-center items-center flex text-xs md:text-base"
-        style={{
-          backgroundColor: isCompleted ? "#318a31" : "#fcfbf9",
-          color: isCompleted ? "#ffffff" : "#d3c9b7",
-        }}
-      >
-        {dayOfMonth.split("-")[0]}
-      </div>
-    </>
   );
 };
 
