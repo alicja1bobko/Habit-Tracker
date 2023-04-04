@@ -1,6 +1,6 @@
 import SignUp from "../components/notLogged/SignUp";
 import HomepageLayout from "../Layouts/HomepageLayout";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import type { NextPageWithLayout } from "../pages/_app";
 
 const SignUpPage: NextPageWithLayout = () => {

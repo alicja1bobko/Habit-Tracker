@@ -9,19 +9,18 @@ import {
   FormGroup,
   TextField,
 } from "@mui/material";
-import { normaliZeWeekdayFromDate, weekdaysTable } from "../utils/weekdays";
+import { weekdaysTable } from "../utils/weekdays";
 import { createHabitSchema } from "../schemas/create-habit";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../pages/api/firebase";
 import useAuth from "../context/auth-context";
-import { daysList } from "../utils/daysRangeList";
-import { lightFormat, subDays } from "date-fns";
 import { FormValues } from "../components/loggedIn/types/FormValues";
 import { textfieldStyles } from "../components/styles/textfieldStyles";
 import { checkboxStyle } from "../components/styles/checkboxStyle";
 import { formControlStyle } from "../components/styles/formControlStyle";
+import { addCheckmarksToDb } from "../utils/addCheckmarksToDb";
 
 const initializeHabit = {
   habitName: "",
@@ -56,24 +55,7 @@ const addHabitPage: NextPageWithLayout = () => {
       description: description,
       frequency: frequency.sort(),
     });
-    // add checkmark for this habit for past week
-    const pastWeek = daysList(7);
-    const addCheckmarksToDb = () => {
-      Object.entries(pastWeek).map(async (entry) => {
-        let i = entry[0];
-        let date = entry[1];
-        const weekday = normaliZeWeekdayFromDate(date);
-        if (frequency.filter((day) => day == weekday).length > 0) {
-          const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
-          await addDoc(checkmarksDoc, {
-            completed: false,
-            habitId: docRef.id,
-            date: lightFormat(date, "d-M-yyy"),
-          });
-        }
-      });
-    };
-    addCheckmarksToDb();
+    addCheckmarksToDb({ frequency, user, docRef });
     setLoading(false);
     reset();
   };

@@ -1,5 +1,5 @@
 import HomepageLayout from "../Layouts/HomepageLayout";
-import React, { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
 import type { NextPageWithLayout } from "../pages/_app";
 import SignIn from "../components/notLogged/SignIn";
 

@@ -1,4 +1,4 @@
-import React, { MouseEvent, ReactElement, useEffect, useState } from "react";
+import { MouseEvent, ReactElement, useEffect, useState } from "react";
 import { NextPageWithLayout } from "./_app";
 import Statistics from "../components/loggedIn/Statistics/Statistics";
 import Greeting from "../components/loggedIn/Greeting";
