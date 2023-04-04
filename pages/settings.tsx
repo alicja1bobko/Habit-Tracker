@@ -5,11 +5,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Modal } from "../components/loggedIn/Modal";
+import { textfieldStyles } from "../components/styles/textfieldStyles";
 import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { settingsSchema } from "../schemas/settings-validation";
-import { textfieldStyles } from "./add-habit";
 import { db } from "./api/firebase";
 import { NextPageWithLayout } from "./_app";
 

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -18,12 +18,10 @@ import { db } from "../pages/api/firebase";
 import useAuth from "../context/auth-context";
 import { daysList } from "../utils/daysRangeList";
 import { lightFormat, subDays } from "date-fns";
-
-export type FormValues = {
-  habitName: string;
-  description: string;
-  frequency: number[];
-};
+import { FormValues } from "../components/loggedIn/types/FormValues";
+import { textfieldStyles } from "../components/styles/textfieldStyles";
+import { checkboxStyle } from "../components/styles/checkboxStyle";
+import { formControlStyle } from "../components/styles/formControlStyle";
 
 const initializeHabit = {
   habitName: "",
@@ -229,52 +227,3 @@ addHabitPage.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default addHabitPage;
-
-export const textfieldStyles = {
-  backgroundColor: "#fcfbf9",
-  borderRadius: "30px",
-  "& .MuiOutlinedInput-root": {
-    borderRadius: "30px",
-    "&.Mui-focused fieldset": {
-      borderColor: "rgb(46, 130, 46)",
-    },
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#fcfbf9",
-  },
-  "& .MuiInputBase-input": {
-    paddingLeft: "1.7rem",
-    fontSize: "14px",
-  },
-};
-
-export const checkboxStyle = {
-  "& .MuiButtonBase-root": {
-    backgroundColor: "orange",
-  },
-  "& .MuiCheckbox-root": {
-    backgroundColor: "orange",
-  },
-  "& .MuiSvgIcon-root": {
-    color: "transparent",
-  },
-};
-
-export const formControlStyle = {
-  "& .MuiButtonBase-root": {
-    backgroundColor: "#fcfbf9",
-    padding: "12px",
-  },
-  "& .Mui-checked:hover": {
-    backgroundColor: "#f87E3A",
-  },
-  "&  .Mui-checked": {
-    backgroundColor: "#f87E3A",
-  },
-  "& .MuiTypography-root": {
-    color: "black",
-  },
-  "& .Mui-checked + .MuiTypography-root": {
-    color: "white",
-  },
-};

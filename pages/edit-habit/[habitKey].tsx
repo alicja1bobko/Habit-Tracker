@@ -11,17 +11,15 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { FormValues } from "../../components/loggedIn/types/FormValues";
+import { checkboxStyle } from "../../components/styles/checkboxStyle";
+import { formControlStyle } from "../../components/styles/formControlStyle";
+import { textfieldStyles } from "../../components/styles/textfieldStyles";
 import useAuth from "../../context/auth-context";
 import { IUserData, useUser } from "../../context/user-context";
 import DashboardLayout from "../../Layouts/DashboardLayout";
 import { createHabitSchema } from "../../schemas/create-habit";
 import { weekdaysTable } from "../../utils/weekdays";
-import {
-  checkboxStyle,
-  formControlStyle,
-  FormValues,
-  textfieldStyles,
-} from "../add-habit";
 import { db } from "../api/firebase";
 import { NextPageWithLayout } from "../_app";
 
