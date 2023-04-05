@@ -20,7 +20,8 @@ const Greeting = ({ settings }: Props) => {
   useEffect(() => {
     const settingsKey = Object.keys(settings)[0];
     if (settingsKey) {
-      setUserName(`, ${settings[settingsKey].firstName}`);
+      let name = settings[settingsKey].firstName;
+      if (name !== undefined) setUserName(`, ${name}`);
     }
   }, [settings]);
 

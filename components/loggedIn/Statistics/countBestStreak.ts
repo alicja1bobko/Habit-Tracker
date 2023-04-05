@@ -46,14 +46,15 @@ export const countBestStreak: countBestStreakFn = (checkmarks, habits) => {
         const secondIsCompleted = sortedByDates[index + 1]
           ? sortedByDates[index + 1][1].completed
           : false;
-        const streak = diff === 1 && firstIsCompleted && secondIsCompleted;
+        let streak = diff === 1 && firstIsCompleted && secondIsCompleted;
+
         const isToday: boolean =
           acc.isToday || differenceInDays(first, today) === 0;
         const isYesterday =
           acc.isYesterday || differenceInDays(first, yesterday) === 0;
 
         if (streak) ++acc.streaks[acc.streaks.length - 1];
-        else if (diff === 1 && firstIsCompleted && !secondIsCompleted)
+        if (diff === 1 && firstIsCompleted && !secondIsCompleted)
           acc.streaks.push(1);
 
         return {
@@ -78,7 +79,7 @@ export const countBestStreak: countBestStreakFn = (checkmarks, habits) => {
 
   let habitKeyMaxValuePair = summary.reduce(
     ([i, max], [key, value]) => {
-      return max > value ? [i, max] : [key, value];
+      return max >= value - 1 ? [i, max] : [key, value];
     },
     ["", 0]
   );
