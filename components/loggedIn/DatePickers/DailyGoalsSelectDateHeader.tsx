@@ -5,10 +5,11 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import React from "react";
-import { selectDay } from "../../utils/daysRangeList";
-import { formatDateForSelectDay } from "../../utils/formatDateForSelect";
+import { selectDay } from "../../../utils/daysRangeList";
+import { formatDateForSelectDay } from "../../../utils/formatDateForSelect";
+import { headerListStyle, listStyle } from "./style";
 
-type TDailyGoalsSelectDate = {
+type Props = {
   selectedDayIndex: string;
   handleSelectDay: (event: SelectChangeEvent<string>) => void;
   selectDayRange: selectDay;
@@ -18,7 +19,7 @@ const DailyGoalsSelectDateHeader = ({
   selectedDayIndex,
   handleSelectDay,
   selectDayRange,
-}: TDailyGoalsSelectDate) => {
+}: Props) => {
   return (
     <div className="flex justify-between ">
       <h3 className="font-bold text-2xl mb-3 mt-2">Habits</h3>
@@ -31,27 +32,8 @@ const DailyGoalsSelectDateHeader = ({
           onChange={handleSelectDay}
           variant="standard"
           disableUnderline
-          sx={{
-            fontWeight: "light",
-            boxShadow: "none",
-            ".MuiOutlinedInput-notchedOutline": { border: 0 },
-            ".MuiSelect-select": {
-              "&:focus": { backgroundColor: "transparent" },
-              fontWeight: 600,
-              color: "#949494",
-            },
-            ".css-jd1zyo-MuiSelect-select-MuiInputBase-input-MuiInput-input": {
-              padding: 0,
-            },
-          }}
-          MenuProps={{
-            sx: {
-              "&& .Mui-selected": {
-                backgroundColor: "rgba(49, 138, 49,0.4)",
-                "&:hover": { backgroundColor: "rgba(49, 138, 49,0.3)" },
-              },
-            },
-          }}
+          sx={headerListStyle}
+          MenuProps={listStyle}
         >
           {Object.entries(selectDayRange).map((entry) => {
             let key = entry[0];

@@ -5,11 +5,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Modal } from "../components/loggedIn/Modal";
+import { textfieldStyles } from "../components/styles/textfieldStyles";
 import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { settingsSchema } from "../schemas/settings-validation";
-import { textfieldStyles } from "./add-habit";
 import { db } from "./api/firebase";
 import { NextPageWithLayout } from "./_app";
 
@@ -57,7 +57,6 @@ const settingsPage: NextPageWithLayout = () => {
     email,
     image,
   }) => {
-    console.log(firstName, lastName, password, email, image);
     let settingsKey = Object.keys(userData.settings)[0];
 
     const settingsRef = doc(db, `users/${user?.uid}/settings/${settingsKey}`);
@@ -107,7 +106,7 @@ const settingsPage: NextPageWithLayout = () => {
         <form onSubmit={handleSubmit(onSubmitHandler)} className="">
           <div className="grid mt-5 gap-5 md:grid-cols-2  md:gap-5 md:mt-5 lg:mt-10">
             <div>
-              <p className="font-semibold text-sm mb-2">FIRST NAME</p>
+              <p className="label mb-2">FIRST NAME</p>
               <TextField
                 id="first-name"
                 type="text"
@@ -126,7 +125,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">LAST NAME</p>
+              <p className="label mb-2">LAST NAME</p>
               <TextField
                 id="last-name"
                 type="text"
@@ -145,7 +144,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">PASSWORD</p>
+              <p className="label mb-2">PASSWORD</p>
 
               <TextField
                 id="password"
@@ -165,7 +164,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">EMAIL</p>
+              <p className="label mb-2">EMAIL</p>
               <TextField
                 id="email"
                 type="email"
@@ -184,7 +183,7 @@ const settingsPage: NextPageWithLayout = () => {
               )}
             </div>
             <div>
-              <p className="font-semibold text-sm mb-2">IMAGE</p>
+              <p className="label mb-2">IMAGE</p>
               <TextField
                 id="image"
                 type="text"
@@ -221,7 +220,7 @@ const settingsPage: NextPageWithLayout = () => {
           <div className="flex justify-between">
             <div className="mb-3">
               <p className="text-lg mt-3">Delete account</p>
-              <p className="text-[#949494]">Accounts can't be recovered</p>
+              <p className="text-dark-graphite">Accounts can't be recovered</p>
             </div>
             <Button
               onClick={handleDeleteModal}

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { ReactNode } from "react";
-import Sidebar from "../components/loggedIn/Sidebar";
+import Sidebar from "../components/loggedIn/Sidebar/Sidebar";
 
 interface Props {
   meta: {
@@ -24,7 +24,7 @@ const DashboardLayout = ({ children, meta }: Props) => {
         />
         <link rel="icon" href={icon || "/favicon.ico"} />
       </Head>
-      <div className="bg-[#fcfbf9]">
+      <div className="bg-background-gray">
         <Sidebar children={children} />
       </div>
     </>

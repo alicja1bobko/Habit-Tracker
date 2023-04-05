@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { NextPageWithLayout } from "./_app";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -9,21 +9,19 @@ import {
   FormGroup,
   TextField,
 } from "@mui/material";
-import { normaliZeWeekdayFromDate, weekdaysTable } from "../utils/weekdays";
+import { weekdaysTable } from "../utils/weekdays";
 import { createHabitSchema } from "../schemas/create-habit";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../pages/api/firebase";
 import useAuth from "../context/auth-context";
-import { daysList } from "../utils/daysRangeList";
-import { lightFormat, subDays } from "date-fns";
+import { FormValues } from "../components/loggedIn/types/FormValues";
+import { textfieldStyles } from "../components/styles/textfieldStyles";
+import { checkboxStyle } from "../components/styles/checkboxStyle";
+import { formControlStyle } from "../components/styles/formControlStyle";
+import { addCheckmarksToDb } from "../utils/addCheckmarksToDb";
 
-export type FormValues = {
-  habitName: string;
-  description: string;
-  frequency: number[];
-};
 
 const initializeHabit = {
   habitName: "",
@@ -34,6 +32,7 @@ const initializeHabit = {
 const addHabitPage: NextPageWithLayout = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+
   const {
     control,
     register,
@@ -58,24 +57,7 @@ const addHabitPage: NextPageWithLayout = () => {
       description: description,
       frequency: frequency.sort(),
     });
-    // add checkmark for this habit for past week
-    const pastWeek = daysList(7);
-    const addCheckmarksToDb = () => {
-      Object.entries(pastWeek).map(async (entry) => {
-        let i = entry[0];
-        let date = entry[1];
-        const weekday = normaliZeWeekdayFromDate(date);
-        if (frequency.filter((day) => day == weekday).length > 0) {
-          const checkmarksDoc = collection(db, `users/${user?.uid}/checkmarks`);
-          await addDoc(checkmarksDoc, {
-            completed: false,
-            habitId: docRef.id,
-            date: lightFormat(date, "d-M-yyy"),
-          });
-        }
-      });
-    };
-    addCheckmarksToDb();
+    addCheckmarksToDb({ frequency, user, docRef });
     setLoading(false);
     reset();
   };
@@ -98,7 +80,7 @@ const addHabitPage: NextPageWithLayout = () => {
       <h1 className="text-4xl font-bolder">Create a habit</h1>
       <div className="mt-7 mb-5">
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm ">NAME</p>
+          <p className="label">NAME</p>
           {errors.habitName ? (
             <p className="invalidInput mt-1" role="alert">
               {errors.habitName.message}
@@ -117,7 +99,7 @@ const addHabitPage: NextPageWithLayout = () => {
           {...register("habitName")}
         />
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm">DESCRIPTION</p>
+          <p className="label">DESCRIPTION</p>
           {errors.description ? (
             <p className="invalidInput" role="alert">
               {errors.description.message}
@@ -136,7 +118,7 @@ const addHabitPage: NextPageWithLayout = () => {
           {...register("description")}
         />
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm">FREQUENCY</p>
+          <p className="label">FREQUENCY</p>
           {errors.frequency ? (
             <p className="invalidInput" role="alert">
               {errors.frequency.message}
@@ -229,52 +211,3 @@ addHabitPage.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default addHabitPage;
-
-export const textfieldStyles = {
-  backgroundColor: "#fcfbf9",
-  borderRadius: "30px",
-  "& .MuiOutlinedInput-root": {
-    borderRadius: "30px",
-    "&.Mui-focused fieldset": {
-      borderColor: "rgb(46, 130, 46)",
-    },
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#fcfbf9",
-  },
-  "& .MuiInputBase-input": {
-    paddingLeft: "1.7rem",
-    fontSize: "14px",
-  },
-};
-
-export const checkboxStyle = {
-  "& .MuiButtonBase-root": {
-    backgroundColor: "orange",
-  },
-  "& .MuiCheckbox-root": {
-    backgroundColor: "orange",
-  },
-  "& .MuiSvgIcon-root": {
-    color: "transparent",
-  },
-};
-
-export const formControlStyle = {
-  "& .MuiButtonBase-root": {
-    backgroundColor: "#fcfbf9",
-    padding: "12px",
-  },
-  "& .Mui-checked:hover": {
-    backgroundColor: "#f87E3A",
-  },
-  "&  .Mui-checked": {
-    backgroundColor: "#f87E3A",
-  },
-  "& .MuiTypography-root": {
-    color: "black",
-  },
-  "& .Mui-checked + .MuiTypography-root": {
-    color: "white",
-  },
-};

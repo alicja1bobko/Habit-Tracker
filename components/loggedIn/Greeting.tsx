@@ -1,21 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { IUserData } from "../../context/user-context";
 
-type Props = {};
-let name = "Anastasia";
+type Props = {
+  settings: IUserData["settings"];
+};
 
-const Greeting = (props: Props) => {
-  let today = new Date();
-  let hours = today.getHours();
-  let greeting = "Hello";
-  if (hours >= 5 && hours <= 11) {
-    greeting = "Good morning";
-  } else if (hours >= 12 && hours <= 17) {
-    greeting = "Good afternoon";
-  } else greeting = "Good evening";
+let today = new Date();
+let hours = today.getHours();
+let greeting = "Hello";
+if (hours >= 5 && hours <= 11) {
+  greeting = "Good morning";
+} else if (hours >= 12 && hours <= 17) {
+  greeting = "Good afternoon";
+} else greeting = "Good evening";
+
+const Greeting = ({ settings }: Props) => {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const settingsKey = Object.keys(settings)[0];
+    if (settingsKey) {
+      setUserName(`, ${settings[settingsKey].firstName}`);
+    }
+  }, [settings]);
 
   return (
-    <h2 className="text-3xl font-bold tracking-wide mb-10 xl:mb-0 col-span-1 xl:col-span-4 ">
-      {greeting}, {name}!
+    <h2 className="text-3xl font-bold tracking-wide ml-2 mt-2 mb-auto xl:mb-0 xl:ml-0 col-span-1 xl:col-span-4">
+      {greeting}
+      {userName}!
     </h2>
   );
 };

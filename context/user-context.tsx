@@ -8,6 +8,7 @@ import {
 } from "react";
 import useAuth from "./auth-context";
 import { db } from "../pages/api/firebase";
+import { FullPageSpinner } from "../components/Spinners";
 
 const initializeUserData = {
   habits: {},
@@ -142,10 +143,10 @@ function UserProvider({ children }: { children: ReactNode }) {
   }, [user, db, setUserData]);
 
   // User data is loading
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
-
+  // if (isLoading) {
+  //   return <FullPageSpinner />;
+  // }
+  // styles for sign up don't load
   if (isSuccess) {
     return (
       <UserContext.Provider value={userData}>{children}</UserContext.Provider>

@@ -11,17 +11,16 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { FormValues } from "../../components/loggedIn/types/FormValues";
+import { FullPageSpinner } from "../../components/Spinners";
+import { checkboxStyle } from "../../components/styles/checkboxStyle";
+import { formControlStyle } from "../../components/styles/formControlStyle";
+import { textfieldStyles } from "../../components/styles/textfieldStyles";
 import useAuth from "../../context/auth-context";
 import { IUserData, useUser } from "../../context/user-context";
 import DashboardLayout from "../../Layouts/DashboardLayout";
 import { createHabitSchema } from "../../schemas/create-habit";
 import { weekdaysTable } from "../../utils/weekdays";
-import {
-  checkboxStyle,
-  formControlStyle,
-  FormValues,
-  textfieldStyles,
-} from "../add-habit";
 import { db } from "../api/firebase";
 import { NextPageWithLayout } from "../_app";
 
@@ -99,7 +98,7 @@ const editHabitPage: NextPageWithLayout = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <FullPageSpinner />;
   }
 
   return (
@@ -110,7 +109,7 @@ const editHabitPage: NextPageWithLayout = () => {
       <h1 className="text-4xl font-bolder">Edit habit</h1>
       <div className="mt-7 mb-5">
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm ">NAME</p>
+          <p className="label">NAME</p>
           {errors.habitName ? (
             <p className="invalidInput mt-1" role="alert">
               {errors.habitName.message}
@@ -129,7 +128,7 @@ const editHabitPage: NextPageWithLayout = () => {
           {...register("habitName")}
         />
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm">DESCRIPTION</p>
+          <p className="label">DESCRIPTION</p>
           {errors.description ? (
             <p className="invalidInput" role="alert">
               {errors.description.message}
@@ -148,7 +147,7 @@ const editHabitPage: NextPageWithLayout = () => {
           {...register("description")}
         />
         <div className="mb-4 mt-5 ">
-          <p className="font-bold text-sm">FREQUENCY</p>
+          <p className="label">FREQUENCY</p>
           {errors.frequency ? (
             <p className="invalidInput" role="alert">
               {errors.frequency.message}

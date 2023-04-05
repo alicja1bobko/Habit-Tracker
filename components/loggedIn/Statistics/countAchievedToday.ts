@@ -1,5 +1,4 @@
 import { lightFormat } from "date-fns";
-import { useEffect } from "react";
 import { IUserData } from "../../../context/user-context";
 
 export const countAchieved = (

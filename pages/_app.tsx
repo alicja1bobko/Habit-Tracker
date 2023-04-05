@@ -4,6 +4,15 @@ import React, { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 import { AppProviders } from "../context";
 import { AuthGuard } from "../context/auth-context";
+import Router from "next/router";
+import NProgress from "nprogress";
+import "../styles/page-loader.css";
+
+//Binding events.
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());  
+
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

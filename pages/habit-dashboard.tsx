@@ -1,16 +1,16 @@
-import React, { MouseEvent, ReactElement, useEffect, useState } from "react";
+import { MouseEvent, ReactElement, useEffect, useState } from "react";
 import { NextPageWithLayout } from "./_app";
 import Statistics from "../components/loggedIn/Statistics/Statistics";
 import Greeting from "../components/loggedIn/Greeting";
 import ProfilePicture from "../components/loggedIn/ProfilePicture";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import { DailyGoals } from "../components/loggedIn/DailyGoals";
+import { DailyGoals } from "../components/loggedIn/DailyGoals/DailyGoals";
 import { useUser } from "../context/user-context";
 import { IUserData } from "../context/user-context";
 import { addDoc, collection, getDoc } from "firebase/firestore";
 import { db } from "./api/firebase";
 import useAuth from "../context/auth-context";
-import ProgressCalendar from "../components/loggedIn/ProgressCalendar";
+import ProgressCalendar from "../components/loggedIn/ProgressCalendar/ProgressCalendar";
 import { HabitsList } from "../components/loggedIn/HabitsList";
 import WeekdaysHeader from "../components/loggedIn/WeekdaysHeader";
 import { SelectChangeEvent } from "@mui/material";
@@ -19,11 +19,11 @@ import { CalendarDateRange } from "../components/loggedIn/CalendarDateRange";
 import { weeksList } from "../utils/weeksRangeList";
 import { monthsList } from "../utils/monthRangeList";
 import { daysList } from "../utils/daysRangeList";
-import DailyGoalsSelectDateHeader from "../components/loggedIn/DailyGoalsSelectDateHeader";
+import DailyGoalsSelectDateHeader from "../components/loggedIn/DatePickers/DailyGoalsSelectDateHeader";
 import { countCurrentGoals } from "../components/loggedIn/Statistics/countCurrentGoals";
 import { countAchieved } from "../components/loggedIn/Statistics/countAchievedToday";
 import { countBestStreak } from "../components/loggedIn/Statistics/countBestStreak";
-import WeekOverview from "../components/loggedIn/WeekOverview";
+import WeekOverview from "../components/loggedIn/WeekOverview/WeekOverview";
 import { habitsForDay } from "../components/loggedIn/Statistics/todaysHabits";
 
 const habitDashboardPage: NextPageWithLayout = () => {
@@ -177,10 +177,11 @@ const habitDashboardPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="col-span-4 xl:col-span-1 p-3 md:p-5 mb-0 xl:mb-8">
+      <div className="col-span-4 xl:col-span-1 p-3 md:p-5 mb-0">
         <div className="statistics-layout">
-          <Greeting />
+          <Greeting settings={userData.settings} />
           <ProfilePicture
+            settings={userData.settings}
             achievedToday={countAchieved(userData.checkmarks, new Date())}
             todaysHabits={habitsForDay(new Date(), userData.habits)}
           />
@@ -251,7 +252,13 @@ const habitDashboardPage: NextPageWithLayout = () => {
           handleSelectDay={handleSelectDay}
           selectDayRange={selectDayRange}
         />
-        <DailyGoals habits={habits} checkmarks={checkmarks} loading={loading} />
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:grid-cols-1 lg:gap-0">
+          <DailyGoals
+            habits={habits}
+            checkmarks={checkmarks}
+            loading={loading}
+          />
+        </div>
       </div>
     </>
   );
@@ -265,7 +272,7 @@ habitDashboardPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker DashboardPage",
       }}
     >
-      <div className="w-full bg-white p-2 md:p-10 md:pb-0 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 ">
+      <div className="w-full bg-white p-2 md:p-10 md:pb-0 2xl:pl-12 2xl:pt-8 2xl:pb-0 2xl:pr-6 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 2xl:gap-14 3xl:gap-16">
         {page}
       </div>
     </DashboardLayout>

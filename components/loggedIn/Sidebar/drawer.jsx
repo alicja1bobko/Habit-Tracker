@@ -1,5 +1,3 @@
-import React from "react";
-// import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -10,7 +8,7 @@ import MuiListItem from "@material-ui/core/ListItem";
 const useStyles = makeStyles(() => ({
   root: {
     width: "100%",
-    backgroundColor: '#fcfbf9',
+    backgroundColor: "#fcfbf9",
   },
 }));
 

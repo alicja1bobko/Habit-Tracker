@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -12,7 +12,9 @@ import AddTaskIcon from "@mui/icons-material/AddTask";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import useAuth from "../../context/auth-context";
+import useAuth from "../../../context/auth-context";
+import Image from "next/image";
+import { reactLocalStorage } from "reactjs-localstorage";
 
 const drawerWidth = 270;
 
@@ -22,25 +24,44 @@ interface Props {
 
 export default function Sidebar({ children }: Props) {
   const { logout } = useAuth();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  // keep the selected tab state on page refresh
+  useEffect(() => {
+    setSelectedIndex(reactLocalStorage.get("index"));
+  }, []);
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index);
+    if (index === 4) {
+      reactLocalStorage.set("index", 0);
+    } else {
+      reactLocalStorage.set("index", index);
+    }
   };
 
   const drawer = (
-    <div className=" p-4 bg-[#fcfbf9] h-full">
-      <h1 className="text-3xl text-[#2e822e] p-6">Habit Tracker</h1>
+    <div className="p-4 bg-background-gray h-full">
+      <div className="flex justify-center mt-4">
+        <Image
+          alt="Profile photo"
+          width={35}
+          height={40}
+          src={"/../public/assets/sprout.png"}
+          className="flex-shrink-0 object-contain"
+        />
+        <h1 className="text-3xl text-light-green p-6 font-semibold">sprout</h1>
+      </div>
 
       <List>
         <DrawerListItem
           icon={<CheckCircleOutlineOutlinedIcon />}
           destination={"/habit-dashboard"}
-          selected={selectedIndex === 0}
+          selected={selectedIndex == 0}
           index={0}
           handleListItemClick={handleListItemClick}
         >
@@ -49,7 +70,7 @@ export default function Sidebar({ children }: Props) {
         <DrawerListItem
           icon={<AddTaskIcon />}
           destination={"/add-habit"}
-          selected={selectedIndex === 1}
+          selected={selectedIndex == 1}
           index={1}
           handleListItemClick={handleListItemClick}
         >
@@ -58,7 +79,7 @@ export default function Sidebar({ children }: Props) {
         <DrawerListItem
           icon={<FormatListBulletedRoundedIcon />}
           destination={"/manage-habits"}
-          selected={selectedIndex === 2}
+          selected={selectedIndex == 2}
           index={2}
           handleListItemClick={handleListItemClick}
         >
@@ -67,7 +88,7 @@ export default function Sidebar({ children }: Props) {
         <DrawerListItem
           icon={<SettingsIcon />}
           destination={"/settings"}
-          selected={selectedIndex === 3}
+          selected={selectedIndex == 3}
           index={3}
           handleListItemClick={handleListItemClick}
         >
@@ -75,7 +96,7 @@ export default function Sidebar({ children }: Props) {
         </DrawerListItem>
         <DrawerButton
           icon={<LogoutRoundedIcon />}
-          selected={selectedIndex === 4}
+          selected={selectedIndex == 4}
           index={4}
           handleListItemClick={handleListItemClick}
         >
@@ -89,7 +110,7 @@ export default function Sidebar({ children }: Props) {
     <Box sx={{ display: "flex" }}>
       <AppBar
         position="fixed"
-        className="!bg-[#f87e3a] "
+        className="!bg-light-orange"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
@@ -114,13 +135,12 @@ export default function Sidebar({ children }: Props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
@@ -156,7 +176,6 @@ export default function Sidebar({ children }: Props) {
         }}
       >
         <Toolbar />
-
         {children}
       </Box>
     </Box>
