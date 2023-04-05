@@ -22,6 +22,7 @@ import { checkboxStyle } from "../components/styles/checkboxStyle";
 import { formControlStyle } from "../components/styles/formControlStyle";
 import { addCheckmarksToDb } from "../utils/addCheckmarksToDb";
 
+
 const initializeHabit = {
   habitName: "",
   description: "",
@@ -31,6 +32,7 @@ const initializeHabit = {
 const addHabitPage: NextPageWithLayout = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+
   const {
     control,
     register,

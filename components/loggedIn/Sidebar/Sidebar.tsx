@@ -33,11 +33,15 @@ export default function Sidebar({ children }: Props) {
   // keep the selected tab state on page refresh
   useEffect(() => {
     setSelectedIndex(reactLocalStorage.get("index"));
-  }, [selectedIndex]);
+  }, []);
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index);
-    reactLocalStorage.set("index", index);
+    if (index === 4) {
+      reactLocalStorage.set("index", 0);
+    } else {
+      reactLocalStorage.set("index", index);
+    }
   };
 
   const drawer = (

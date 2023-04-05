@@ -19,9 +19,9 @@ import {
   useEffect,
   useMemo,
   useContext,
-  ReactNode,
   useCallback,
 } from "react";
+import { FullPageSpinner } from "../components/Spinners";
 import { auth } from "../pages/api/firebase";
 import setSampleUserDatabase from "./propagate-sample-data";
 
@@ -271,10 +271,10 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
   }, [initialLoading, router, user]);
 
   /* show loading indicator while the auth provider is still initializing */
-  if (initialLoading) {
-    return <div>Loading..</div>;
-  }
-
+  // if (initialLoading) {
+  //   return <FullPageSpinner />;
+  // }
+  // styles for sign up don't load
   // if auth initialized with a valid user show protected page
   if (!initialLoading && user) {
     return <>{children}</>;

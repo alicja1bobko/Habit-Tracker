@@ -1,3 +1,4 @@
+import { SmallSpinner } from "../../Spinners";
 import { Goal } from "./Goal";
 
 interface IDailyGoals {
@@ -46,7 +47,7 @@ const DailyGoals = ({ habits, checkmarks, loading }: IDailyGoals) => {
     });
     return <>{habitsList}</>;
   } else {
-    return <p>Loading...</p>;
+    return <SmallSpinner />;
   }
 };
 

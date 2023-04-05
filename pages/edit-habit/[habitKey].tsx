@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormValues } from "../../components/loggedIn/types/FormValues";
+import { FullPageSpinner } from "../../components/Spinners";
 import { checkboxStyle } from "../../components/styles/checkboxStyle";
 import { formControlStyle } from "../../components/styles/formControlStyle";
 import { textfieldStyles } from "../../components/styles/textfieldStyles";
@@ -97,7 +98,7 @@ const editHabitPage: NextPageWithLayout = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <FullPageSpinner />;
   }
 
   return (

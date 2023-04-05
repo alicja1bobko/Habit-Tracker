@@ -25,7 +25,8 @@
     "context/index.tsx",
     "context/firestore-context.tsx",
     "jest.config.js",
-    "cypress/support/commands.js"
+    "cypress/support/commands.js",
+    "pages/_document.js"
   ],
   "exclude": ["node_modules"]
 }
