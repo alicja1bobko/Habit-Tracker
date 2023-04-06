@@ -3,9 +3,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../pages/api/firebase";
 import { getToday } from "../utils/getToday";
 
-export default async function setSampleUserDatabase(uid: string) {
-  const today = getToday();
-  const userRef = setDoc(doc(db, "users", uid), {});
+async function setSampleUserDatabase(uid: string) {
+  const userRef = await setDoc(doc(db, "users", uid), {});
   const habitsDocs = [
     {
       name: "Wake up at 6am",
@@ -30,5 +29,17 @@ export default async function setSampleUserDatabase(uid: string) {
     lastName: "Anonymous",
   });
 
-  await Promise.all([...habitsDocs, settingsDoc]);
+  await Promise.all([...habitsDocs, userRef, settingsDoc]);
 }
+async function setEmptyUserDatabase(uid: string) {
+  const userRef = setDoc(doc(db, "users", uid), {});
+
+  const settingsCol = collection(db, `users/${uid}/settings`);
+  const settingsDoc = await addDoc(settingsCol, {
+    lastName: "Anonymous",
+  });
+
+  await Promise.all([userRef, settingsDoc]);
+}
+
+export { setEmptyUserDatabase, setSampleUserDatabase };

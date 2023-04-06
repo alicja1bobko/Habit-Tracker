@@ -25,6 +25,7 @@ import { countAchieved } from "../components/loggedIn/Statistics/countAchievedTo
 import { countBestStreak } from "../components/loggedIn/Statistics/countBestStreak";
 import WeekOverview from "../components/loggedIn/WeekOverview/WeekOverview";
 import { habitsForDay } from "../components/loggedIn/Statistics/todaysHabits";
+import { NoHabits } from "../components/NoHabits";
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
@@ -47,12 +48,17 @@ const habitDashboardPage: NextPageWithLayout = () => {
   const [weekView, setWeekView] = useState(true);
   const [selectedHabit, setSelectedHabit] = useState(0);
   const [selectedHabitKey, setSelectedHabitKey] = useState("");
+  const [habitsKeys, setHabitsKeys] = useState<string[]>([]);
 
-  const habitsKeys = Object.keys(userData.habits);
   const habitNames = habitsKeys.map((key) => userData.habits[key].name);
 
   useEffect(() => {
+    setHabitsKeys(Object.keys(userData.habits));
+  }, [userData.habits]);
+
+  useEffect(() => {
     setLoading(true);
+
     initializeNewDay(userData.checkmarks, userData.habits);
   }, [userData, selectedDayIndex]);
 
@@ -175,8 +181,16 @@ const habitDashboardPage: NextPageWithLayout = () => {
     setSelectedDayIndex(event.target.value);
   };
 
+  if (habitsKeys.length == 0) {
+    return (
+      <div className="subpage-layout">
+        <NoHabits />
+      </div>
+    );
+  }
+
   return (
-    <>
+    <div className="dashboard-layout">
       <div className="col-span-4 xl:col-span-1 p-3 md:p-5 mb-0">
         <div className="statistics-layout">
           <Greeting settings={userData.settings} />
@@ -188,7 +202,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
           <Statistics
             header={"Current goal"}
             text={"habit"}
-            stat={countCurrentGoals(userData["habits"])}
+            stat={countCurrentGoals(userData.habits)}
           />
           <Statistics
             header={"Achieved today"}
@@ -260,7 +274,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -272,9 +286,7 @@ habitDashboardPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker DashboardPage",
       }}
     >
-      <div className="w-full bg-white p-2 md:p-10 md:pb-0 2xl:pl-12 2xl:pt-8 2xl:pb-0 2xl:pr-6 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 2xl:gap-14 3xl:gap-16">
-        {page}
-      </div>
+      {page}
     </DashboardLayout>
   );
 };
