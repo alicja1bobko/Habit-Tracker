@@ -186,7 +186,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true);
     const auth = getAuth();
     signInAnonymously(auth)
-      .then(() => {
+      .then(async (result) => {
+        const user = result.user;
+        setUser(user);
+        const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
+        if (isNewUser) await setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
       })
