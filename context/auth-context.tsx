@@ -23,7 +23,10 @@ import {
 } from "react";
 import { FullPageSpinner } from "../components/Spinners";
 import { auth } from "../pages/api/firebase";
-import setSampleUserDatabase from "./propagate-sample-data";
+import {
+  setSampleUserDatabase,
+  setEmptyUserDatabase,
+} from "./propagate-sample-data";
 
 interface IAuth {
   user: User | null;
@@ -91,7 +94,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user);
-        setSampleUserDatabase(userCredential.user.uid);
+        setEmptyUserDatabase(userCredential.user.uid);
+        // setSampleUserDatabase(userCredential.user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
       })
@@ -111,7 +115,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const user = result.user;
         setUser(user);
         const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
-        if (isNewUser) setSampleUserDatabase(user.uid);
+        if (isNewUser) setEmptyUserDatabase(user.uid);
+        // if (isNewUser) setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
       })
@@ -135,7 +140,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const user = result.user;
         setUser(user);
         const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
-        if (isNewUser) setSampleUserDatabase(user.uid);
+        if (isNewUser) setEmptyUserDatabase(user.uid);
+        // if (isNewUser) setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -162,7 +168,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const user = result.user;
         setUser(user);
         const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
-        if (isNewUser) setSampleUserDatabase(user.uid);
+        if (isNewUser) setEmptyUserDatabase(user.uid);
+        // if (isNewUser) setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -186,7 +193,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true);
     const auth = getAuth();
     signInAnonymously(auth)
-      .then(() => {
+      .then(async (result) => {
+        const user = result.user;
+        setUser(user);
+        const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
+        if (isNewUser) await setSampleUserDatabase(user.uid);
         router.push("/habit-dashboard");
         setLoading(false);
       })
@@ -217,7 +228,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signOut(auth)
       .then(() => {
         setUser(null);
-        router.push("/sign-in");
+        router.push("/");
       })
       .catch((error) => console.log(error.message))
       .finally(() => setLoading(false));

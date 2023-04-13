@@ -12,12 +12,15 @@ const Statistics = ({ header, text, stat, habit }: Props) => {
       <p className="mt-4 font-bold text-dark-gray">
         <span className="text-dark-orange text-lg">{stat}</span> {text}
         {stat == 1 ? "" : "s"}
-        {habit && (
-          <>
-            <span>{" of "}</span>
-            <span className="capitalize text-black">{habit}</span>
-          </>
-        )}
+        {habit &&
+          (stat == 0 ? (
+            <></>
+          ) : (
+            <>
+              <span>{" of "}</span>
+              <span className="capitalize text-black">{habit}</span>
+            </>
+          ))}
       </p>
     </div>
   );

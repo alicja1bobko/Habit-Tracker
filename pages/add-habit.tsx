@@ -22,7 +22,6 @@ import { checkboxStyle } from "../components/styles/checkboxStyle";
 import { formControlStyle } from "../components/styles/formControlStyle";
 import { addCheckmarksToDb } from "../utils/addCheckmarksToDb";
 
-
 const initializeHabit = {
   habitName: "",
   description: "",
@@ -203,9 +202,7 @@ addHabitPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker Add Habit Subpage",
       }}
     >
-      <div className="justify-center align-middle h-[calc(100vh-4rem)] flex bg-white p-3 md:pl-10 md:pr-10 rounded-3xl md:-translate-y-12 ">
-        {page}
-      </div>
+      <div className="subpage-layout">{page}</div>
     </DashboardLayout>
   );
 };

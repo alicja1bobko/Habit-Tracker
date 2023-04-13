@@ -12,6 +12,14 @@
         @apply !h-0
     }
 
+    .subpage-layout {
+        @apply items-center justify-center align-middle h-[calc(100vh-4rem)] flex flex-col bg-white p-3 rounded-3xl md:-translate-y-12 
+    }
+
+    .dashboard-layout{
+        @apply min-h-[calc(100vh-4rem)] w-full bg-white p-2 md:p-10 md:pb-0 2xl:pl-12 2xl:pt-8 2xl:pb-0 2xl:pr-6 rounded-3xl md:-translate-y-12 grid grid-cols-1 md:grid-cols-[minmax(0,_1fr)] xl:grid-cols-[minmax(0,_1fr)_275px] xl:gap-12 2xl:gap-14 3xl:gap-16
+    }
+
     .progress-layout{
         @apply grid grid-cols-[30%_auto]  md:grid-cols-[25%_auto] xl:grid-cols-[25%_15%_20%_auto] 3xl:grid-cols-[25%_10%_10%_auto] grid-rows-2 xl:grid-rows-1 grid-areas-[top-left_top-right,bottom-left_bottom-right] xl:grid-areas-[progress_week_month_select] gap-4 mb-3
     }

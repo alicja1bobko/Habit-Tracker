@@ -1,6 +1,7 @@
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { ReactElement, useEffect, useState } from "react";
 import { ManageHabit } from "../components/loggedIn/ManageHabit";
+import { NoHabits } from "../components/NoHabits";
 import useAuth from "../context/auth-context";
 import { IUserData, useUser } from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
@@ -18,6 +19,10 @@ const manageHabitsPage: NextPageWithLayout = () => {
       setHabitKeys(querySnapshot.docs.map((doc) => doc.id));
     });
   }, [userData]);
+
+  if (Object.keys(habitKeys).length === 0) {
+    return <NoHabits />;
+  }
 
   const deleteHabit = async (habitKey: string) => {
     await deleteDoc(doc(db, `users/${user?.uid}/habits/${habitKey}`));
@@ -61,9 +66,7 @@ manageHabitsPage.getLayout = function getLayout(page: ReactElement) {
         description: "Habit tracker Manage Habits Subpage",
       }}
     >
-      <div className="items-center justify-center align-middle min-h-[calc(100vh-4rem)] flex bg-white p-3 md:pl-10 md:pr-10 rounded-3xl md:-translate-y-12 ">
-        {page}
-      </div>
+      <div className="subpage-layout">{page}</div>
     </DashboardLayout>
   );
 };
