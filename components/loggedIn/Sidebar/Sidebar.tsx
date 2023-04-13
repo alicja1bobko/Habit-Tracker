@@ -51,7 +51,7 @@ export default function Sidebar({ children }: Props) {
           alt="Profile photo"
           width={35}
           height={40}
-          src={"/../public/static/images/sprout.png"}
+          src={"/../public/sprout.png"}
           className="flex-shrink-0 object-contain"
         />
         <h1 className="text-3xl text-light-green p-6 font-semibold">sprout</h1>

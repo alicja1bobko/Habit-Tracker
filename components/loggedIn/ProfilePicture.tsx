@@ -42,8 +42,8 @@ const ProfilePicture = ({ achievedToday, todaysHabits, settings }: Props) => {
         height={130}
         src={img}
         placeholder="blur"
-        blurDataURL={"/../../public/static/images/anonymous.jpg"}
-        onErrorCapture={() => setImg("/../public/static/images/anonymous.jpg")}
+        blurDataURL={"/../../public/anonymous.jpg"}
+        onErrorCapture={() => setImg("/../public/anonymous.jpg")}
         className="rounded-full relative z-20 max-w-none"
       />
     </div>
