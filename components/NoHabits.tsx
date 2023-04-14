@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import AddIcon from "@mui/icons-material/Add";
+import noHabits from "../public/nohabits.jpg";
 
 const NoHabits = () => {
   const router = useRouter();
@@ -11,7 +12,7 @@ const NoHabits = () => {
         height={400}
         width={400}
         alt="thinking person no habits page image"
-        src={"/../public/nohabits.jpg"}
+        src={noHabits}
       ></Image>
       <h2 className="text-3xl font-bolder mt-3">There are no habits</h2>
       <p className="p-5 mb-2">

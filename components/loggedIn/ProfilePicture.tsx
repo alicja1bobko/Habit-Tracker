@@ -10,7 +10,7 @@ type Props = {
 
 const ProfilePicture = ({ achievedToday, todaysHabits, settings }: Props) => {
   const [img, setImg] = useState(
-    "https://lionsyouthbrass.band/wp-content/uploads/2022/05/Profile.jpg"
+    "https://github.com/alicja1bobko/Habit-Tracker/blob/main/public/anonymous.jpg?raw=true"
   );
   const [completed, setCompleted] = useState<number>(0);
 
@@ -36,16 +36,28 @@ const ProfilePicture = ({ achievedToday, todaysHabits, settings }: Props) => {
         }}
       ></div>
       <div className="w-[152px] h-[152px] bg-background-gray rounded-full absolute -translate-x-[11px] -translate-y-[11px] z-5"></div>
-      <Image
-        alt="Profile photo"
-        width={130}
-        height={130}
-        src={img}
-        placeholder="blur"
-        blurDataURL={"/../../public/anonymous.jpg"}
-        onErrorCapture={() => setImg("/../public/anonymous.jpg")}
-        className="rounded-full relative z-20 max-w-none"
-      />
+      <div className="w-[130px] h-[130px] rounded-full overflow-y-hidden">
+        <Image
+          alt="Profile photo"
+          width={130}
+          height={130}
+          style={{
+            maxWidth: "130px",
+            height: "auto",
+          }}
+          src={img}
+          placeholder="blur"
+          blurDataURL={
+            "https://github.com/alicja1bobko/Habit-Tracker/blob/main/public/anonymous.jpg?raw=true"
+          }
+          onErrorCapture={() =>
+            setImg(
+              "https://github.com/alicja1bobko/Habit-Tracker/blob/main/public/anonymous.jpg?raw=true"
+            )
+          }
+          className="rounded-full relative z-20 max-w-none "
+        />
+      </div>
     </div>
   );
 };

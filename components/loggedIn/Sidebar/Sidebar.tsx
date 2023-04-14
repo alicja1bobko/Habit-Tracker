@@ -15,6 +15,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import useAuth from "../../../context/auth-context";
 import Image from "next/image";
 import { reactLocalStorage } from "reactjs-localstorage";
+import logo from "../../../public/sprout.png";
 
 const drawerWidth = 270;
 
@@ -51,7 +52,7 @@ export default function Sidebar({ children }: Props) {
           alt="Profile photo"
           width={35}
           height={40}
-          src={"/../public/sprout.png"}
+          src={logo}
           className="flex-shrink-0 object-contain"
         />
         <h1 className="text-3xl text-light-green p-6 font-semibold">sprout</h1>
