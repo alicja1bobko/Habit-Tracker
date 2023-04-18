@@ -49,16 +49,18 @@ const habitDashboardPage: NextPageWithLayout = () => {
   const [selectedHabit, setSelectedHabit] = useState(0);
   const [selectedHabitKey, setSelectedHabitKey] = useState("");
   const [habitsKeys, setHabitsKeys] = useState<string[]>([]);
-
-  const habitNames = habitsKeys.map((key) => userData.habits[key].name);
+  const [habitNames, setHabitNames] = useState<string[]>([]);
 
   useEffect(() => {
     setHabitsKeys(Object.keys(userData.habits));
   }, [userData.habits]);
 
   useEffect(() => {
-    setLoading(true);
+    setHabitNames(habitsKeys.map((key) => userData.habits[key].name));
+  }, [habitsKeys]);
 
+  useEffect(() => {
+    setLoading(true);
     initializeNewDay(userData.checkmarks, userData.habits);
   }, [userData, selectedDayIndex]);
 
