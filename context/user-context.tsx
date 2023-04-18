@@ -99,6 +99,8 @@ function UserProvider({ children }: { children: ReactNode }) {
       habitsRef,
       (snapshot) => {
         if (isMounted) {
+          if (snapshot.docs.length === 0)
+            setUserData((prev) => ({ ...prev, habits: {} }));
           snapshot.docs.forEach((doc) => {
             setUserData((prev: any) => ({
               ...prev,
