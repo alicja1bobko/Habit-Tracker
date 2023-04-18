@@ -5,7 +5,7 @@ import {
   startOfWeek,
   endOfWeek,
 } from "date-fns";
-import { IUserData } from "../../../context/user-context";
+import { IUserData, useUser } from "../../../context/user-context";
 import { chunks } from "../../../utils/chunks";
 import { Week } from "./Week";
 
@@ -16,14 +16,10 @@ export interface ISelectedRangeHabits {
 }
 
 const ProgressCalendar = ({
-  habits,
-  checkmarks,
   selectedHabitKey,
   selectDatesRange,
   weekView,
 }: {
-  habits: IUserData["habits"];
-  checkmarks: IUserData["checkmarks"];
   weekView: boolean;
   selectedHabitKey: string;
   selectDatesRange: {
@@ -31,6 +27,9 @@ const ProgressCalendar = ({
     end: Date;
   };
 }) => {
+  const userData: IUserData | null = useUser();
+  const checkmarks = userData.checkmarks;
+  const habits = userData.habits;
   let habitsKeys = Object.keys(habits);
   const checkmarkKeys = Object.keys(checkmarks);
   let selectedDates: string[] = [];

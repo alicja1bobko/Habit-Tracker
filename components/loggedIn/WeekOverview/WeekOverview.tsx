@@ -6,7 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import { eachDayOfInterval } from "date-fns";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { IUserData } from "../../../context/user-context";
+import { IUserData, useUser } from "../../../context/user-context";
 import { habitsForDay } from "../Statistics/todaysHabits";
 import { countAchieved } from "../Statistics/countAchievedToday";
 import { breakpoints } from "./breakpoints";
@@ -16,17 +16,15 @@ type Props = {
   selectedRange: string;
   handleSelect: (event: SelectChangeEvent<string>) => void;
   selectDatesRange: selectRange;
-  checkmarks: IUserData["checkmarks"];
-  habits: IUserData["habits"];
 };
 
 const WeekOverview = ({
   selectedRange,
   handleSelect,
   selectDatesRange,
-  checkmarks,
-  habits,
 }: Props) => {
+  const userData: IUserData | null = useUser();
+  const habits = userData.habits;
   let weekOverview = eachDayOfInterval({
     start: selectDatesRange[selectedRange].start,
     end: selectDatesRange[selectedRange].end,
@@ -66,7 +64,7 @@ const WeekOverview = ({
         >
           {weekOverview.map((date, index) => {
             let numOfHabits = habitsForDay(date, habits);
-            let achieved = countAchieved(checkmarks, date);
+            let achieved = countAchieved(date);
             let completed = (achieved / Object.keys(numOfHabits).length) * 100;
             return (
               <PieChart

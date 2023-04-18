@@ -1,10 +1,7 @@
 import { addDays, differenceInDays, startOfDay, subDays } from "date-fns";
-import { IUserData } from "../../../context/user-context";
+import { IUserData, useUser } from "../../../context/user-context";
 
-type countBestStreakFn = (
-  checkmarks: IUserData["checkmarks"],
-  habits: IUserData["habits"]
-) => [string, number];
+type countBestStreakFn = () => [string, number];
 
 const formatDate = (date: string) => {
   return new Date(date.split("-").reverse().join("-"));
@@ -18,7 +15,10 @@ const relativeDates = () => ({
 
 // based on https://github.com/jonsamp/date-streaks code
 
-export const countBestStreak: countBestStreakFn = (checkmarks, habits) => {
+export const countBestStreak: countBestStreakFn = () => {
+  const userData: IUserData | null = useUser();
+  const checkmarks = userData.checkmarks;
+  const habits = userData.habits;
   const { today, yesterday } = relativeDates();
   const habitKeys = Object.keys(habits);
 

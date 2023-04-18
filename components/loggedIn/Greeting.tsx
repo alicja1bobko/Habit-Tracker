@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IUserData } from "../../context/user-context";
-
-type Props = {
-  settings: IUserData["settings"];
-};
+import { IUserData, useUser } from "../../context/user-context";
 
 let today = new Date();
 let hours = today.getHours();
@@ -14,7 +10,11 @@ if (hours >= 5 && hours <= 11) {
   greeting = "Good afternoon";
 } else greeting = "Good evening";
 
-const Greeting = ({ settings }: Props) => {
+const Greeting = () => {
+  const userData: IUserData | null = useUser();
+  const [settings, setSettings] = useState<IUserData["settings"]>(
+    userData.settings
+  );
   const [userName, setUserName] = useState("");
 
   useEffect(() => {

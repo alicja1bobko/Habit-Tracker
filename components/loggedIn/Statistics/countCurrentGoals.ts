@@ -1,5 +1,6 @@
-import { IUserData } from "../../../context/user-context";
+import { IUserData, useUser } from "../../../context/user-context";
 
-export const countCurrentGoals = (habits: IUserData["habits"]) => {
-  return Object.keys(habits).length;
+export const countCurrentGoals = () => {
+  const userData: IUserData | null = useUser();
+  return Object.keys(userData.habits).length;
 };

@@ -10,7 +10,7 @@ import useAuth from "./auth-context";
 import { db } from "../pages/api/firebase";
 import { FullPageSpinner } from "../components/Spinners";
 
-const initializeUserData = {
+export const initializeUserData = {
   habits: {},
   checkmarks: {},
   settings: {},

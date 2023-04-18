@@ -1,24 +1,25 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { IUserData } from "../../context/user-context";
+import { IUserData, useUser } from "../../context/user-context";
+import { countAchieved } from "./Statistics/countAchievedToday";
+import { habitsForDay } from "./Statistics/todaysHabits";
 
-type Props = {
-  achievedToday: number;
-  todaysHabits: string[];
-  settings: IUserData["settings"];
-};
-
-const ProfilePicture = ({ achievedToday, todaysHabits, settings }: Props) => {
+const ProfilePicture = () => {
   const [img, setImg] = useState(
     "https://github.com/alicja1bobko/Habit-Tracker/blob/main/public/anonymous.jpg?raw=true"
   );
   const [completed, setCompleted] = useState<number>(0);
 
+  const userData: IUserData | null = useUser();
+  const settings: IUserData["settings"] = userData.settings;
+  const achievedToday: number = countAchieved(new Date());
+  const todaysHabits: string[] = habitsForDay(new Date(), userData.habits);
+
   // load image from firestore
   useEffect(() => {
     const settingsKey = Object.keys(settings)[0];
     if (settingsKey) setImg(settings[settingsKey].image);
-  }, [settings]);
+  }, [userData.settings]);
 
   //fill the progress border around image on completed habits change
   useEffect(() => {
