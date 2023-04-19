@@ -63,12 +63,55 @@
 
 - Settings
 
-<img src='public/screenshots/settings.png' width='800px' alt="settingspage">
+<img src='public/screenshots/settings.png' width='500px' alt="settings page">
 
 
-### What I learned
+## What I have learned
 
-So far I have learned Authentication with Firebase, the whole signing up/signing in process. Also realtime Firestore DB was a bit of a challenge to set up and structure data in logical documents/collections shallow object. It's my first time using Material-UI, so customizing them to resebmle designs was also new for me. It's still in development so more new challenges will occur for sure.
+I have learned a lot of new things while building this application. It was my first bigger application, so a lot of problems occurred. I have learned Authentication with Firebase, signing up/signing in process. Also realtime Firestore DB was a bit of a challenge to set up and structure data in logical documents/collections shallow object. I've also used Firestore Cloud to upload images.
+
+A big challenge was to control the asynchronism of function execution and maintaining the current state of variables available for the whole application.
+
+I also learned more about git, branching, merging and maintaining codebase. 
+
+It was my first time using Material-UI. Now I think pure tailwind components or Flowbite library would have been a better choice, because it was a lot overriding styles with such a custom design. I've also gained confidence in building more sophisticated and complicated UI components and Responsive Layouts.
+
+### Database structure
+
+### Database and data structure
+
+```json
+{
+    "users": {
+        "user-id": {
+            "habits": {
+                "habit-one":{
+                    "name": "Wake up at 6am",
+                    "description": "Wake up 1 hour before normal wake up time for mindful activities",
+                    "frequency": [0,1,2,3,4]
+                }
+            },
+            "checkmarks": {
+                "checkmark-id": {
+                    "completed": false,
+                    "date": "19-04-2023",
+                    "habitId": "habit-one"
+                }
+            },
+            "settings":{
+                "settings-id":{
+                    "email": "abc@gmail.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "password": "sdfsgagrmj1!",
+                    "image": "https://firebasestorage.googleapis.com/v0/b/habit-tracker-app-pf.appspot.com/o/image%2Fimages.jfif?alt=media&token=6a109c8c-f176-40ee-97b2-328e75440d03"
+                }
+            }
+
+        }
+    },
+}
+```
 
 <hr>
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
