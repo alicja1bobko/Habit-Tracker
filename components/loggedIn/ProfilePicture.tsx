@@ -1,15 +1,12 @@
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { IUserData, useUser } from "../../context/user-context";
 import { countAchieved } from "./Statistics/countAchievedToday";
 import { habitsForDay } from "./Statistics/todaysHabits";
+import { Avatar } from "@mui/material";
 
 const ProfilePicture = () => {
-  const [img, setImg] = useState(
-    "https://github.com/alicja1bobko/Habit-Tracker/blob/main/public/anonymous.jpg?raw=true"
-  );
+  const [img, setImg] = useState("");
   const [completed, setCompleted] = useState<number>(0);
-
   const userData: IUserData | null = useUser();
   const settings: IUserData["settings"] = userData.settings;
   const achievedToday: number = countAchieved(new Date());
@@ -38,25 +35,14 @@ const ProfilePicture = () => {
       ></div>
       <div className="w-[152px] h-[152px] bg-background-gray rounded-full absolute -translate-x-[11px] -translate-y-[11px] z-5"></div>
       <div className="w-[130px] h-[130px] rounded-full overflow-y-hidden">
-        <Image
-          alt="Profile photo"
-          width={130}
-          height={130}
-          style={{
-            maxWidth: "130px",
-            height: "auto",
-          }}
+        <Avatar
+          alt="Avatar profile picture"
           src={img}
-          placeholder="blur"
-          blurDataURL={
-            "https://github.com/alicja1bobko/Habit-Tracker/blob/main/public/anonymous.jpg?raw=true"
-          }
-          onErrorCapture={() =>
-            setImg(
-              "https://github.com/alicja1bobko/Habit-Tracker/blob/main/public/anonymous.jpg?raw=true"
-            )
-          }
-          className="rounded-full relative z-20 max-w-none "
+          sx={{
+            width: 130,
+            height: 130,
+            zIndex: 20,
+          }}
         />
       </div>
     </div>

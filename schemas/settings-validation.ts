@@ -23,5 +23,4 @@ export const settingsSchema = yup.object().shape({
           ? isEmailValidator(value)
           : new yup.ValidationError("Invalid value")
     ),
-  image: yup.string().nullable().optional(),
 });

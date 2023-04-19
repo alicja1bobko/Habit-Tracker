@@ -30,6 +30,7 @@ import WeekOverview from "../components/loggedIn/WeekOverview/WeekOverview";
 import { habitsForDay } from "../components/loggedIn/Statistics/todaysHabits";
 import { NoHabits } from "../components/NoHabits";
 import { addCheckmarksToDb } from "../components/loggedIn/habitDashboard/addCheckmarksToDb";
+import useAuth from "../context/auth-context";
 
 const NUMBER_OF_PAST_WEEKS = 4;
 const NUMBER_OF_PAST_MONTHS = 6;
@@ -37,6 +38,7 @@ const NUMBER_OF_PAST_DAYS = 7;
 
 const habitDashboardPage: NextPageWithLayout = () => {
   const userData: IUserData | null = useUser();
+  const { user } = useAuth();
   const [habits, setHabits] = useState<IUserData["habits"]>({});
   const [checkmarks, setCheckmarks] = useState<IUserData["checkmarks"]>({});
   const [loading, setLoading] = useState(false);
@@ -103,7 +105,7 @@ const habitDashboardPage: NextPageWithLayout = () => {
       setLoading(true);
 
       // add new checkmarks docs for all today's habits
-      await addCheckmarksToDb(selectedDaysHabitKeys, selectedDay).then(
+      await addCheckmarksToDb(selectedDaysHabitKeys, selectedDay, user).then(
         (habitsArray) => {
           let checkmarksObj: any = habitsArray.reduce(
             (acc, cur) => ({ ...acc, ...cur }),
