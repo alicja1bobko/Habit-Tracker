@@ -1,9 +1,13 @@
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useLayoutEffect, useState } from "react";
 import { ManageHabit } from "../components/loggedIn/ManageHabit";
 import { NoHabits } from "../components/NoHabits";
 import useAuth from "../context/auth-context";
-import { IUserData, useUser } from "../context/user-context";
+import {
+  IUserData,
+  initializeUserData,
+  useUser,
+} from "../context/user-context";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import { db } from "./api/firebase";
 import { NextPageWithLayout } from "./_app";
@@ -12,17 +16,13 @@ const manageHabitsPage: NextPageWithLayout = () => {
   const { user } = useAuth();
   const userData: IUserData = useUser();
   const [habitKeys, setHabitKeys] = useState<string[]>([]);
+  const habitsRef = collection(db, `users/${user?.uid}/habits`);
 
   useEffect(() => {
-    const habitsRef = collection(db, `users/${user?.uid}/habits`);
     onSnapshot(habitsRef, (querySnapshot) => {
       setHabitKeys(querySnapshot.docs.map((doc) => doc.id));
     });
-  }, [userData]);
-
-  if (Object.keys(habitKeys).length === 0) {
-    return <NoHabits />;
-  }
+  }, [userData.habits]);
 
   const deleteHabit = async (habitKey: string) => {
     await deleteDoc(doc(db, `users/${user?.uid}/habits/${habitKey}`));
@@ -36,6 +36,10 @@ const manageHabitsPage: NextPageWithLayout = () => {
       }
     });
   };
+
+  if (habitKeys.length == 0 && userData !== initializeUserData) {
+    return <NoHabits />;
+  }
 
   return (
     <div className="flex flex-col p-5 md:p-10">
