@@ -25,7 +25,7 @@ export const ManageHabit = ({ habitKey, habit, deleteHabit }: Props) => {
 
   return (
     <>
-      <div className="pb-6 pr-0">
+      <div className="pb-10 pr-0">
         <div className="manage-habits-grid">
           <div className="grid-in-[top-left] lg:grid-in-[habit]">
             <h2 className="text-lg">{name}</h2>

@@ -44,7 +44,7 @@ const manageHabitsPage: NextPageWithLayout = () => {
   return (
     <div className="flex flex-col p-5 md:p-10">
       {habitKeys.length !== 0 && (
-        <h1 className="text-4xl font-bolder mb-3">Manage habits</h1>
+        <h1 className="text-4xl font-bolder mb-5">Manage habits</h1>
       )}
       <div className="mt-5">
         {habitKeys.map((habitKey, index) => {
