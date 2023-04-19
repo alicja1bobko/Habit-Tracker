@@ -39,23 +39,23 @@
 
 - Landing Page
 
-![Landing Page](public/screenshots/start.png)
+<img src='public/screenshots/start.png' width='400px' alt="landing page">
 
 - Sign in using **Facebook**, **GitHub**, **Google** or as **Guest**
 
-![Sign In Page](public/screenshots/sign-in.png)
+<img src='public/screenshots/sign-in.png' width='400px' alt="sign-in page">
 
 - No Habits Page
 
-![No Habits](public/screenshots/no-habits.png)
+<img src='public/screenshots/no-habits.png' width='400px' alt="no-habits page">
 
 - Add Habit
 
-![Add Habit](public/screenshots/add-habit.png)
+<img src='public/screenshots/add-habit.png' width='400px' alt="add-habit page">
 
 - Manage your habits - edit, delete
 
-![Manage Habits](public/screenshots/manage-habits.png)
+<img src='public/screenshots/manage-habits.png' width='400px' alt="manage habits page">
 
 - Habit Dashboard
 
