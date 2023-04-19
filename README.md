@@ -39,7 +39,7 @@
 
 - Landing Page
 
-<img src='public/screenshots/start.png' width='400px' alt="landing page">
+![Landing Page](public/screenshots/start.png)
 
 - Sign in using **Facebook**, **GitHub**, **Google** or as **Guest**
 
@@ -55,7 +55,7 @@
 
 - Manage your habits - edit, delete
 
-<img src='public/screenshots/manage-habits.png' width='400px' alt="manage habits page">
+<img src='public/screenshots/manage-habits.png' width='450px' alt="manage habits page">
 
 - Habit Dashboard
 
@@ -63,7 +63,7 @@
 
 - Settings
 
-![Settings](public/screenshots/settings.png)
+<img src='public/screenshots/settings.png' width='800px' alt="settingspage">
 
 
 ### What I learned
