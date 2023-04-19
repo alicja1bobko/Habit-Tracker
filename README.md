@@ -1,14 +1,26 @@
-<h2>Currently in develepment...</h2>
+# Sprout
 
 ## About
 
-Habit Tracker app helps you keep track of your habits 💪 Due to my lack of design skills I took inspiration of [this](https://https://www.behance.net/gallery/107179009/Habit-Sleep-Tracker-UIUX-Design) beautifull UX/UI design by Anastasia Shorohova.
+**Sprout** app helps you keep track of your habits 💪 I took inspiration of [this](https://www.behance.net/gallery/107179009/Habit-Sleep-Tracker-UIUX-Design) beautiful UI design by Anastasia Shorohova.
 
 ### Links
 
 [Live Site URL](https://habit-tracker-tawny.vercel.app)
 
 ## My process
+
+### Features
+
+- create an account with email and password
+- Facebook, GitHub, Google authentication
+- guest account prefilled with data to play around with application features
+- add, delete, update habits
+- mark habits as completed
+- week and month progress visualized in calendar
+- week overview pie charts in carousel
+- brief statistics section with current goals, how many habits achieved today and best streak
+- upload custom avatar image
 
 ### Built with
 
@@ -19,7 +31,40 @@ Habit Tracker app helps you keep track of your habits 💪 Due to my lack of des
 - [Material UI](https://mui.com/)
 - [Firebase - authorization](https://firebase.google.com/)
 - [Firestore](https://firebase.google.com/docs/firestore)
+- Cloud Firestore
+- Context Api
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+## Screenshots
+
+- Landing Page
+
+![Landing Page](public/screenshots/start.png)
+
+- Sign in using **Facebook**, **GitHub**, **Google** or as **Guest**
+
+![Sign In Page](public/screenshots/sign-in.png)
+
+- No Habits Page
+
+![No Habits](public/screenshots/no-habits.png)
+
+- Add Habit
+
+![Add Habit](public/screenshots/add-habit.png)
+
+- Manage your habits - edit, delete
+
+![Manage Habits](public/screenshots/manage-habits.png)
+
+- Habit Dashboard
+
+![Habit Dashboard](public/screenshots/dashboard.png)
+
+- Settings
+
+![Settings](public/screenshots/settings.png)
+
 
 ### What I learned
 
