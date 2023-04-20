@@ -68,7 +68,7 @@
 
 ## What I have learned
 
-I have learned a lot of new things while building this application. It was my first bigger application, so a lot of problems occurred. I have learned Authentication with Firebase, signing up/signing in process. Also realtime Firestore DB was a bit of a challenge to set up and structure data in logical documents/collections shallow object. I've also used Firestore Cloud to upload images.
+I have learned a lot of new things while building this application. It was my first bigger application, so a lot of problems and new challenges occurred. I have learned Authentication with Firebase, signing up/signing in process. Also realtime Firestore DB was a bit of a challenge to set up and structure data in logical documents/collections shallow object. I've also used Firestore Cloud to upload images.
 
 A big challenge was to control the asynchronism of function execution and maintaining the current state of variables available for the whole application.
 
@@ -77,8 +77,6 @@ I also learned more about git, branching, merging and maintaining codebase.
 It was my first time using Material-UI. Now I think pure tailwind components or Flowbite library would have been a better choice, because it was a lot overriding styles with such a custom design. I've also gained confidence in building more sophisticated and complicated UI components and Responsive Layouts.
 
 ### Database structure
-
-### Database and data structure
 
 ```json
 {
@@ -112,6 +110,43 @@ It was my first time using Material-UI. Now I think pure tailwind components or 
     },
 }
 ```
+
+## Getting started
+
+### Clone repo and install all dependencies
+
+```bash
+git clone https://github.com/alicja1bobko/Habit-Tracker.git
+
+cd habit-tracker
+npm install
+```
+### Connect Firebase
+
+Next step it to add Firebase to your project. You can follow the steps in this [link](https://firebase.google.com/docs/web/setup?hl=en), or this short instruction:
+
+1. Login to [Firebase](https://console.firebase.google.com/).
+2. Add new project.
+3. Create Realtime Database in Firestore Database panel
+4. In Authentication panel go to Sign-in method tab, then add Sign-in providers: Email/Password, Google, Anonymous, Facebook and Github. For the last 2 you’ll have to get Client IDs and secrets from these services.
+5. In Project Overview Panel add a web app.
+6. You should see a `firebaseConfig` similar to this:
+
+    ```bash
+    const firebaseConfig = {
+      apiKey: "<YOUR_API_KEY>",
+      authDomain: "<YOUR_AUTH_DOMAIN>",
+      databaseURL: "<YOUR_DATABASE_URL>",
+      projectId: "<YOUR_PROJECT_ID>",
+      storageBucket: "<YOUR_STORAGE_BUCKET>",
+      messagingSenderId: "<YOUR_MESSAGING_SENDER_ID>",
+      appId: "<YOUR_APP_ID>",
+      measurementId: "<YOUR_MEASUREMENT_ID>",
+    };
+    ```
+8. Create `.env.local` file and use config above to fill it out.
+9. Start the application with `npm run dev`. The app should be running at: http://localhost:3000
+
 
 <hr>
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
